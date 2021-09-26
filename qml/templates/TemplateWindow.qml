@@ -15,7 +15,6 @@ Window {
     width: windowWidht
     height: windowHeigth
     visible: true
-    title: qsTr(windowTitle)
 
     // TITLE BAR
     Rectangle {
@@ -58,7 +57,7 @@ Window {
                     verticalCenter: parent.verticalCenter
                     leftMargin: 15
                 }
-                text: qsTr(windowTitle)
+                text: qsTr(window.windowTitle)
                 horizontalAlignment: Text.AlignLeft
                 verticalAlignment: Text.AlignVCenter
                 font.weight: Font.Medium
