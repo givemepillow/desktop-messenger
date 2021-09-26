@@ -68,7 +68,7 @@ Window {
 
             }
 
-            DragHandler { onActiveChanged: if (active) mainWindow.startSystemMove() }
+            DragHandler { onActiveChanged: if (active) window.startSystemMove() }
         }
     }
 
