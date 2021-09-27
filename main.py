@@ -3,8 +3,8 @@ import os
 from pathlib import Path
 import sys
 
-from PySide6.QtGui import QGuiApplication
-from PySide6.QtQml import QQmlApplicationEngine
+from PySide2.QtGui import QGuiApplication
+from PySide2.QtQml import QQmlApplicationEngine
 
 
 if __name__ == "__main__":
