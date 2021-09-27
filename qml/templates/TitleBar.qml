@@ -6,6 +6,9 @@ Rectangle {
     id: titleBar
 
     property string title: "Window"
+    property bool onMinimize: true
+    property bool onMaximize: true
+    property bool onClose: true
 
     height: 30
     anchors {
@@ -18,6 +21,7 @@ Rectangle {
     Row {
         id: windowButtons
         width: 90
+        layoutDirection: Qt.RightToLeft
         anchors {
             right: parent.right
             top: parent.top
@@ -25,18 +29,8 @@ Rectangle {
         }
 
         IconButton {
-            width: parent.width / 3; height: parent.height;
-            colorDefault: "#3b3e42"
-            colorMouseOver: "#616161"
-            onClicked: controller.closeCurrentWindow()
-        }
-        IconButton {
-            width: parent.width / 3; height: parent.height;
-            colorDefault: "#3b3e42"
-            colorMouseOver: "#616161"
-            onClicked: controller.closeCurrentWindow()
-        }
-        IconButton {
+            id: closeButton
+            visible: onClose
             width: parent.width / 3; height: parent.height;
             colorDefault: "#3b3e42"
             colorMouseOver: "#616161"
@@ -44,6 +38,24 @@ Rectangle {
             onClicked: controller.closeCurrentWindow()
             iconSource: "../resources/icons/close.png"
         }
+
+        IconButton {
+            id: maximizeButton
+            width: parent.width / 3; height: parent.height;
+            visible: onMaximize
+            colorDefault: "#3b3e42"
+            colorMouseOver: "#616161"
+            onClicked: controller.closeCurrentWindow()
+        }
+        IconButton {
+            id: minimizeButton
+            visible: onMinimize
+            width: parent.width / 3; height: parent.height;
+            colorDefault: "#3b3e42"
+            colorMouseOver: "#616161"
+            onClicked: controller.closeCurrentWindow()
+        }
+
 
     }
     // WINDOW TITLE
