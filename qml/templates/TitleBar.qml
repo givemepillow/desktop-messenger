@@ -23,9 +23,28 @@ Rectangle {
             top: parent.top
             bottom: parent.bottom
         }
-        Rectangle {width: parent.width / 3; height: parent.height; color: "green"}
-        Rectangle {width: parent.width / 3; height: parent.height; color: "blue"}
-        Rectangle {width: parent.width / 3; height: parent.height; color: "red"}
+
+        IconButton {
+            width: parent.width / 3; height: parent.height;
+            colorDefault: "#3b3e42"
+            colorMouseOver: "#616161"
+            onClicked: controller.closeCurrentWindow()
+        }
+        IconButton {
+            width: parent.width / 3; height: parent.height;
+            colorDefault: "#3b3e42"
+            colorMouseOver: "#616161"
+            onClicked: controller.closeCurrentWindow()
+        }
+        IconButton {
+            width: parent.width / 3; height: parent.height;
+            colorDefault: "#3b3e42"
+            colorMouseOver: "#616161"
+            colorClicked: "#ba3b32"
+            onClicked: controller.closeCurrentWindow()
+            iconSource: "../resources/icons/close.png"
+        }
+
     }
     // WINDOW TITLE
     Rectangle {
