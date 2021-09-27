@@ -11,6 +11,9 @@ TemplateWindow {
     TitleBar {
         id: titleBar
         title: "Desktop messenger. Login."
+        onMaximize: false
+        onMinimize: false
+
     }
     Container {
         id: container
