@@ -1,14 +1,18 @@
-import sys
+# This Python file uses the following encoding: utf-8
 import os
+from pathlib import Path
+import sys
 
 from PySide6.QtGui import QGuiApplication
 from PySide6.QtQml import QQmlApplicationEngine
 
+
 if __name__ == "__main__":
     app = QGuiApplication(sys.argv)
     engine = QQmlApplicationEngine()
-    engine.load(os.path.join(os.path.dirname(__file__), "qml\init.qml"))
-
+    engine.load(os.fspath(
+            Path(__file__).resolve().parent / "qml/controller.qml")
+        )
     if not engine.rootObjects():
         sys.exit(-1)
     sys.exit(app.exec_())
