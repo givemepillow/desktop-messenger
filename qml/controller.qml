@@ -32,10 +32,10 @@ Item {
     }
 
     Component.onCompleted: {
-       // controller.loadLogin()
-       controller.loadRegistration()
+       controller.loadLogin()
+       //controller.loadRegistration()
     }
-    
+
 }
 /*##^##
 Designer {
