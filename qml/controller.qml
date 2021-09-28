@@ -7,16 +7,26 @@ Item {
     visible: false
 
     signal loginWindow()
-    onLoginWindow: loadWelcome()
+    onLoginWindow: {
+        closeCurrentWindow()
+        loadLogin()
+    }
+    signal mainWindow()
+    onMainWindow: {
+        closeCurrentWindow()
+        loadMain()
+    }
     signal registrationWindow()
-    onRegistrationWindow: loadWelcome()
+    onRegistrationWindow: {
+        closeCurrentWindow()
+        loadRegistration()
+    }
 
     property var currentWindow: null
 
     function closeCurrentWindow() { if (currentWindow != null) currentWindow.close() }
 
-    function loadLogin() {
-        closeCurrentWindow()
+    function loadLogin() { 
         let component = Qt.createComponent("windows/login/main.qml")
         let win = component.createObject()
         win.show()
@@ -24,15 +34,21 @@ Item {
     }
 
     function loadRegistration() {
-        closeCurrentWindow()
         let component = Qt.createComponent("windows/registration/main.qml")
         let win = component.createObject()
         win.show()
         currentWindow = win
     }
 
+    function loadMain() {
+        let component = Qt.createComponent("windows/main/main.qml")
+        let win = component.createObject()
+        win.show()
+        currentWindow = win
+    }
+
     Component.onCompleted: {
-       controller.loadLogin()
+       controller.loginWindow()
        //controller.loadRegistration()
     }
 
