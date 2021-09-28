@@ -6,8 +6,8 @@ Button {
     id: button
 
     property url iconSource: ""
-    property color colorDefault: "black"
-    property color colorMouseOver: "blue"
+    property color colorDefault: "transparent"
+    property color colorMouseOver: "transparent"
     property color colorClicked: "red"
 
     property int iconHeight: 37
