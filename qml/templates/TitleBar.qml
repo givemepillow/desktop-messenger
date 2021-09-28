@@ -16,7 +16,7 @@ Rectangle {
         right: parent.right
         top: parent.top
     }
-    color: "#3b3e42"
+    color: "#262626"
     // WINDOW BUTTONS
     Row {
         id: windowButtons
@@ -32,7 +32,6 @@ Rectangle {
             id: closeButton
             visible: onClose
             width: parent.width / 3; height: parent.height;
-            colorDefault: "#3b3e42"
             colorMouseOver: "#616161"
             colorClicked: "#ba3b32"
             onClicked: controller.closeCurrentWindow()
@@ -43,7 +42,6 @@ Rectangle {
             id: maximizeButton
             width: parent.width / 3; height: parent.height;
             visible: onMaximize
-            colorDefault: "#3b3e42"
             colorMouseOver: "#616161"
             colorClicked: "#616161"
             onClicked: controller.closeCurrentWindow()
@@ -53,7 +51,6 @@ Rectangle {
             id: minimizeButton
             visible: onMinimize
             width: parent.width / 3; height: parent.height;
-            colorDefault: "#3b3e42"
             colorMouseOver: "#616161"
             colorClicked: "#616161"
             onClicked: controller.closeCurrentWindow()
