@@ -19,6 +19,20 @@ TemplateWindow {
         id: container
         color: "#3d3d3d"
 
+        Column {
+            id: inputBlock
+            spacing: 15
+            anchors {
+                horizontalCenter: parent.horizontalCenter
+                top: parent.top
+                topMargin: 100
+            }
+
+            LoginField {}
+            PasswordField {}
+            
+        }
+
         TextButton {
             id: loginButton
             buttonText: qsTr("Войти")
@@ -37,18 +51,16 @@ TemplateWindow {
             }
 
             onClicked: {
-                //controller.loadRegistration()
+                    controller.mainWindow()
             }
         }
 
-        Rectangle {
-
-            id: registration
-
-            width: 230 + 110
+        Row {
+            id: registrationBlock
 
             anchors {
                 bottom: parent.bottom
+                bottomMargin: 10
                 horizontalCenter: parent.horizontalCenter
             }
 
@@ -58,11 +70,6 @@ TemplateWindow {
                 width: 230
                 colorClicked: "transparent"
                 colorMouseOver: "transparent"
-                anchors {
-                    bottom: parent.bottom
-                    bottomMargin: 10
-                }
-
             }
 
             TextButton {
@@ -73,20 +80,10 @@ TemplateWindow {
                 colorClicked: "transparent"
                 colorMouseOver: "transparent"
                 colorTextMouseOver: "#88bfd2"
-                anchors {
-                    bottom: parent.bottom
-                    bottomMargin: 10
-                    left: registrationText.right
-                }
-
                 onClicked: {
-                    controller.loadRegistration()
+                    controller.registrationWindow()
                 }
             }
-
         }
-
-
-
     }
 }
