@@ -45,7 +45,9 @@ Rectangle {
             visible: onMaximize
             colorDefault: "#3b3e42"
             colorMouseOver: "#616161"
+            colorClicked: "#616161"
             onClicked: controller.closeCurrentWindow()
+            iconSource: "../resources/icons/maximize.png"
         }
         IconButton {
             id: minimizeButton
@@ -53,7 +55,9 @@ Rectangle {
             width: parent.width / 3; height: parent.height;
             colorDefault: "#3b3e42"
             colorMouseOver: "#616161"
+            colorClicked: "#616161"
             onClicked: controller.closeCurrentWindow()
+            iconSource: "../resources/icons/minimize.png"
         }
 
 
