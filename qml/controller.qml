@@ -27,14 +27,14 @@ Item {
     function closeCurrentWindow() { if (currentWindow != null) currentWindow.close() }
 
     function loadLogin() { 
-        let component = Qt.createComponent("windows/login/main.qml")
+        let component = Qt.createComponent("windows/login/login.qml")
         let win = component.createObject()
         win.show()
         currentWindow = win
     }
 
     function loadRegistration() {
-        let component = Qt.createComponent("windows/registration/main.qml")
+        let component = Qt.createComponent("windows/registration/registration.qml")
         let win = component.createObject()
         win.show()
         currentWindow = win
