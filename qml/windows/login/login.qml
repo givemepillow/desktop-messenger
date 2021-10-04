@@ -20,7 +20,7 @@ TemplateWindow {
         id: internal
         function check_login_and_password() {
             if (usernameField.text != "" && passwordField.text != "") {
-                let ansewer = v.check_login_and_password(usernameField.text, passwordField.text)
+                let ansewer = account.authentication(usernameField.text, passwordField.text)
                 if (ansewer === true) {
                     controller.mainWindow()
                     uncorrect.visible = false

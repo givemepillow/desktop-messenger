@@ -5,15 +5,14 @@ import sys
 
 from PySide2.QtGui import QGuiApplication
 from PySide2.QtQml import QQmlApplicationEngine
-#from PySide2.QtCore import QObject, QUrl, Slot
 
-from authentication import Verify
+from service import Account
 
 if __name__ == "__main__":
     app = QGuiApplication(sys.argv)
-    v = Verify()
+    account = Account()
     engine = QQmlApplicationEngine()
-    engine.rootContext().setContextProperty("v", v)
+    engine.rootContext().setContextProperty("account", account)
     engine.load(os.fspath(Path(__file__).resolve().parent / "qml/controller.qml"))
     if not engine.rootObjects():
         sys.exit(-1)
