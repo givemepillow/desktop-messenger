@@ -2,6 +2,8 @@ import QtQuick 2.15
 import QtQuick.Window 2.15
 import QtQuick.Controls 2.15
 import "../../templates"
+import "functions"
+import "fields"
 
 TemplateWindow {
     id: window
@@ -12,9 +14,12 @@ TemplateWindow {
         id: titleBar
         title: "Desktop messenger. Registration."
     }
+
     Container {
         id: container
         color: "#3d3d3d"
+
+        PopupInfo {id: popup}
 
         Rectangle {
             id: registartionBlock
@@ -28,13 +33,21 @@ TemplateWindow {
                 bottom: parent.bottom
             }
 
-            FirstNameField { id: firstNameField}
+            Registration {id: registration}
+
+            ErrorLabel {field: firstNameField; id: firstNameLabel}
+            FirstNameField {id: firstNameField}
+            ErrorLabel {field: secondNameField; id: secondNameFieldLabel}
             SecondNameField { id: secondNameField}
 
+            ErrorLabel {field: loginField; id: loginFieldLabel}
             LoginField {id: loginField}
+            ErrorLabel {field: emailField; id: emailFieldLabel}
             EmailField {id: emailField}
 
+            ErrorLabel {field: password1Field; id: password1FieldLabel}
             Password1Field {id: password1Field}
+            ErrorLabel {field: password2Field; id: password2FieldLabel}
             Password2Field {id: password2Field}
 
             Rectangle {
@@ -55,12 +68,14 @@ TemplateWindow {
                     colorMouseOver: "deepskyblue"
                     colorTextMouseOver: "whitesmoke"
                     width: parent.width
+                    buttonRadius: 7
+                    enabled: true
                     onClicked: {
-                        controller.registrationWindow()
+                        registration.start()
                     }
                 }
             }
-        }       
-
+        }     
     }
 }
+
