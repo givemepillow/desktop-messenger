@@ -25,4 +25,7 @@ TextField {
         color: bgColor
         radius: 6
     }
+    onPressed: {
+        bgColor = "#37000000"
+    }
 }
