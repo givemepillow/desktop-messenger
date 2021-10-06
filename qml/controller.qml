@@ -8,43 +8,53 @@ Item {
 
     signal loginWindow()
     onLoginWindow: {
-        closeCurrentWindow()
-        loadLogin()
+        internal.closeCurrentWindow()
+        internal.loadLogin()
     }
     signal mainWindow()
     onMainWindow: {
-        closeCurrentWindow()
-        loadMain()
+        internal.closeCurrentWindow()
+        internal.loadMain()
     }
     signal registrationWindow()
     onRegistrationWindow: {
-        closeCurrentWindow()
-        loadRegistration()
+        internal.closeCurrentWindow()
+        internal.loadRegistration()
     }
 
-    property var currentWindow: null
-
-    function closeCurrentWindow() { if (currentWindow != null) currentWindow.close() }
-
-    function loadLogin() { 
-        let component = Qt.createComponent("windows/login/login.qml")
-        let win = component.createObject()
-        win.show()
-        currentWindow = win
+    signal exit()
+    onExit: {
+        //internal.closeCurrentWindow()
+        Qt.quit()
     }
 
-    function loadRegistration() {
-        let component = Qt.createComponent("windows/registration/registration.qml")
-        let win = component.createObject()
-        win.show()
-        currentWindow = win
-    }
+    QtObject {
+        id: internal
 
-    function loadMain() {
-        let component = Qt.createComponent("windows/main/main.qml")
-        let win = component.createObject()
-        win.show()
-        currentWindow = win
+        property var currentWindow: null
+
+        function closeCurrentWindow() { if (currentWindow != null) currentWindow.close() }
+
+        function loadLogin() { 
+            let component = Qt.createComponent("windows/login/login.qml")
+            let win = component.createObject()
+            win.show()
+            currentWindow = win
+        }
+
+        function loadRegistration() {
+            let component = Qt.createComponent("windows/registration/registration.qml")
+            let win = component.createObject()
+            win.show()
+            currentWindow = win
+        }
+
+        function loadMain() {
+            let component = Qt.createComponent("windows/main/main.qml")
+            let win = component.createObject()
+            win.show()
+            currentWindow = win
+        }
     }
 
     Component.onCompleted: {
