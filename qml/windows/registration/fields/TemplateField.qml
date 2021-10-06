@@ -5,6 +5,7 @@ import QtQuick.Controls 2.15
 TextField {
     property color bgColor: "#37000000"
     property string warning: ""
+    echoMode: TextInput.Text
     width: 300
     height: 40
     text: qsTr("")
