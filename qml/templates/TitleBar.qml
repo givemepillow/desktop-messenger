@@ -34,7 +34,7 @@ Rectangle {
             width: parent.width / 3; height: parent.height;
             colorMouseOver: "#616161"
             colorClicked: "#ba3b32"
-            onClicked: controller.closeCurrentWindow()
+            onClicked: controller.exit()
             iconSource: "../resources/icons/close.png"
         }
 
