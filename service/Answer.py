@@ -1,0 +1,7 @@
+import json
+
+class Answer:
+    ERROR = 1
+    REGISTRATION_ACCEPTED = 3
+    AUTHENTICATION_ACCEPTED = 2
+    REGISTRATION_VERIFICATION = 4
