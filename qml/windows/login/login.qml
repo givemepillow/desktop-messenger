@@ -18,6 +18,12 @@ TemplateWindow {
 
     QtObject {
         id: internal
+
+        function warningColors(field) {
+            field.bgColor = "#3d2727"
+            field.borderColor = "#ad2424"
+        }
+
         function check_login_and_password() {
             if (usernameField.text != "" && passwordField.text != "") {
                 let ansewer = account.authentication(usernameField.text, passwordField.text)
@@ -26,8 +32,8 @@ TemplateWindow {
                     uncorrect.visible = false
                 } else {
                     uncorrect.visible = true
-                    usernameField.bgColor = "#6dba3737"
-                    passwordField.bgColor = "#6dba3737"
+                    warningColors(usernameField)
+                    warningColors(passwordField)
                 }
             }
         }
@@ -49,17 +55,10 @@ TemplateWindow {
 
             UsernameField {
                 id: usernameField
-                onPressed: {
-                    usernameField.bgColor = "#37000000"
-                    passwordField.bgColor = "#37000000"
-                }
+                onTextEdited: uncorrect.visible = false
             }
             PasswordField {
-                id: passwordField
-                onPressed: {
-                    usernameField.bgColor = "#37000000"
-                    passwordField.bgColor = "#37000000"
-                }    
+                id: passwordField   
             }
             
         }
