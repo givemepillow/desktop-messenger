@@ -9,6 +9,9 @@ Button {
     property color colorDefault: "transparent"
     property color colorMouseOver: "transparent"
     property color colorClicked: "red"
+    property color colorOverlayDefault: "white"
+    property color colorOverlayMouseOver: "white"
+    property color colorOverlayClicked: "white"
 
     property int iconHeight: 37
     property int iconWidth: 37
@@ -16,6 +19,7 @@ Button {
     QtObject {
         id: internal
         property var dynamicColor: button.down ? colorClicked : button.hovered ? colorMouseOver : colorDefault
+        property var dynamicOverlayColor: button.down ? colorOverlayClicked : button.hovered ? colorOverlayMouseOver : colorOverlayDefault
     }
 
     background: Rectangle {
@@ -39,7 +43,7 @@ Button {
         ColorOverlay {
             anchors.fill: iconButton
             source: iconButton
-            color: "white"
+            color: internal.dynamicOverlayColor
             antialiasing: false
         }
     }
