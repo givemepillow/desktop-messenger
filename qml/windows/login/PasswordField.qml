@@ -1,26 +1,35 @@
 import QtQuick 2.15
 import QtQuick.Window 2.15
 import QtQuick.Controls 2.15
+import "../../templates"
 
 
-TextField {
+TemplateField {
     id: passwordField
-    width: 300
-    height: 40
-    property color bgColor: "#37000000"
-    echoMode: TextInput.Password
-    text: qsTr("")
-    color: "white"
-    selectByMouse: true
     placeholderText: qsTr("Введите пароль")
-    verticalAlignment: Text.AlignVCenter
-    anchors.horizontalCenter: parent.horizontalCenter
-    leftPadding: 15
-    anchors.topMargin: 25
-    font.pointSize: 10
-    background: Rectangle {
-        anchors.fill: parent
-        color: bgColor
-        radius: 20
+    echoMode: showPassword.pressed ? TextInput.Normal : TextInput.Password
+    inputMethodHints: Qt.ImhSensitiveData | Qt.ImhHiddenText
+    anchors {
+        horizontalCenter: parent.horizontalCenter
+    }
+    Rectangle {
+        width: 30
+        color: "transparent"
+        anchors {
+            right: parent.right
+            bottom: parent.bottom
+            top: parent.top
+            rightMargin: 10
+        }
+        IconButton {
+            id: showPassword
+            iconSource: showPassword.pressed ? "../../resources/icons/show_pass.png" : "../../resources/icons/hide_pass.png"
+            iconHeight: parent.height - 5 ; iconWidth: parent.width - 5
+            height: parent.height; width: parent.width
+            colorMouseOver: "transparent"
+            colorClicked: "transparent"
+            colorOverlayDefault: "gray"
+        }
     }
 }            
+            

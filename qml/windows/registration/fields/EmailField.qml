@@ -1,3 +1,5 @@
+import "../../../templates"
+
 TemplateField {
     placeholderText: qsTr("Введите email")
     anchors {

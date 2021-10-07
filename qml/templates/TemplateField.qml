@@ -4,6 +4,7 @@ import QtQuick.Controls 2.15
 
 TextField {
     property color bgColor: "#37000000"
+    property color borderColor: "#262626"
     property string warning: ""
     echoMode: TextInput.Normal
     maximumLength: 25
@@ -19,11 +20,18 @@ TextField {
         anchors.fill: parent
         color: bgColor
         radius: 6
+        border {
+            width: 2
+            color: borderColor
+        }
     }
     onPressed: {
         bgColor = "#37000000"
     }
-    onTextEdited: warning = ""
+    onTextEdited: {
+        borderColor = "#262626"
+        warning = ""
+    }
 }
     
     
