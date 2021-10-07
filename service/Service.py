@@ -14,13 +14,15 @@ class Service:
         except ConnectionRefusedError as e:
             print(e)
 
+    @classmethod
     def close(cls):
-        s.__socket.close()
+        cls.__socket.close()
 
     @classmethod
     def send(cls, data):
         cls.__socket.sendall(bytes(data, encoding="utf-8"))
-        
+
+    @classmethod 
     def receive(cls):
-        data = cls.__socket.recv(self.BUFFER_SIZE)
+        data = cls.__socket.recv(cls.BUFFER_SIZE)
         return data.decode("utf-8")
