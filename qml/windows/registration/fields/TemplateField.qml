@@ -6,12 +6,13 @@ TextField {
     property color bgColor: "#37000000"
     property string warning: ""
     echoMode: TextInput.Normal
+    maximumLength: 25
     width: 300
     height: 40
     text: qsTr("")
     color: "white"
     selectByMouse: true
-    font.pointSize: 10
+    font.pointSize: 11
     rightInset: 4
     verticalAlignment: Text.AlignVCenter
     background: Rectangle {
