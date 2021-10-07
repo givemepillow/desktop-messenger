@@ -1,13 +1,13 @@
 from PySide2.QtCore import Slot, QObject, Signal
 from .Service import Service
-from .RequestConstractor import RequestConstarctor
+from .RequestConstractor import RequestConstructor
 from .AnswerParser import AnswerParser
 from .Answer import Answer
 
 class Account(QObject):
     @Slot(str, str, result=bool)
     def authentication(self, login, password):
-        Service.send(RequestConstarctor.authentication(login, password))
+        Service.send(RequestConstructor.authentication(login, password))
         answer = Service.receive()
         return AnswerParser.assert_answer(answer, Answer.AUTHENTICATION_ACCEPTED)
 
