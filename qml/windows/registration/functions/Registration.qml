@@ -4,7 +4,7 @@ Item {
 
     Validate {id: vl}
 
-    function start() {
+    function validation(){
         let valid = true
 
         if (! vl.longPassword(password1Field)) valid = false
@@ -18,21 +18,18 @@ Item {
         if (vl.nullField(emailField)) valid = false
         if (vl.nullField(password1Field)) valid = false
         if (vl.nullField(password2Field)) valid = false
-        
-        
-        if (valid) {
-            let answer = account.registration(
-                loginField.text,
-                password1Field.text,
-                firstNameField.text,
-                secondNameField.text,
-                emailField.text
-            )
-            if (answer) {
-                controller.loginWindow()
-            } else {
-                popup.open()
-            }
-        }             
+
+        return valid
+    }
+
+    function registration() {
+        let answer = account.registration(
+            loginField.text,
+            password1Field.text,
+            firstNameField.text,
+            secondNameField.text,
+            emailField.text
+        )
+        return answer            
     }
 }
