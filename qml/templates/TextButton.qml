@@ -11,7 +11,7 @@ Button {
     property color colorDefault: "transparent"
     property color colorMouseOver: "blue"
     property color colorClicked: "red"
-    property color colorDefaultText: "white"
+    property color colorTextDefault: "white"
     property color colorTextMouseOver: "white"
     property color colorTextClicked: "white"
 
@@ -22,7 +22,7 @@ Button {
     QtObject {
         id: internal
         property var dynamicButtonColor: button.down ? colorClicked : button.hovered ? colorMouseOver : colorDefault
-        property var dynamicTextColor: button.down ? colorTextClicked : button.hovered ? colorTextMouseOver : colorDefaultText
+        property var dynamicTextColor: button.down ? colorTextClicked : button.hovered ? colorTextMouseOver : colorTextDefault
     }
 
     background: Rectangle {
