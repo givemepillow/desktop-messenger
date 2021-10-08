@@ -6,6 +6,8 @@ from .Answer import Answer
 
 class Account(QObject):
 
+    DEFAULT_MESSAGE = "Произошла непредвиденная ошибка :("
+
     server_message = ''
 
     @Slot(str, str, result=bool)
@@ -47,5 +49,5 @@ class Account(QObject):
     @Slot(result=str)
     def get_server_message(self):
         msg = self.server_message
-        self.server_message = ""
+        self.server_message = self.DEFAULT_MESSAGE
         return msg
