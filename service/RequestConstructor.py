@@ -25,7 +25,7 @@ class RequestConstructor:
     @classmethod
     def verification(cls, email, code):
         return json.dumps({
-            'type': Request.VERIFICATION_REQUEST,
+            'type': Request.CODE_VERIFICATION_REQUEST,
             'email': email,
             'code': code
         })
@@ -33,7 +33,7 @@ class RequestConstructor:
     @classmethod
     def email_and_login(cls, email, login):
         return json.dumps({
-            'type': Request.EMAIL_AND_LOGIN_REQUEST,
+            'type': Request.EMAIL_VERIFICATION_REQUEST,
             'email': email,
             'login': login
         })
