@@ -19,16 +19,10 @@ TemplateWindow {
         id: container
         color: "#3d3d3d"
 
-        Rectangle {
-            id: darkOverlay
-            color: "#9c000000"
-            visible: false
-            anchors.fill: parent
-
-            z: 1
+        ErrorBar {
+            id: popup
+            z: 10
         }
-
-        PopupInfo {id: popup}
 
         Rectangle {
             id: registrationBlock
@@ -86,10 +80,11 @@ TemplateWindow {
                             if (account.email_and_login(emailField.text, loginField.text)) {
                                 registrationBlock.read = true
                                 enabled = false
-                                darkOverlay.visible = true
+                                popup.text_info = account.get_server_message()
                                 emailValidation.visible = true
                             } else {
-                                popup.open()
+                                popup.text_info = account.get_server_message()
+                                popup.visible = true
                             }
                         }
                     }
@@ -97,16 +92,13 @@ TemplateWindow {
             }
         }
 
+
         Rectangle {
             id: emailValidation
-            color: "transparent"
+            color: "#85000000"
             visible: false
-            z:2
             anchors {
-                left: registrationBlock.right
-                bottom: parent.bottom
-                top: parent.top
-                right: parent.right
+                fill: parent
             }
             EmailCodeField {id: codeField}
 
@@ -124,6 +116,7 @@ TemplateWindow {
                 }
             }
             Rectangle {
+                id: acceptButton
                 color: "transparent"
                 anchors {
                     horizontalCenter: parent.horizontalCenter
@@ -147,16 +140,43 @@ TemplateWindow {
                             if(registration.registration()){
                                 controller.loginWindow()
                             } else {
-                                popup.open()
+                                popup.text_info = account.get_server_message()
+                                popup.visible = true
                             }
                         } else {
-                            popup.open()
+                            popup.text_info = account.get_server_message()
+                            popup.visible = true
                         }
                     }
                 }
             }
-
+            Rectangle {
+                color: "transparent"
+                anchors {
+                    horizontalCenter: parent.horizontalCenter
+                    top: acceptButton.bottom
+                    topMargin: 10
+                }
+                width: 100
+                height: 15
+                TextButton {
+                    fontSize: 10
+                    buttonText: qsTr("Отмена")
+                    colorDefault: "transparent"
+                    colorClicked: "transparent"
+                    colorMouseOver: "transparent"
+                    colorTextMouseOver: "#9e9e9e"
+                    colorTextClicked: "#ffffff"
+                    colorTextDefault: "#707070"
+                    width: parent.width
+                    enabled: true
+                    onClicked: {
+                        emailValidation.visible = false
+                    }
+                }
+            }
         }
+
     }
 }
 
