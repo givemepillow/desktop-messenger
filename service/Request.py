@@ -52,7 +52,7 @@ class Request(BaseModel):
         Authentication,
         EncryptionKey
     ]
-    ip: str
+    ip: Optional[str]
 
 
 requests = {
