@@ -9,17 +9,17 @@ QtObject {
     }
 
     function openLoginWindow() {
-        WindowManager.createWindow("windows/login/login.qml")
+        WindowManager.createWindow("login/main.qml")
     }
 
     function openRegistrationWindow() {
-        WindowManager.createWindow("windows/registration/registration.qml")
+        WindowManager.createWindow("registration/main.qml")
     }
 
     function openMainWindow() {
-        WindowManager.createWindow("windows/main/main.qml")
+        WindowManager.createWindow("main/main.qml")
     }
 
-    Component.onCompleted: openLoginWindow()
+    Component.onCompleted: openRegistrationWindow()
 
 }
