@@ -1,8 +1,9 @@
 import QtQuick
 import QtQuick.Window
 import QtQuick.Controls
+import Qt5Compat.GraphicalEffects
 import "functions"
-import "fields"
+import "../templates"
 
 TemplateWindow {
     id: window
@@ -16,17 +17,17 @@ TemplateWindow {
 
     Container {
         id: container
-        color: "#3d3d3d"
+        
 
         ErrorBar {
             id: popup
-            z: 10
+            z: 1
         }
 
         Rectangle {
             id: registrationBlock
 
-            property bool read: false
+            property bool isOff: false
 
             width: 400
             color: "transparent"
@@ -37,56 +38,155 @@ TemplateWindow {
                 bottom: parent.bottom
             }
 
-            Registration {id: registration}
+            Label {
+                id: header
+                text: qsTr("Регистрация")
+                font.pointSize: 20
+                color: "white"
+                anchors {
+                    horizontalCenter: parent.horizontalCenter
+                    top: parent.top
+                    topMargin: 15
+                }
+            }
 
-            ErrorLabel {field: firstNameField; id: firstNameLabel}
-            FirstNameField {id: firstNameField; readOnly: registrationBlock.read}
-            ErrorLabel {field: secondNameField; id: secondNameFieldLabel}
-            SecondNameField { id: secondNameField; readOnly: registrationBlock.read}
+            // First name field
+            ErrorLabel {
+                id: firstNameLabel
+                field: firstNameField
+            }
+            FirstNameField {
+                id: firstNameField;
+            }
+            // Last name field
+            ErrorLabel {
+                id: lastNameFieldLabel
+                field: lastNameField
+            }
+            LastNameField {
+                id: lastNameField;
+            }
+            // Login field
+            ErrorLabel {
+                id: loginFieldLabel
+                field: loginField
+            }
+            LoginField {
+                id: loginField;
+            }
+            // Email field
+            ErrorLabel {
+                id: emailFieldLabel
+                field: emailField
+            }
+            EmailField {
+                id: emailField;
+            }
+            // Password 1 field
+            ErrorLabel {
+                id: password1FieldLabel
+                field: password1Field
+            }
+            Password1Field {
+                id: password1Field;
+            }
+            // Password 2 field
+            ErrorLabel {
+                id: password2FieldLabel
+                field: password2Field
+            }
+            Password2Field {
+                id: password2Field
+            }
 
-            ErrorLabel {field: loginField; id: loginFieldLabel}
-            LoginField {id: loginField; readOnly: registrationBlock.read}
-            ErrorLabel {field: emailField; id: emailFieldLabel}
-            EmailField {id: emailField; readOnly: registrationBlock.read}
+            Label {
+                text: qsTr("* Пароль должен содержать символы латинского\n   алфавита в верхем и нижнем регистре, цифры\n   и как миниум один из следующих символов:\n   ! № % @ _ ) ( ? $ ^ # * -")
+                anchors {
+                    left: password2Field.left
+                    leftMargin: 5
+                    top: password2Field.bottom
+                    topMargin: 4
+                }
+                color: "whitesmoke"
+            }
 
-            ErrorLabel {field: password1Field; id: password1FieldLabel}
-            Password1Field {id: password1Field; readOnly: registrationBlock.read}
-            ErrorLabel {field: password2Field; id: password2FieldLabel}
-            Password2Field {id: password2Field; readOnly: registrationBlock.read}
+            Label {
+                text: qsTr("* Вводите ваши настоящие данные")
+                anchors {
+                    left: lastNameField.left
+                    leftMargin: 5
+                    top: lastNameField.bottom
+                    topMargin: 4
+                }
+                color: "whitesmoke"
+            }
 
-            Rectangle {
+            Label {
+                text: qsTr("* На него придёт письмо с кодом подтверждения")
+                anchors {
+                    left: emailField.left
+                    leftMargin: 5
+                    top: emailField.bottom
+                    topMargin: 4
+                }
+                color: "whitesmoke"
+            }
+                
+            TemplateButton {
                 id: registrationProcessButton
-                height: 50
-                width: 250
-                color: "transparent"
+                buttonText: "Зерегистрироваться"
+                height: 45
+                width: 230
+                fontSize: 14
+                buttonRadius: 7
+                colorDefault: "#364d96"
+                colorMouseOver: "#3e59b5"
+                colorClicked: "#563eb5"
                 anchors {
                     bottom: parent.bottom
-                    bottomMargin: 50
+                    bottomMargin: 60
                     horizontalCenter: parent.horizontalCenter
                 }
-                TextButton {
-                    buttonText: qsTr("Регистрация.")
-                    colorTextClicked: "#1ccad9"
-                    colorDefault: "#2a4d73"
-                    colorClicked: "#135fb0"
-                    colorMouseOver: "deepskyblue"
-                    colorTextMouseOver: "whitesmoke"
-                    width: parent.width
-                    buttonRadius: 7
-                    enabled: true
-                    onClicked: {
-                        if(registration.validation()) {
-                            if (account.email_and_login(emailField.text, loginField.text)) {
-                                registrationBlock.read = true
-                                enabled = false
-                                popup.text_info = account.get_server_message()
-                                emailValidation.visible = true
-                            } else {
-                                popup.text_info = account.get_server_message()
-                                popup.visible = true
-                            }
-                        }
-                    }
+                layer.enabled: true
+                layer.effect: DropShadow {
+                    transparentBorder: true
+                    horizontalOffset: 2
+                    verticalOffset: 2
+                    color: "#50000000"
+                }
+                onClicked: {
+                    emailValidation.visible = true
+                    codeField.focus = true
+                }
+            }
+
+            TemplateButton {
+                id: loginBtn1
+                buttonText: "Уже зарегестрированы?"
+                width: 180
+                height: 30
+                enabled: false
+                fontSize: 11
+                anchors {
+                    bottom: parent.bottom
+                    bottomMargin: 20
+                    left: parent.left
+                    leftMargin: (parent.width - (loginBtn1.width + loginBtn2.width)) / 2
+                }
+            }
+            TemplateButton {
+                id: loginBtn2
+                buttonText: "Вход"
+                width: 50
+                height: 30
+                fontSize: 11
+                colorTextMouseOver: "#e3bf30"
+                colorTextClicked: "#e37e30"
+                onClicked: windowManager.openLoginWindow()
+                anchors {
+                    bottom: parent.bottom
+                    bottomMargin: 20
+                    left: loginBtn1.right
                 }
             }
         }
@@ -99,7 +199,9 @@ TemplateWindow {
             anchors {
                 fill: parent
             }
-            EmailCodeField {id: codeField}
+            EmailCodeField {
+                id: codeField
+            }
 
             Label {
                 property var field: null
@@ -114,9 +216,9 @@ TemplateWindow {
                     horizontalCenter: parent.horizontalCenter
                 }
             }
-            Rectangle {
+                
+            TemplateButton {
                 id: acceptButton
-                color: "transparent"
                 anchors {
                     horizontalCenter: parent.horizontalCenter
                     top: codeField.bottom
@@ -124,33 +226,23 @@ TemplateWindow {
                 }
                 height: codeField.height - 15
                 width: codeField.width - 30
-                TextButton {
-                    buttonText: qsTr("Подтвердить")
-                    colorTextClicked: "#1ccad9"
-                    colorDefault: "#2a4d73"
-                    colorClicked: "#135fb0"
-                    colorMouseOver: "deepskyblue"
-                    colorTextMouseOver: "whitesmoke"
-                    width: parent.width
-                    buttonRadius: 7
-                    enabled: true
-                    onClicked: {
-                        if (account.verification(emailField.text, codeField.text)) {
-                            if(registration.registration()){
-                                controller.loginWindow()
-                            } else {
-                                popup.text_info = account.get_server_message()
-                                popup.visible = true
-                            }
-                        } else {
-                            popup.text_info = account.get_server_message()
-                            popup.visible = true
-                        }
-                    }
+                buttonText: qsTr("Подтвердить")
+                fontSize: 13
+                buttonRadius: 7
+                colorDefault: "#364d96"
+                colorMouseOver: "#3e59b5"
+                colorClicked: "#563eb5"
+                layer.enabled: true
+                layer.effect: DropShadow {
+                    transparentBorder: true
+                    horizontalOffset: 2
+                    verticalOffset: 2
+                    color: "#50000000"
+                }
+                onClicked: {
                 }
             }
-            Rectangle {
-                color: "transparent"
+            TemplateButton {
                 anchors {
                     horizontalCenter: parent.horizontalCenter
                     top: acceptButton.bottom
@@ -158,22 +250,19 @@ TemplateWindow {
                 }
                 width: 100
                 height: 15
-                TextButton {
-                    fontSize: 10
-                    buttonText: qsTr("Отмена")
-                    colorDefault: "transparent"
-                    colorClicked: "transparent"
-                    colorMouseOver: "transparent"
-                    colorTextMouseOver: "#9e9e9e"
-                    colorTextClicked: "#ffffff"
-                    colorTextDefault: "#707070"
-                    width: parent.width
-                    enabled: true
-                    onClicked: {
-                        emailValidation.visible = false
-                    }
+                fontSize: 10
+                buttonText: qsTr("Отмена")
+                colorDefault: "transparent"
+                colorClicked: "transparent"
+                colorMouseOver: "transparent"
+                colorTextMouseOver: "#9e9e9e"
+                colorTextClicked: "#ffffff"
+                colorTextDefault: "#707070"
+                onClicked: {
+                    emailValidation.visible = false
                 }
             }
+            
         }
 
     }
