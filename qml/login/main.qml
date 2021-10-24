@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import Qt5Compat.GraphicalEffects
+import "../validator.js" as Validator
 import "../templates"
 
 TemplateWindow {
@@ -30,6 +31,11 @@ TemplateWindow {
             }
         }
 
+        ErrorLabel {
+            id: loginFieldLabel
+            field: loginField
+        }
+
         TemplateField {
             id: loginField
             placeholderText: qsTr("Введите ваш логин или email")
@@ -39,14 +45,36 @@ TemplateWindow {
                 topMargin: 150
                 horizontalCenter: parent.horizontalCenter
             }
+            onEditingFinished: {
+                let length = Validator.lengthLogin(text)
+                let validEmail = Validator.validateEmail(text)
+                let validLogin = Validator.validateLogin(text)
+
+                if ((!length || (!validEmail && !validLogin)) && text !== "") {
+                    borderColor = warningColor
+                    warning = "Некорректный логин или email!"
+                }
+            }
         }
+
+        ErrorLabel {
+            id: passwordFieldLabel
+            field: passwordField
+        }
+
         PasswordField {
             id: passwordField
             placeholderText: qsTr("Введите пароль")
             anchors {
                 top: loginField.bottom
-                topMargin: 20
+                topMargin: 25
                 horizontalCenter: parent.horizontalCenter
+            }
+            onEditingFinished: {
+                if ((!Validator.validatePassword(text) || !Validator.lengthPassword(text)) && text !== "") {
+                    borderColor = warningColor
+                    warning = "Некорректный пароль!"
+                }
             }
         }
         TemplateButton {
@@ -70,6 +98,12 @@ TemplateWindow {
                 horizontalOffset: 2
                 verticalOffset: 2
                 color: "#50000000"
+            }
+            onClicked: {
+                let fields = [loginField, passwordField]
+                if (Validator.isAllValid(fields) && !Validator.isEmpty(fields)) {
+                    console.log("BOOOM")
+                }
             }
         }
 
