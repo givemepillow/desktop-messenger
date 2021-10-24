@@ -8,5 +8,5 @@ Rectangle {
         bottom: parent.bottom
         top: titleBar.bottom
     }
-    color: "white"
+    color: "#3d3d3d"
 }
