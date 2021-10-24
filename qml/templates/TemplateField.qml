@@ -1,11 +1,12 @@
-import QtQuick 2.15
-import QtQuick.Window 2.15
-import QtQuick.Controls 2.15
+import QtQuick
+import QtQuick.Window
+import QtQuick.Controls
 
 TextField {
-    property color bgColor: "#37000000"
-    property color borderColor: "#262626"
-    property string warning: ""
+    readonly property color defaultBgColor: "#37000000"
+    readonly property color defaultborderColor: "#262626"
+    property color bgColor: defaultBgColor
+    property color borderColor: defaultborderColor
     echoMode: TextInput.Normal
     maximumLength: 25
     width: 300
@@ -26,11 +27,10 @@ TextField {
         }
     }
     onPressed: {
-        bgColor = "#37000000"
+        bgColor = defaultBgColor
     }
     onTextEdited: {
-        borderColor = "#262626"
-        warning = ""
+        borderColor = defaultborderColor
     }
 }
     
