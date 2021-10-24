@@ -1,5 +1,4 @@
 import QtQuick
-import QtQuick.Window
 import QtQuick.Controls
 import Qt5Compat.GraphicalEffects
 import "../templates"
@@ -100,7 +99,7 @@ TemplateWindow {
                     top: password2Field.bottom
                     topMargin: 4
                 }
-                color: "whitesmoke"
+                color: "#b0b0b0"
             }
 
             Label {
@@ -111,7 +110,7 @@ TemplateWindow {
                     top: lastNameField.bottom
                     topMargin: 4
                 }
-                color: "whitesmoke"
+                color: "#b0b0b0"
             }
 
             Label {
@@ -122,12 +121,13 @@ TemplateWindow {
                     top: emailField.bottom
                     topMargin: 4
                 }
-                color: "whitesmoke"
+                color: "#b0b0b0"
             }
                 
             TemplateButton {
                 id: registrationProcessButton
                 buttonText: "Зерегистрироваться"
+                enabled: !registrationBlock.isOff
                 height: 45
                 width: 230
                 fontSize: 14
@@ -148,8 +148,7 @@ TemplateWindow {
                     color: "#50000000"
                 }
                 onClicked: {
-                    emailValidation.visible = true
-                    codeField.focus = true
+                    registrationBlock.isOff = true
                 }
             }
 
@@ -170,6 +169,7 @@ TemplateWindow {
             TemplateButton {
                 id: loginBtn2
                 buttonText: "Вход"
+                enabled: !registrationBlock.isOff
                 width: 50
                 height: 30
                 fontSize: 11
@@ -186,14 +186,15 @@ TemplateWindow {
 
 
         Rectangle {
-            id: emailValidation
+            id: emailValidationBlock
             color: "#85000000"
-            visible: false
+            visible: registrationBlock.isOff
             anchors {
                 fill: parent
             }
             EmailCodeField {
                 id: codeField
+                focus: registrationBlock.isOff
             }
 
             Label {
@@ -252,7 +253,7 @@ TemplateWindow {
                 colorTextClicked: "#ffffff"
                 colorTextDefault: "#707070"
                 onClicked: {
-                    emailValidation.visible = false
+                    registrationBlock.isOff = false
                 }
             }
             
@@ -260,4 +261,3 @@ TemplateWindow {
 
     }
 }
-
