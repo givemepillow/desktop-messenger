@@ -21,7 +21,7 @@ Rectangle {
             right: parent.right
             top: parent.top
         }
-        visible: true
+        visible: false
         property string textInfo: qsTr("Ошибка на стороне сервера!")
         Label {
             anchors.left: parent.left
