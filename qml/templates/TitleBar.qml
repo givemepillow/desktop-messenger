@@ -1,14 +1,16 @@
-import QtQuick 2.15
-import QtQuick.Window 2.15
-import QtQuick.Controls 2.15
+import QtQuick
+import QtQuick.Window
+import QtQuick.Controls
 
 Rectangle {
     id: titleBar
 
     property string title: "Window"
-    property bool onMinimize: true
-    property bool onMaximize: true
-    property bool onClose: true
+    property bool minimizable: true
+    property bool maximizable: true
+    property bool closable: true
+
+    DragHandler { onActiveChanged: if (active) window.startSystemMove() }
 
     height: 30
     anchors {
@@ -28,32 +30,34 @@ Rectangle {
             bottom: parent.bottom
         }
 
-        IconButton {
+        TemplateButton {
             id: closeButton
-            visible: onClose
+            visible: closable
             width: parent.width / 3; height: parent.height;
             colorMouseOver: "#616161"
             colorClicked: "#ba3b32"
-            onClicked: controller.exit()
+            onClicked: windowManager.exit()
             iconSource: "../resources/icons/close.png"
         }
 
-        IconButton {
+        TemplateButton {
             id: maximizeButton
             width: parent.width / 3; height: parent.height;
-            visible: onMaximize
+            visible: maximizable
+            iconHeight: 35
+            iconWidth: 35
             colorMouseOver: "#616161"
             colorClicked: "#616161"
-            onClicked: controller.closeCurrentWindow()
+            //onClicked: controller.closeApplication()
             iconSource: "../resources/icons/maximize.png"
         }
-        IconButton {
+        TemplateButton {
             id: minimizeButton
-            visible: onMinimize
+            visible: minimizable
             width: parent.width / 3; height: parent.height;
             colorMouseOver: "#616161"
             colorClicked: "#616161"
-            onClicked: controller.closeCurrentWindow()
+            //onClicked: controller.closeCurrentWindow()
             iconSource: "../resources/icons/minimize.png"
         }
 
@@ -84,9 +88,6 @@ Rectangle {
             font.pointSize: 10
             font.family: "Arial"
             styleColor: "#e3f0f2"
-
         }
-
-        DragHandler { onActiveChanged: if (active) window.startSystemMove() }
     }
 }
