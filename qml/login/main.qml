@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Controls
 import Qt5Compat.GraphicalEffects
 import "../templates"
 
@@ -16,6 +17,19 @@ TemplateWindow {
 
     Container {
         id: container
+
+        Label {
+            id: header
+            text: qsTr("Вход")
+            font.pointSize: 36
+            color: "white"
+            anchors {
+                horizontalCenter: parent.horizontalCenter
+                top: parent.top
+                topMargin: 40
+            }
+        }
+
         TemplateField {
             id: loginField
             placeholderText: qsTr("Введите ваш логин или email")
