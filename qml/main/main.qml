@@ -1,7 +1,7 @@
-import QtQuick 2.15
-import QtQuick.Window 2.15
-import QtQuick.Controls 2.15
-import "../../templates"
+import QtQuick 
+import QtQuick.Window
+import QtQuick.Controls
+import "../templates"
 
 TemplateWindow {
     id: window
@@ -14,6 +14,5 @@ TemplateWindow {
     }
     Container {
         id: container
-        color: "lightblue"
     }
 }
