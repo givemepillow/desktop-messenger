@@ -3,7 +3,9 @@ import QtQuick.Window
 import QtQuick.Controls
 
 TemplateField {
-    echoMode: showPassword.pressed ? TextInput.Normal : TextInput.Password
+    id: root
+    property bool isClicked: false
+    echoMode: isClicked ? TextInput.Normal : TextInput.Password
     inputMethodHints: Qt.ImhSensitiveData | Qt.ImhHiddenText
     maximumLength: 25
     Rectangle {
@@ -17,11 +19,13 @@ TemplateField {
         }
         TemplateButton {
             id: showPassword
-            iconSource: showPassword.pressed ? "../resources/icons/show_pass.png" : "../resources/icons/hide_pass.png"
+            enabled: !root.readOnly
+            iconSource: isClicked ? "../resources/icons/show_pass.png" : "../resources/icons/hide_pass.png"
             iconHeight: parent.height - 5
             iconWidth: parent.width - 5
             height: parent.height
             width: parent.width
+            onClicked: isClicked = !isClicked
         }
     }
 }  
