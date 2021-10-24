@@ -11,19 +11,17 @@ Button {
     property int fontSize: 10
     property color colorDefault: "transparent"
     property color colorMouseOver: "transparent"
-    property color colorClicked: "red"
-    property color colorOverlayDefault: "white"
-    property color colorOverlayMouseOver: "white"
-    property color colorOverlayClicked: "white"
-    property color colorTextDefault: "white"
-    property color colorTextMouseOver: "white"
-    property color colorTextClicked: "white"
+    property color colorClicked: "transparent"
+    property color colorOverlayDefault: "whitesmoke"
+    property color colorOverlayMouseOver: "whitesmoke"
+    property color colorOverlayClicked: "whitesmoke"
+    property color colorTextDefault: "whitesmoke"
+    property color colorTextMouseOver: "whitesmoke"
+    property color colorTextClicked: "whitesmoke"
 
     property int iconHeight: 37
     property int iconWidth: 37
-
-    height: 50
-    width: 50
+    
 
     flat: true
     highlighted: false
