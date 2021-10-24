@@ -1,7 +1,9 @@
 import QtQuick
 import QtQuick.Controls
 import Qt5Compat.GraphicalEffects
+import "../validator.js" as Validator
 import "../templates"
+
 
 TemplateWindow {
     id: window
@@ -20,6 +22,7 @@ TemplateWindow {
             id: registrationBlock
 
             property bool isOff: false
+            
 
             width: 400
             color: "transparent"
@@ -72,7 +75,7 @@ TemplateWindow {
                 field: emailField
             }
             EmailField {
-                id: emailField;
+                id: emailField
             }
             // Password 1 field
             ErrorLabel {
@@ -80,7 +83,8 @@ TemplateWindow {
                 field: password1Field
             }
             Password1Field {
-                id: password1Field;
+                id: password1Field
+                //warning: validator.name
             }
             // Password 2 field
             ErrorLabel {
@@ -89,10 +93,11 @@ TemplateWindow {
             }
             Password2Field {
                 id: password2Field
+                //warning: validator.name
             }
 
             Label {
-                text: qsTr("* Пароль должен содержать символы латинского\n   алфавита в верхем и нижнем регистре, цифры\n   и как миниум один из следующих символов:\n   ! № @ _ ) ( ? $ ^ # * -")
+                text: qsTr("* Пароль должен содержать символы латинского\n   алфавита в верхем и нижнем регистре, цифры\n   и как миниум один из следующих символов:\n   ! @ _ ) ( ? $ ^ # * -")
                 anchors {
                     left: password2Field.left
                     leftMargin: 5
@@ -148,7 +153,12 @@ TemplateWindow {
                     color: "#50000000"
                 }
                 onClicked: {
-                    registrationBlock.isOff = true
+                    let fields = [
+                        firstNameField, lastNameField,
+                        loginField, emailField,
+                        password1Field, password2Field
+                    ]
+                    if (!Validator.isEmpty(fields) && Validator.isAllValid(fields)) registrationBlock.isOff = true
                 }
             }
 

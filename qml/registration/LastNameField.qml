@@ -1,4 +1,5 @@
 import "../templates"
+import "../validator.js" as Validator
 
 TemplateField {
     placeholderText: qsTr("Введите фамилию")
@@ -7,5 +8,11 @@ TemplateField {
         horizontalCenter: parent.horizontalCenter
         top: firstNameField.bottom
         topMargin: 25
+    }
+    onEditingFinished: {
+        if (!Validator.validateName(text) && text !== "") {
+            borderColor = warningColor
+            warning = "Некорректное имя!"
+        }
     }
 }

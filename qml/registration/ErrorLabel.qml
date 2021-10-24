@@ -4,7 +4,7 @@ import QtQuick.Controls
 
 Label {
     property TextField field: null
-    text: qsTr("text")
+    text: field.warning
     visible: true
     font.pointSize: 10
     color: "#eb4034"
