@@ -1,4 +1,4 @@
-var CURRENT_WINDOW = null;
+let CURRENT_WINDOW = null;
 
 function replaceWindows(newWindow) {
     if (CURRENT_WINDOW !== null) {
