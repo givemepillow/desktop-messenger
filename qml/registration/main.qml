@@ -17,12 +17,6 @@ TemplateWindow {
 
     Container {
         id: container
-        
-
-        ErrorBar {
-            id: popup
-            z: 1
-        }
 
         Rectangle {
             id: registrationBlock
