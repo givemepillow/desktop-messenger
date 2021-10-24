@@ -2,8 +2,8 @@ var CURRENT_WINDOW = null;
 
 function replaceWindows(newWindow) {
     if (CURRENT_WINDOW !== null) {
-        console.log("close")
-        CURRENT_WINDOW.close();
+        CURRENT_WINDOW.close()
+        CURRENT_WINDOW.destroy();
     }
     CURRENT_WINDOW = newWindow;
     CURRENT_WINDOW.show();
