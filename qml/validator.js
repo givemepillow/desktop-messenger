@@ -5,22 +5,28 @@ function validateEmail(email) {
 
 function validateLogin(login) {
     const re = /^[0-9a-zA-Z\_]+$/;
+    const re1 = /^[0-9]+$/
+    const re2 = /^[\_]+$/
+    const re3 = /^[0-9\_]+$/
+    if ((re1.test(String(login))) || (re2.test(String(login)))) return false;
+    if (re3.test(String(login))) return false;
     return re.test(String(login).toLowerCase());
 }
 
 function validateName(name) {
+    if (String(name).length < 2) return false;
     const re1 = /^[а-яА-Я\-]+$/;
     const re2 = /^[a-zA-Z\-]+$/;
-    return re1.test(String(name).toLowerCase()) || re2.test(String(name).toLowerCase());
+    return (re1.test(String(name)) || re2.test(String(name)));
 }
 
 function validatePassword(password) {
-    const re = /^[a-zA-Z0-9\#\!\_\&\?\*\@\%\-\)\(\^\$]+$/;
+    const re = /^[a-zA-Z0-9\#\!\_\&\?\*\@\%\-\)\(\^\$\+]+$/;
     return re.test(String(password))
 }
 
 function isHardPassword(password) {
-    if (password.match(/[0-9]/g) && password.match(/[a-zA-Z]/g) && password.match(/[#|!|_|&|?|)|(|@|*|-|%|^|$]/g)) {
+    if (password.match(/[0-9]/g) && password.match(/[a-zA-Z]/g) && password.match(/[#|!|_|&|?|)|(|@|*|-|%|^|$|+]/g)) {
         return true
     } else {
         return false
