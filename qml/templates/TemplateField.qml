@@ -3,12 +3,12 @@ import QtQuick.Window
 import QtQuick.Controls
 
 TextField {
-    property color defaultBgColor: "#37000000"
+    property color defaultBgColor: "#20000000"
     property color defaultborderColor: "#262626"
     property color bgColor: defaultBgColor
     property color borderColor: defaultborderColor
     echoMode: TextInput.Normal
-    maximumLength: 25
+    maximumLength: 30
     width: 300
     height: 40
     color: "white"
