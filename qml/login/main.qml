@@ -33,6 +33,7 @@ TemplateWindow {
         TemplateField {
             id: loginField
             placeholderText: qsTr("Введите ваш логин или email")
+            maximumLength: 25 * 2
             anchors {
                 top: parent.top
                 topMargin: 150

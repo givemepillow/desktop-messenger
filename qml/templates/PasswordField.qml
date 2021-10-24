@@ -5,6 +5,7 @@ import QtQuick.Controls
 TemplateField {
     echoMode: showPassword.pressed ? TextInput.Normal : TextInput.Password
     inputMethodHints: Qt.ImhSensitiveData | Qt.ImhHiddenText
+    maximumLength: 25
     Rectangle {
         width: 30
         color: "transparent"
