@@ -20,6 +20,5 @@ QtObject {
         WindowManager.createWindow("main/main.qml")
     }
 
-    Component.onCompleted: openRegistrationWindow()
-
+    Component.onCompleted: openLoginWindow()
 }
