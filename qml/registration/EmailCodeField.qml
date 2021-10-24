@@ -6,7 +6,7 @@ import "../templates"
 TemplateField {
     
     property color bgColor: "#3e3e3e"
-    font.pointSize: 16
+    font.pixelSize: 22
     height: 50
     width: 200
     maximumLength: 6
