@@ -10,7 +10,7 @@ from service.Security import Security
 
 class AuthorizationDispatcher:
     __network = Network()
-
+    __server_message = None
     __server_message: Optional[str]
     __default_server_message = 'Неизвестная ошибка.'
 
@@ -25,6 +25,17 @@ class AuthorizationDispatcher:
     @classmethod
     def server_error_occurred(cls):
         return cls.__server_error
+
+    @classmethod
+    def __receive(cls):
+        try:
+            answer = AnswerParser.extract_answer(cls.__network.receive())
+            cls.__set_server_message(answer)
+            return answer.type == AnswerType.ACCEPT
+        except IOError as e:
+            cls.__server_message = e
+            cls.__server_error = True
+            return False
 
     @classmethod
     def __set_server_message(cls, answer):
@@ -54,9 +65,7 @@ class AuthorizationDispatcher:
                 password=Security.encrypt(password),
                 email=email
             ))
-        answer = AnswerParser.extract_answer(cls.__network.receive())
-        cls.__set_server_message(answer)
-        return answer.type == AnswerType.ACCEPT
+        return cls.__receive()
 
     @classmethod
     def registration(cls, login, password, first_name, last_name, email):
@@ -71,9 +80,7 @@ class AuthorizationDispatcher:
                 last_name=last_name,
                 email=email
             ))
-        answer = AnswerParser.extract_answer(cls.__network.receive())
-        cls.__set_server_message(answer)
-        return answer.type == AnswerType.ACCEPT
+        return cls.__receive()
 
     @classmethod
     def email_verification(cls, email, login):
@@ -83,9 +90,7 @@ class AuthorizationDispatcher:
                 email=email,
                 login=login
             ))
-        answer = AnswerParser.extract_answer(cls.__network.receive())
-        cls.__set_server_message(answer)
-        return answer.type == AnswerType.ACCEPT
+        return cls.__receive()
 
     @classmethod
     def code_verification(cls, email, code):
@@ -95,9 +100,7 @@ class AuthorizationDispatcher:
                 email=email,
                 code=code
             ))
-        answer = AnswerParser.extract_answer(cls.__network.receive())
-        cls.__set_server_message(answer)
-        return answer.type == AnswerType.ACCEPT
+        return cls.__receive()
 
     @classmethod
     def encryption_key(cls):
@@ -116,9 +119,7 @@ class AuthorizationDispatcher:
             request_type=RequestType.AVAILABLE_EMAIL,
             email=email
         ))
-        answer = AnswerParser.extract_answer(cls.__network.receive())
-        cls.__set_server_message(answer)
-        return answer.type == AnswerType.ACCEPT
+        return cls.__receive()
 
     @classmethod
     def available_login(cls, login):
@@ -126,6 +127,4 @@ class AuthorizationDispatcher:
             request_type=RequestType.AVAILABLE_LOGIN,
             login=login
         ))
-        answer = AnswerParser.extract_answer(cls.__network.receive())
-        cls.__set_server_message(answer)
-        return answer.type == AnswerType.ACCEPT
+        return cls.__receive()
