@@ -158,7 +158,16 @@ TemplateWindow {
                         loginField, emailField,
                         password1Field, password2Field
                     ]
-                    if (!Validator.isEmpty(fields) && Validator.isAllValid(fields)) registrationBlock.isOff = true
+                    if (!Validator.isEmpty(fields) && Validator.isAllValid(fields)) {
+                        service.registration(
+                            firstNameField.text,
+                            lastNameField.text,
+                            loginField.text,
+                            emailField.text,
+                            password1Field.text
+                        )
+                        registrationBlock.isOff = true
+                    }
                 }
             }
 

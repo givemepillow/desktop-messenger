@@ -10,6 +10,8 @@ Rectangle {
         bottom: parent.bottom
         top: titleBar.bottom
     }
+    property string errorBarTextInfo: qsTr("Ошибка на стороне сервера!")
+    property bool errorBarVisible: false
     color: "#3d3d3d"
     Rectangle {
         id: errorBar
@@ -21,8 +23,8 @@ Rectangle {
             right: parent.right
             top: parent.top
         }
-        visible: false
-        property string textInfo: qsTr("Ошибка на стороне сервера!")
+        visible: errorBarVisible
+        property string textInfo: errorBarTextInfo
         Label {
             anchors.left: parent.left
             anchors.leftMargin: 10
