@@ -15,7 +15,7 @@ class Service(QObject):
         return AuthorizationDispatcher.get_server_message()
 
     @Slot(str, str, str, str, str, result=bool)
-    def registration(self, login, password, first_name, last_name, email):
+    def registration(self, login, email, password, first_name, last_name):
         return AuthorizationDispatcher.registration(
             login=login,
             password=password,
