@@ -1,9 +1,9 @@
-function validateEmail(email) {
+function isValidEmail(email) {
     const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(String(email).toLowerCase());
 }
 
-function validateLogin(login) {
+function isValidLogin(login) {
     const re = /^[0-9a-zA-Z\_]+$/;
     const re1 = /^[0-9]+$/
     const re2 = /^[\_]+$/
@@ -13,14 +13,14 @@ function validateLogin(login) {
     return re.test(String(login).toLowerCase());
 }
 
-function validateName(name) {
+function isValidName(name) {
     if (String(name).length < 2) return false;
     const re1 = /^[а-яА-Я\-]+$/;
     const re2 = /^[a-zA-Z\-]+$/;
     return (re1.test(String(name)) || re2.test(String(name)));
 }
 
-function validatePassword(password) {
+function isValidPassword(password) {
     const re = /^[a-zA-Z0-9\#\!\_\&\?\*\@\%\-\)\(\^\$\+]+$/;
     return re.test(String(password))
 }
@@ -33,7 +33,7 @@ function isHardPassword(password) {
     }
 }
 
-function lengthPassword(login) {
+function isEnoughPasswordLength(login) {
     return String(login).length > 7 ? true : false
 }
 
@@ -41,7 +41,7 @@ function equalPasswords(p1, p2) {
     return p1 === p2 ? true : false
 }
 
-function lengthLogin(login) {
+function isEnoughLoginLength(login) {
     return String(login).length > 2 ? true : false
 }
 
