@@ -23,4 +23,10 @@ PasswordField {
             password2Field.editingFinished()
         }
     }
+    onTextEdited: {
+        if (Validator.equalPasswords(text, password2Field.text)) {
+            password2Field.warning = ""
+            password2Field.borderColor = password2Field.defaultborderColor
+        }
+    }
 }            
