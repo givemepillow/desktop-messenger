@@ -10,7 +10,7 @@ TemplateField {
         topMargin: 75
     }
     onEditingFinished: {
-        if (!Validator.validateName(text) && text !== "") {
+        if (!Validator.isValidName(text) && text !== "") {
             borderColor = warningColor
             warning = "Некорректное имя!"
         }
