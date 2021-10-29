@@ -54,3 +54,6 @@ compile_commands.json
 
 # Python byte code
 *.pyc
+
+# IDE
+.idea/

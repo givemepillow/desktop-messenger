@@ -1,6 +1,7 @@
-import json
+from service.Answer import Answer
+
 
 class AnswerParser:
     @classmethod
     def extract_answer(cls, data):
-        return json.loads(data)
+        return Answer.parse_raw(bytes(data))

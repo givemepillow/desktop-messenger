@@ -1,12 +1,12 @@
-import QtQuick 2.15
-import QtQuick.Window 2.15
-import QtQuick.Controls 2.15
+import QtQuick
+import QtQuick.Window
+import QtQuick.Controls
 
 Label {
-    property var field: null
+    property TextField field: null
     text: field.warning
     visible: true
-    font.pointSize: 9
+    font.pointSize: 10
     color: "#eb4034"
     anchors {
         bottom: field.top

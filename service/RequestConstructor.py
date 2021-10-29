@@ -1,39 +1,11 @@
-from .Request import Request
-import json
+from service.Request import Request, requests
 
 
 class RequestConstructor:
-    @classmethod
-    def authentication(cls, login, password):
-        return json.dumps({
-            'type': Request.AUTHENTICATION_REQUEST,
-            'login': login,
-            'password': password
-        })
 
     @classmethod
-    def registration(cls, login, password, first_name, last_name, email):
-        return json.dumps({
-            'type': Request.REGISTRATION_REQUEST,
-            'login': login,
-            'password': password,
-            'email': email,
-            'first_name': first_name,
-            'last_name': last_name
-        })
-
-    @classmethod
-    def verification(cls, email, code):
-        return json.dumps({
-            'type': Request.CODE_VERIFICATION_REQUEST,
-            'email': email,
-            'code': code
-        })
-
-    @classmethod
-    def email_and_login(cls, email, login):
-        return json.dumps({
-            'type': Request.EMAIL_VERIFICATION_REQUEST,
-            'email': email,
-            'login': login
-        })
+    def create(cls, request_type, **kwargs):
+        data = dict()
+        for field in kwargs:
+            data[field] = kwargs[field]
+        return Request(type=request_type, data=requests[request_type].parse_obj(data)).json().encode('utf-8')

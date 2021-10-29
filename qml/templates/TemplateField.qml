@@ -1,23 +1,26 @@
-import QtQuick 2.15
-import QtQuick.Window 2.15
-import QtQuick.Controls 2.15
+import QtQuick
+import QtQuick.Window
+import QtQuick.Controls
 
 TextField {
-    property color bgColor: "#37000000"
-    property color borderColor: "#262626"
+    property color defaultBgColor: "#20000000"
+    property color defaultborderColor: "#262626"
+    property color bgColor: defaultBgColor
+    property color borderColor: defaultborderColor
     property string warning: ""
+    property string tip: ""
+    property color warningColor: "#a82222"
     echoMode: TextInput.Normal
-    maximumLength: 25
+    maximumLength: 30
     width: 300
     height: 40
-    text: qsTr("")
     color: "white"
     selectByMouse: true
-    font.pointSize: 11
+    //font.pointSize: 11
+    font.pixelSize: 16
     rightInset: 4
     verticalAlignment: Text.AlignVCenter
     background: Rectangle {
-        anchors.fill: parent
         color: bgColor
         radius: 6
         border {
@@ -26,11 +29,12 @@ TextField {
         }
     }
     onPressed: {
-        bgColor = "#37000000"
+        bgColor = defaultBgColor
     }
     onTextEdited: {
-        borderColor = "#262626"
+        borderColor = defaultborderColor
         warning = ""
+        tip = ""
     }
 }
     

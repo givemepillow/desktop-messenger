@@ -1,53 +1,130 @@
-from PySide2.QtCore import Slot, QObject, Signal
-from .Service import Service
-from .RequestConstructor import RequestConstructor
-from .AnswerParser import AnswerParser
-from .Answer import Answer
+from typing import Optional
 
-class Account(QObject):
+from service.Request import RequestType
+from service.RequestConstructor import RequestConstructor
+from service.AnswerParser import AnswerParser
+from service.Answer import AnswerType
+from service.network import Network
+from service.Security import Security
 
-    DEFAULT_MESSAGE = "Произошла непредвиденная ошибка :("
 
-    server_message = ''
+class AuthorizationDispatcher:
+    __network = Network()
+    __server_message = None
+    __server_message: Optional[str]
+    __default_server_message = 'Неизвестная ошибка.'
 
-    @Slot(str, str, result=bool)
-    def authentication(self, login, password):
-        Service.connect()
-        Service.send(RequestConstructor.authentication(login, password))
-        answer = AnswerParser.extract_answer(Service.receive())
-        Service.close()
-        self.server_message = answer['message']
-        return answer['type'] == Answer.ACCEPT
+    __server_error = False
 
-    @Slot(str, str, str, str, str, result=bool)
-    def registration(self, login, password, first_name, last_name, email):
-        Service.connect()
-        Service.send(RequestConstructor.registration(login, password, first_name, last_name, email))
-        answer = AnswerParser.extract_answer(Service.receive())
-        Service.close()
-        self.server_message = answer['message']
-        return answer['type'] == Answer.ACCEPT
-
-    @Slot(str, str, result=bool)
-    def verification(self, email, code):
-        Service.connect()
-        Service.send(RequestConstructor.verification(email, code))
-        answer = AnswerParser.extract_answer(Service.receive())
-        Service.close()
-        self.server_message = answer['message']
-        return answer['type'] == Answer.ACCEPT
-
-    @Slot(str, str, result=bool)
-    def email_and_login(self, email, login):
-        Service.connect()
-        Service.send(RequestConstructor.email_and_login(email, login))
-        answer = AnswerParser.extract_answer(Service.receive())
-        Service.close()
-        self.server_message = answer['message']
-        return answer['type'] == Answer.ACCEPT
-
-    @Slot(result=str)
-    def get_server_message(self):
-        msg = self.server_message
-        self.server_message = self.DEFAULT_MESSAGE
+    @classmethod
+    def get_server_message(cls):
+        msg = cls.__server_message if cls.__server_message else cls.__default_server_message
+        cls.__server_message = None
         return msg
+
+    @classmethod
+    def server_error_occurred(cls):
+        return cls.__server_error
+
+    @classmethod
+    def __receive(cls):
+        try:
+            answer = AnswerParser.extract_answer(cls.__network.receive())
+            cls.__set_server_message(answer)
+            return answer.type == AnswerType.ACCEPT
+        except IOError as e:
+            cls.__server_message = e
+            cls.__server_error = True
+            return False
+
+    @classmethod
+    def __set_server_message(cls, answer):
+        if answer.type == AnswerType.ERROR:
+            cls.__server_error = True
+        else:
+            cls.__server_error = False
+        cls.__server_message = answer.data.message
+
+    @classmethod
+    def __update_encryption_key(cls):
+        try:
+            if not Security.have_key():
+                Security.update_encryption_key(cls.encryption_key())
+        except TypeError:
+            return False
+        return True
+
+    @classmethod
+    def authentication(cls, login, email, password):
+        if not cls.__update_encryption_key():
+            return False
+        cls.__network.send(
+            RequestConstructor.create(
+                request_type=RequestType.AUTHENTICATION,
+                login=login,
+                password=Security.encrypt(password),
+                email=email
+            ))
+        return cls.__receive()
+
+    @classmethod
+    def registration(cls, login, password, first_name, last_name, email):
+        if not cls.__update_encryption_key():
+            return False
+        cls.__network.send(
+            RequestConstructor.create(
+                request_type=RequestType.REGISTRATION,
+                login=login,
+                password=Security.encrypt(password),
+                first_name=first_name,
+                last_name=last_name,
+                email=email
+            ))
+        return cls.__receive()
+
+    @classmethod
+    def email_verification(cls, email, login):
+        cls.__network.send(
+            RequestConstructor.create(
+                request_type=RequestType.EMAIL_VERIFICATION,
+                email=email,
+                login=login
+            ))
+        return cls.__receive()
+
+    @classmethod
+    def code_verification(cls, email, code):
+        cls.__network.send(
+            RequestConstructor.create(
+                request_type=RequestType.CODE_VERIFICATION,
+                email=email,
+                code=code
+            ))
+        return cls.__receive()
+
+    @classmethod
+    def encryption_key(cls):
+        cls.__network.send(RequestConstructor.create(
+            request_type=RequestType.ENCRYPTION_KEY
+        ))
+        answer = AnswerParser.extract_answer(cls.__network.receive())
+        if answer.type != AnswerType.KEY:
+            cls.__set_server_message(answer)
+            raise TypeError("Ошибка при получении ключа шифрования!")
+        return answer.data.key
+
+    @classmethod
+    def available_email(cls, email):
+        cls.__network.send(RequestConstructor.create(
+            request_type=RequestType.AVAILABLE_EMAIL,
+            email=email
+        ))
+        return cls.__receive()
+
+    @classmethod
+    def available_login(cls, login):
+        cls.__network.send(RequestConstructor.create(
+            request_type=RequestType.AVAILABLE_LOGIN,
+            login=login
+        ))
+        return cls.__receive()
