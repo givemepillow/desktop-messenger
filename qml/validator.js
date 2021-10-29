@@ -15,7 +15,7 @@ function isValidLogin(login) {
 
 function isValidName(name) {
     if (String(name).length < 2) return false;
-    const re1 = /^[а-яА-Я\-]+$/;
+    const re1 = /^[а-яА-ЯёЁ\-]+$/;
     const re2 = /^[a-zA-Z\-]+$/;
     return (re1.test(String(name)) || re2.test(String(name)));
 }
@@ -61,6 +61,7 @@ function isAllValid(args) {
     let isAllValid = true
     for (var i = 0; i < args.length; i++) {
         if (args[i].warning !== "") {
+            args[i].borderColor = args[i].warningColor
             isAllValid = false
         }
     }
