@@ -167,14 +167,8 @@ TemplateWindow {
                         password1Field, password2Field
                     ]
                     if (!Validator.isEmpty(fields) && Validator.isAllValid(fields)) {
-                        service.registration(
-                            firstNameField.text,
-                            lastNameField.text,
-                            loginField.text,
-                            emailField.text,
-                            password1Field.text
-                        )
-                        registrationBlock.isOff = true
+                        if (service.emailVerification(emailField.text, loginField.text, ))
+                            registrationBlock.isOff = true
                     }
                 }
             }
@@ -222,14 +216,23 @@ TemplateWindow {
             EmailCodeField {
                 id: codeField
                 focus: registrationBlock.isOff
+                onTextEdited: {
+                    codeLabel.text = codeLabel.defaultText
+                    codeLabel.color = codeLabel.nonWarningColor
+                    codeLabel.font.pointSize = 11
+                }
             }
 
             Label {
+                id: codeLabel
                 property var field: null
-                text: qsTr("Введите код, отправленный\nна указанный вами адрес электронной почты.")
+                property string defaultText: qsTr("Введите код, отправленный\nна указанный вами адрес электронной почты.")
+                text: defaultText
                 visible: true
                 font.pointSize: 11
-                color: "whitesmoke"
+                property color warningColor: "#d45353"
+                property color nonWarningColor: "whitesmoke"
+                color: nonWarningColor
                 horizontalAlignment: Text.AlignHCenter
                 anchors {
                     bottom: codeField.top
@@ -251,8 +254,8 @@ TemplateWindow {
                 fontSize: 13
                 buttonRadius: 7
                 colorDefault: "#364d96"
-                colorMouseOver: "#3e59b5"
-                colorClicked: "#563eb5"
+                colorMouseOver: "#364d96"
+                colorClicked: "#364d96"
                 layer.enabled: true
                 layer.effect: DropShadow {
                     transparentBorder: true
@@ -261,6 +264,27 @@ TemplateWindow {
                     color: "#50000000"
                 }
                 onClicked: {
+                    if (service.codeVerification(emailField.text, codeField.text)) {
+                        if (service.registration(
+                            loginField.text,
+                            emailField.text,
+                            password1Field.text,
+                            firstNameField.text,
+                            lastNameField.text
+                        )) windowManager.openLoginWindow()
+                    } else {
+                        if (service.isError()) {
+                            container.errorBarTextInfo = service.getServerMessage()
+                            container.errorBarVisible = true
+                            registrationBlock.isOff = false
+                        } else {
+                            codeLabel.text = service.getServerMessage()
+                            codeLabel.color = codeLabel.warningColor
+                            codeLabel.font.pointSize = 16
+                            codeField.focus = true
+                            codeField.text = ""
+                        }
+                    }
                 }
             }
             TemplateButton {
