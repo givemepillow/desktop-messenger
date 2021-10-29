@@ -271,7 +271,10 @@ TemplateWindow {
                             password1Field.text,
                             firstNameField.text,
                             lastNameField.text
-                        )) windowManager.openLoginWindow()
+                        )) {
+                            registrationBlock.isOff = false
+                            registrationCompleteBlock.visible = true
+                        }
                     } else {
                         if (service.isError()) {
                             container.errorBarTextInfo = service.getServerMessage()
@@ -308,6 +311,54 @@ TemplateWindow {
                 }
             }
             
+        }
+
+        Rectangle {
+            id: registrationCompleteBlock
+            anchors.fill: parent
+            color: container.color
+            visible: false
+
+            Label {
+                id: registrationCompleteLabel
+                text: qsTr("Регистрация прошла успешно!")
+                font.pointSize: 36
+                anchors {
+                    horizontalCenter: parent.horizontalCenter
+                    top: parent.top
+                    topMargin: (parent.height - openLoginButton.height - height - 40) / 2
+                }
+                
+                color: "whitesmoke"
+            }
+
+            TemplateButton {
+                id: openLoginButton
+                buttonText: "Авторизоваться"
+                height: 45
+                width: 230
+                fontSize: 14
+                buttonRadius: 7
+                colorDefault: "#364d96"
+                colorMouseOver: "#3e59b5"
+                colorClicked: "#563eb5"
+                anchors {
+                    top: registrationCompleteLabel.bottom
+                    topMargin: 20
+                    horizontalCenter: parent.horizontalCenter
+                }
+                layer.enabled: true
+                layer.effect: DropShadow {
+                    transparentBorder: true
+                    horizontalOffset: 2
+                    verticalOffset: 2
+                    color: "#50000000"
+                }
+                onClicked: {
+                    windowManager.openLoginWindow()
+                }
+            }
+
         }
 
     }
