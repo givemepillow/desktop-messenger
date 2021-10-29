@@ -31,9 +31,18 @@ TemplateWindow {
             }
         }
 
-        ErrorLabel {
+        Label {
             id: loginFieldLabel
-            field: loginField
+            property TextField field: loginField
+            text: field.warning
+            visible: true
+            font.pointSize: 12
+            color: "#eb4034"
+            anchors {
+                bottom: field.top
+                bottomMargin: 2
+                horizontalCenter: field.horizontalCenter
+            }
         }
 
         TemplateField {
