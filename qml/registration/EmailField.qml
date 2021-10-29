@@ -10,10 +10,25 @@ TemplateField {
         top: loginField.bottom
         topMargin: 25
     }
+    function isValid() {
+        if (!Validator.isValidEmail(text))
+            return false
+        return true
+    }
+
     onEditingFinished: {
-        if (!Validator.validateEmail(text) && text !== "") {
+        if (!Validator.isValidEmail(text) && text !== "") {
             borderColor = warningColor
             warning = "Некорректный адрес электронной почты!"
+        }
+    }
+    onTextEdited: {
+        if (isValid()) {
+            if (!service.availableEmail(text)) {
+                warning = service.getServerMessage()
+            } else {
+                tip = service.getServerMessage()
+            }
         }
     }
 }

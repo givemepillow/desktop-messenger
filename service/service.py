@@ -24,10 +24,36 @@ class Service(QObject):
             email=email
         )
 
+    @Slot(str, str, result=bool)
+    def emailVerification(self, email, login):
+        return AuthorizationDispatcher.email_verification(
+            login=login,
+            email=email
+        )
+
+    @Slot(str, str, result=bool)
+    def codeVerification(self, email, code):
+        return AuthorizationDispatcher.code_verification(
+            email=email,
+            code=code
+        )
+
     @Slot(str, str, str, result=bool)
     def authentication(self, login, email, password):
         return AuthorizationDispatcher.authentication(
             login=login if login != '' else None,
             password=password,
             email=email if email != '' else None
+        )
+
+    @Slot(str, result=bool)
+    def availableEmail(self, email):
+        return AuthorizationDispatcher.available_email(
+            email=email
+        )
+
+    @Slot(str, result=bool)
+    def availableLogin(self, login):
+        return AuthorizationDispatcher.available_login(
+            login=login
         )

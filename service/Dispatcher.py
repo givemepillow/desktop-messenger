@@ -109,3 +109,23 @@ class AuthorizationDispatcher:
             cls.__set_server_message(answer)
             raise TypeError("Ошибка при получении ключа шифрования!")
         return answer.data.key
+
+    @classmethod
+    def available_email(cls, email):
+        cls.__network.send(RequestConstructor.create(
+            request_type=RequestType.AVAILABLE_EMAIL,
+            email=email
+        ))
+        answer = AnswerParser.extract_answer(cls.__network.receive())
+        cls.__set_server_message(answer)
+        return answer.type == AnswerType.ACCEPT
+
+    @classmethod
+    def available_login(cls, login):
+        cls.__network.send(RequestConstructor.create(
+            request_type=RequestType.AVAILABLE_LOGIN,
+            login=login
+        ))
+        answer = AnswerParser.extract_answer(cls.__network.receive())
+        cls.__set_server_message(answer)
+        return answer.type == AnswerType.ACCEPT

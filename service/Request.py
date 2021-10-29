@@ -12,6 +12,16 @@ class RequestType(enum.Enum):
     CODE_VERIFICATION: int = 103
     EMAIL_VERIFICATION: int = 104
     ENCRYPTION_KEY: int = 105
+    AVAILABLE_EMAIL: int = 106
+    AVAILABLE_LOGIN: int = 107
+
+
+class AvailableLogin(BaseModel):
+    login: str
+
+
+class AvailableEmail(BaseModel):
+    email: str
 
 
 class EncryptionKey(BaseModel):
@@ -50,7 +60,9 @@ class Request(BaseModel):
         CodeVerification,
         EmailVerification,
         Authentication,
-        EncryptionKey
+        EncryptionKey,
+        AvailableLogin,
+        AvailableEmail
     ]
     ip: Optional[str]
 
@@ -60,5 +72,7 @@ requests = {
     RequestType.ENCRYPTION_KEY: EncryptionKey,
     RequestType.REGISTRATION: Registration,
     RequestType.CODE_VERIFICATION: CodeVerification,
-    RequestType.EMAIL_VERIFICATION: EmailVerification
+    RequestType.EMAIL_VERIFICATION: EmailVerification,
+    RequestType.AVAILABLE_EMAIL: AvailableEmail,
+    RequestType.AVAILABLE_LOGIN: AvailableLogin
 }
