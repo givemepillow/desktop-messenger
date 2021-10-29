@@ -66,12 +66,20 @@ TemplateWindow {
                 id: loginFieldLabel
                 field: loginField
             }
+            TipLabel {
+                id: loginFieldTipLabel
+                field: loginField
+            }
             LoginField {
                 id: loginField;
             }
             // Email field
             ErrorLabel {
                 id: emailFieldLabel
+                field: emailField
+            }
+            TipLabel {
+                id: emailFieldTipLabel
                 field: emailField
             }
             EmailField {
