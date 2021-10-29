@@ -102,7 +102,23 @@ TemplateWindow {
             onClicked: {
                 let fields = [loginField, passwordField]
                 if (Validator.isAllValid(fields) && !Validator.isEmpty(fields)) {
-                    console.log("BOOOM")
+                    let answer = true
+                    if (loginField.text.indexOf('@') !== -1)
+                        answer = service.authentication(null, loginField.text, passwordField.text)
+                    else
+                        answer = service.authentication(loginField.text, null, passwordField.text)
+                    if (answer == false) {
+                        if (service.isError()) {
+                            container.errorBarTextInfo = service.getServerMessage()
+                            container.errorBarVisible = true
+                        } else {
+                            let serverMessage = service.getServerMessage()
+                            loginField.warning = serverMessage
+                            loginField.borderColor = loginField.warningColor
+                        }
+                    } else {
+                        windowManager.openMainWindow()
+                    }
                 }
             }
         }
