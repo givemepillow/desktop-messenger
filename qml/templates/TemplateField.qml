@@ -8,6 +8,7 @@ TextField {
     property color bgColor: defaultBgColor
     property color borderColor: defaultborderColor
     property string warning: ""
+    property string tip: ""
     property color warningColor: "#a82222"
     echoMode: TextInput.Normal
     maximumLength: 30
@@ -33,6 +34,7 @@ TextField {
     onTextEdited: {
         borderColor = defaultborderColor
         warning = ""
+        tip = ""
     }
 }
     
