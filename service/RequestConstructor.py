@@ -1,4 +1,4 @@
-from service.Request import Request, requests
+from service.Requests import Request, requests
 
 
 class RequestConstructor:

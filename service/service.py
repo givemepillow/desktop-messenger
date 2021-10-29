@@ -1,5 +1,5 @@
 from PySide6.QtCore import QObject, Signal, Slot, Property
-from .dispatcher import AuthorizationDispatcher
+from .Dispatcher import AuthorizationDispatcher
 
 
 class Service(QObject):

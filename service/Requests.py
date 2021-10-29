@@ -6,7 +6,7 @@ from pydantic import BaseModel
 
 class RequestType(enum.Enum):
     # request starts with 1, code length - 3
-    # answers starts with 2, code length - 3
+    # responses starts with 2, code length - 3
     AUTHENTICATION: int = 101
     REGISTRATION: int = 102
     CODE_VERIFICATION: int = 103

@@ -1,9 +1,9 @@
 from typing import Optional
 
-from service.Request import RequestType
+from service.Requests import RequestType
 from service.RequestConstructor import RequestConstructor
-from service.AnswerParser import AnswerParser
-from service.Answer import AnswerType
+from service.ResponseParser import ResponseParser
+from service.Responses import ResponseType
 from service.network import Network
 from service.Security import Security
 
@@ -29,9 +29,9 @@ class AuthorizationDispatcher:
     @classmethod
     def __receive(cls):
         try:
-            answer = AnswerParser.extract_answer(cls.__network.receive())
+            answer = ResponseParser.extract_answer(cls.__network.receive())
             cls.__set_server_message(answer)
-            return answer.type == AnswerType.ACCEPT
+            return answer.type == ResponseType.ACCEPT
         except IOError as e:
             cls.__server_message = e
             cls.__server_error = True
@@ -39,7 +39,7 @@ class AuthorizationDispatcher:
 
     @classmethod
     def __set_server_message(cls, answer):
-        if answer.type == AnswerType.ERROR:
+        if answer.type == ResponseType.ERROR:
             cls.__server_error = True
         else:
             cls.__server_error = False
@@ -107,8 +107,8 @@ class AuthorizationDispatcher:
         cls.__network.send(RequestConstructor.create(
             request_type=RequestType.ENCRYPTION_KEY
         ))
-        answer = AnswerParser.extract_answer(cls.__network.receive())
-        if answer.type != AnswerType.KEY:
+        answer = ResponseParser.extract_answer(cls.__network.receive())
+        if answer.type != ResponseType.KEY:
             cls.__set_server_message(answer)
             raise TypeError("Ошибка при получении ключа шифрования!")
         return answer.data.key
