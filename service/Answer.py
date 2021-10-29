@@ -22,11 +22,11 @@ class Error(BaseModel):
 
 
 class Reject(BaseModel):
-    cause: str
+    message: str
 
 
 class Accept(BaseModel):
-    info: str
+    message: str
 
 
 answers = {
