@@ -15,4 +15,9 @@ PasswordField {
             warning = "Пароли не совпадаю!"
         }
     }
+    onTextEdited: {
+        if (password1Field.isValid() && Validator.equalPasswords(text, password1Field.text)) {
+            tip = "Пароли совпадают."
+        }
+    }
 }            

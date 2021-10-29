@@ -90,6 +90,10 @@ TemplateWindow {
                 id: password1FieldLabel
                 field: password1Field
             }
+            TipLabel {
+                id: password1FieldTipLabel
+                field: password1Field
+            }
             Password1Field {
                 id: password1Field
                 //warning: validator.name
@@ -97,6 +101,10 @@ TemplateWindow {
             // Password 2 field
             ErrorLabel {
                 id: password2FieldLabel
+                field: password2Field
+            }
+            TipLabel {
+                id: password2FieldTipLabel
                 field: password2Field
             }
             Password2Field {

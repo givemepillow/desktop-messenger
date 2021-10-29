@@ -9,6 +9,17 @@ PasswordField {
         top: emailField.bottom
         topMargin: 50
     }
+
+    function isValid() {
+        if (!Validator.isEnoughPasswordLength(text)) {
+            return false
+        } else if (!Validator.isValidPassword(text)) {
+            return false
+        } else {
+            return true
+        }
+    }
+
     onEditingFinished: {
         if (!Validator.isValidPassword(text) && text !== "") {
             borderColor = warningColor
@@ -27,6 +38,9 @@ PasswordField {
         if (Validator.equalPasswords(text, password2Field.text)) {
             password2Field.warning = ""
             password2Field.borderColor = password2Field.defaultborderColor
+        } 
+        if (isValid() && Validator.isHardPassword(text)) {
+            tip = "Сильный пароль!"
         }
     }
 }            
