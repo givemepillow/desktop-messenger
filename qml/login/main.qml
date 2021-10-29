@@ -46,13 +46,20 @@ TemplateWindow {
                 horizontalCenter: parent.horizontalCenter
             }
             onEditingFinished: {
-                let length = Validator.lengthLogin(text)
-                let validEmail = Validator.validateEmail(text)
-                let validLogin = Validator.validateLogin(text)
+                let length = Validator.isEnoughLoginLength(text)
+                let validEmail = Validator.isValidEmail(text)
+                let validLogin = Validator.isValidLogin(text)
 
                 if ((!length || (!validEmail && !validLogin)) && text !== "") {
                     borderColor = warningColor
                     warning = "Некорректный логин или email!"
+                }
+            }
+
+            onTextEdited: {
+                if (Validator.isValidPassword(passwordField.text) 
+                && Validator.isEnoughPasswordLength(passwordField.text)) {
+                    passwordField.borderColor = passwordField.defaultborderColor
                 }
             }
         }
@@ -71,7 +78,7 @@ TemplateWindow {
                 horizontalCenter: parent.horizontalCenter
             }
             onEditingFinished: {
-                if ((!Validator.validatePassword(text) || !Validator.lengthPassword(text)) && text !== "") {
+                if ((!Validator.isValidPassword(text) || !Validator.isEnoughPasswordLength(text)) && text !== "") {
                     borderColor = warningColor
                     warning = "Некорректный пароль!"
                 }
@@ -115,6 +122,7 @@ TemplateWindow {
                             let serverMessage = service.getServerMessage()
                             loginField.warning = serverMessage
                             loginField.borderColor = loginField.warningColor
+                            passwordField.borderColor = passwordField.warningColor
                         }
                     } else {
                         windowManager.openMainWindow()
