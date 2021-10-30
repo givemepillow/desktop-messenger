@@ -20,5 +20,9 @@ QtObject {
         WindowManager.createWindow("main/main.qml")
     }
 
+    function openRecoveryWindow() {
+        WindowManager.createWindow("recovery/main.qml")
+    }
+
     Component.onCompleted: openLoginWindow()
 }

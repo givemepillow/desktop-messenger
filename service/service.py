@@ -6,6 +6,10 @@ class Service(QObject):
     def __init__(self):
         QObject.__init__(self)
 
+    @classmethod
+    def __null(cls, var):
+        return var if var != '' else None
+
     @Slot(result=bool)
     def isError(self):
         return AuthorizationDispatcher.server_error_occurred()
@@ -41,8 +45,8 @@ class Service(QObject):
     @Slot(str, str, str, result=bool)
     def authentication(self, login, email, password):
         return AuthorizationDispatcher.authentication(
-            login=login if login != '' else None,
-            password=password,
+            login=self.__null(login),
+            password=self.__null(password),
             email=email if email != '' else None
         )
 
@@ -56,4 +60,27 @@ class Service(QObject):
     def availableLogin(self, login):
         return AuthorizationDispatcher.available_login(
             login=login
+        )
+
+    @Slot(str, str, result=bool)
+    def recoveryEmailVerification(self, email, login):
+        return AuthorizationDispatcher.recovery_email_verification(
+            email=self.__null(email),
+            login=self.__null(login)
+        )
+
+    @Slot(str, str, str, result=bool)
+    def recoveryCodeVerification(self, email, login, code):
+        return AuthorizationDispatcher.recovery_code_verification(
+            email=self.__null(email),
+            login=self.__null(login),
+            code=code
+        )
+
+    @Slot(str, str, str, result=bool)
+    def newPassword(self, email, login, password):
+        return AuthorizationDispatcher.new_password(
+            email=self.__null(email),
+            login=self.__null(login),
+            password=password
         )

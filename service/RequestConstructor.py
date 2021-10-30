@@ -8,4 +8,7 @@ class RequestConstructor:
         data = dict()
         for field in kwargs:
             data[field] = kwargs[field]
-        return Request(type=request_type, data=requests[request_type].parse_obj(data)).json().encode('utf-8')
+        return Request.construct(
+            type=request_type,
+            data=requests[request_type].parse_obj(data)
+        ).json().encode('utf-8')
