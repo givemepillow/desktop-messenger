@@ -18,6 +18,7 @@ Button {
     property color colorTextDefault: "whitesmoke"
     property color colorTextMouseOver: "whitesmoke"
     property color colorTextClicked: "whitesmoke"
+    property bool fontUnderline: false
 
     property int iconHeight: 37
     property int iconWidth: 37
@@ -48,6 +49,7 @@ Button {
                 fill: parent
                 centerIn: parent
             }
+            font.underline: fontUnderline
             text: qsTr(button.buttonText)
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
