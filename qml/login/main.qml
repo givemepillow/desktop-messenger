@@ -128,14 +128,15 @@ TemplateWindow {
             colorTextClicked: colorTextDefault
             anchors {
                 top: passwordField.bottom
-                topMargin: 0
+                topMargin: -2
                 right: recoveryBtn2.left
+                rightMargin: 5
             }
         }
         TemplateButton {
             id: recoveryBtn2
             buttonText: "Восстановление пароля."
-            width: 160
+            width: 150
             height: 30
             fontSize: 10
             colorTextDefault: "#a4a9b0"
@@ -145,9 +146,9 @@ TemplateWindow {
             onClicked: windowManager.openRecoveryWindow()
             anchors {
                 top: passwordField.bottom
-                topMargin: 0
+                topMargin: -3
                 right: passwordField.right
-                rightMargin: 0
+                rightMargin: 7
             }
         }
 
