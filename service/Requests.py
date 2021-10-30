@@ -14,6 +14,15 @@ class RequestType(enum.Enum):
     ENCRYPTION_KEY: int = 105
     AVAILABLE_EMAIL: int = 106
     AVAILABLE_LOGIN: int = 107
+    RECOVERY_EMAIl_VERIFICATION: int = 108
+    RECOVERY_CODE_VERIFICATION: int = 109
+    NEW_PASSWORD: int = 110
+
+
+class NewPassword(BaseModel):
+    email: Optional[str]
+    login: Optional[str]
+    password: bytes
 
 
 class AvailableLogin(BaseModel):
@@ -53,6 +62,17 @@ class CodeVerification(BaseModel):
     code: int
 
 
+class RecoveryEmailVerification(BaseModel):
+    email: Optional[str]
+    login: Optional[str]
+
+
+class RecoveryCodeVerification(BaseModel):
+    email: Optional[str]
+    login: Optional[str]
+    code: int
+
+
 class Request(BaseModel):
     type: RequestType
     data: Union[
@@ -62,7 +82,10 @@ class Request(BaseModel):
         Authentication,
         EncryptionKey,
         AvailableLogin,
-        AvailableEmail
+        AvailableEmail,
+        RecoveryEmailVerification,
+        RecoveryCodeVerification,
+        NewPassword
     ]
     ip: Optional[str]
 
@@ -74,5 +97,8 @@ requests = {
     RequestType.CODE_VERIFICATION: CodeVerification,
     RequestType.EMAIL_VERIFICATION: EmailVerification,
     RequestType.AVAILABLE_EMAIL: AvailableEmail,
-    RequestType.AVAILABLE_LOGIN: AvailableLogin
+    RequestType.AVAILABLE_LOGIN: AvailableLogin,
+    RequestType.RECOVERY_CODE_VERIFICATION: RecoveryCodeVerification,
+    RequestType.RECOVERY_EMAIl_VERIFICATION: RecoveryEmailVerification,
+    RequestType.NEW_PASSWORD: NewPassword
 }
