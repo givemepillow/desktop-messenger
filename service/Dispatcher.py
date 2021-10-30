@@ -97,8 +97,8 @@ class AuthorizationDispatcher:
         cls.__network.send(RequestConstructor.create(
             request_type=RequestType.ENCRYPTION_KEY
         ))
-        answer = ResponseParser.extract_answer(cls.__network.receive())
-        if answer.type != ResponseType.KEY:
+        answer = ResponseParser.extract_response(cls.__network.receive())
+        if ResponseType(answer.type) != ResponseType.KEY:
             cls.__set_server_message(answer)
             raise TypeError("Ошибка при получении ключа шифрования!")
         return answer.data.key
@@ -116,5 +116,36 @@ class AuthorizationDispatcher:
         cls.__network.send(RequestConstructor.create(
             request_type=RequestType.AVAILABLE_LOGIN,
             login=login
+        ))
+        return cls.__receive()
+
+
+    @classmethod
+    def recovery_email_verification(cls, email, login):
+        cls.__network.send(RequestConstructor.create(
+            request_type=RequestType.RECOVERY_EMAIl_VERIFICATION,
+            login=login,
+            email=email
+        ))
+        return cls.__receive()
+
+    @classmethod
+    def recovery_code_verification(cls, email, login, code):
+        cls.__network.send(RequestConstructor.create(
+            request_type=RequestType.RECOVERY_CODE_VERIFICATION,
+            login=login,
+            email=email,
+            code=code
+        ))
+        return cls.__receive()
+
+    @classmethod
+    def new_password(cls, email, login, password):
+        Security.update_encryption_key(cls.encryption_key())
+        cls.__network.send(RequestConstructor.create(
+            request_type=RequestType.NEW_PASSWORD,
+            login=login,
+            email=email,
+            password=Security.encrypt(password)
         ))
         return cls.__receive()
