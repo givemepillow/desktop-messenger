@@ -115,6 +115,42 @@ TemplateWindow {
                 }
             }
         }
+
+        TemplateButton {
+            id: recoveryBtn1
+            buttonText: "Забыли пароль?"
+            width: 95
+            height: 30
+            enabled: false
+            fontSize: 10
+            colorTextDefault: "#a4a9b0"
+            colorTextMouseOver: colorTextDefault
+            colorTextClicked: colorTextDefault
+            anchors {
+                top: passwordField.bottom
+                topMargin: 0
+                right: recoveryBtn2.left
+            }
+        }
+        TemplateButton {
+            id: recoveryBtn2
+            buttonText: "Восстановление пароля."
+            width: 160
+            height: 30
+            fontSize: 10
+            colorTextDefault: "#a4a9b0"
+            colorTextMouseOver: "#e3bf30"
+            colorTextClicked: "#e37e30"
+            colorOverlayClicked: "transparent"
+            onClicked: windowManager.openRecoveryWindow()
+            anchors {
+                top: passwordField.bottom
+                topMargin: 0
+                right: passwordField.right
+                rightMargin: 0
+            }
+        }
+
         TemplateButton {
             id: registrationProcessButton
             buttonText: "Войти"
