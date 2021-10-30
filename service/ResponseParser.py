@@ -1,7 +1,18 @@
-from service.Responses import Response
-
+import json
+from json import JSONDecodeError
+from service.Responses import ResponseType, Response, responses
 
 class ResponseParser:
     @classmethod
-    def extract_answer(cls, data):
-        return Response.parse_raw(bytes(data))
+    def extract_response(cls, data) -> Response:
+        json_response = json.loads(bytes(data))
+        try:
+            parsed_response = Response.construct(
+                type=json_response['type'],
+                data=responses[ResponseType(json_response['type'])].parse_obj(json_response['data']),
+                ip=None
+            )
+            print(parsed_response)
+        except JSONDecodeError:
+            raise ValueError('Получен невалидный запрос.')
+        return parsed_response

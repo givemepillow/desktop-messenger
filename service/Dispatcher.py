@@ -29,9 +29,9 @@ class AuthorizationDispatcher:
     @classmethod
     def __receive(cls):
         try:
-            answer = ResponseParser.extract_answer(cls.__network.receive())
+            answer = ResponseParser.extract_response(cls.__network.receive())
             cls.__set_server_message(answer)
-            return answer.type == ResponseType.ACCEPT
+            return ResponseType(answer.type) == ResponseType.ACCEPT
         except IOError as e:
             cls.__server_message = e
             cls.__server_error = True
