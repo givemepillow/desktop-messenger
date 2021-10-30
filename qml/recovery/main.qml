@@ -1,12 +1,13 @@
 import QtQuick 
 import QtQuick.Window
 import QtQuick.Controls
+import Qt5Compat.GraphicalEffects
 import "../templates"
 
 TemplateWindow {
     id: window
-    windowHeigth: 720
-    windowWidht: 980
+    windowHeigth: 500
+    windowWidht: 400
 
     TitleBar {
         id: titleBar
@@ -14,5 +15,32 @@ TemplateWindow {
     }
     Container {
         id: container
+
+        Label {
+            text: qsTr('Восстановление пароля')
+            color: "whitesmoke"
+            font.pointSize: 24 
+            anchors {
+                horizontalCenter: parent.horizontalCenter
+                top: parent.top
+                topMargin: 50
+            }
+        }
+
+        LoginOrEmailBlock {
+            id: loginOrEmailBlock
+        }
+
+        CodeVerificationBlock {
+            id: codeVerificationBlock
+        }
+
+        NewPasswordBlock {
+            id: newPasswordBlock
+        }
+
+        CompleteBlock {
+            id: completeBlock
+        }
     }
 }
