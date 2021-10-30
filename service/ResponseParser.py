@@ -9,8 +9,7 @@ class ResponseParser:
         try:
             parsed_response = Response.construct(
                 type=json_response['type'],
-                data=responses[ResponseType(json_response['type'])].parse_obj(json_response['data']),
-                ip=None
+                data=responses[ResponseType(json_response['type'])].parse_obj(json_response['data'])
             )
             print(parsed_response)
         except JSONDecodeError:
