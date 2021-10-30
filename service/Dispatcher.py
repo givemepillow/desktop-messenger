@@ -45,19 +45,10 @@ class AuthorizationDispatcher:
             cls.__server_error = False
         cls.__server_message = answer.data.message
 
-    @classmethod
-    def __update_encryption_key(cls):
-        try:
-            if not Security.have_key():
-                Security.update_encryption_key(cls.encryption_key())
-        except TypeError:
-            return False
-        return True
 
     @classmethod
     def authentication(cls, login, email, password):
-        if not cls.__update_encryption_key():
-            return False
+        Security.update_encryption_key(cls.encryption_key())
         cls.__network.send(
             RequestConstructor.create(
                 request_type=RequestType.AUTHENTICATION,
@@ -69,8 +60,7 @@ class AuthorizationDispatcher:
 
     @classmethod
     def registration(cls, login, password, first_name, last_name, email):
-        if not cls.__update_encryption_key():
-            return False
+        Security.update_encryption_key(cls.encryption_key())
         cls.__network.send(
             RequestConstructor.create(
                 request_type=RequestType.REGISTRATION,
