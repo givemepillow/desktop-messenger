@@ -36,7 +36,7 @@ TemplateWindow {
             property TextField field: loginField
             text: field.warning
             visible: true
-            font.pointSize: 12
+            font.pointSize: 11
             color: "#eb4034"
             anchors {
                 bottom: field.top
@@ -79,10 +79,19 @@ TemplateWindow {
                 }
             }
         }
-
-        ErrorLabel {
+        
+        Label {
             id: passwordFieldLabel
-            field: passwordField
+            property TextField field: passwordField
+            text: field.warning
+            visible: true
+            font.pointSize: 11
+            color: "#eb4034"
+            anchors {
+                bottom: field.top
+                bottomMargin: 2
+                horizontalCenter: field.horizontalCenter
+            }
         }
 
         PasswordField {
