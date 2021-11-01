@@ -53,7 +53,8 @@ class Network(QObject):
         if not self.__reconnect():
             return False
         self.socket.write(data)
-        return self.socket.flush()
+        self.__alive = self.socket.flush()
+        return self.__alive 
 
     def receive(self):
         if self.socket.waitForReadyRead(1000):
