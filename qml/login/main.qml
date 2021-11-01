@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import Qt5Compat.GraphicalEffects
 import "../validator.js" as Validator
+import "loginTools.js" as Tools
 import "../templates"
 
 TemplateWindow {
@@ -49,37 +50,15 @@ TemplateWindow {
             id: loginField
             placeholderText: qsTr("Введите ваш логин или email")
             maximumLength: 25 * 2
+            focus: true
             anchors {
                 top: parent.top
                 topMargin: 150
                 horizontalCenter: parent.horizontalCenter
             }
-
-            function isValid() {
-                let length = Validator.isEnoughLoginLength(text)
-                let validEmail = Validator.isValidEmail(text)
-                let validLogin = Validator.isValidLogin(text)
-
-                if ((!length || (!validEmail && !validLogin)) && text !== "") {
-                    return false
-                }
-                return true
-            }
-
-            onEditingFinished: {
-                if (!isValid()) {
-                    borderColor = warningColor
-                    warning = "Некорректный логин или email!"
-                }
-            }
-
-            onAccepted: registrationProcessButton.login()
-
-            onTextEdited: {
-                if (passwordField.isValid()) {
-                    passwordField.borderColor = passwordField.defaultborderColor
-                }
-            }
+            onEditingFinished: Tools.onEditingFinishedEmailOrLogin()
+            onAccepted: Tools.login()
+            onTextEdited: Tools.onTextEditedEmailOrLogin()
         }
         
         Label {
@@ -104,28 +83,9 @@ TemplateWindow {
                 topMargin: 25
                 horizontalCenter: parent.horizontalCenter
             }
-
-            function isValid() {
-                if ((!Validator.isValidPassword(text) || !Validator.isEnoughPasswordLength(text)) && text !== "") {
-                    return false
-                }
-                return true
-            }
-
-            onEditingFinished: {
-                if (!isValid()) {
-                    borderColor = warningColor
-                    warning = "Некорректный пароль!"
-                }
-            }
-
-            onAccepted: registrationProcessButton.login()
-            onTextEdited: {
-                if (loginField.isValid()) {
-                    loginField.borderColor = loginField.defaultborderColor
-                    loginField.warning = ""
-                }
-            }
+            onEditingFinished: Tools.onEditingFinishedPassword()
+            onAccepted: Tools.login()
+            onTextEdited: Tools.onTextEditedPassword()
         }
 
         TemplateButton {
@@ -186,32 +146,7 @@ TemplateWindow {
                 verticalOffset: 2
                 color: "#50000000"
             }
-
-            function login() {
-                let fields = [loginField, passwordField]
-                if (Validator.isAllValid(fields) && !Validator.isEmpty(fields)) {
-                    let answer = true
-                    if (loginField.text.indexOf('@') !== -1)
-                        answer = service.authentication(null, loginField.text, passwordField.text)
-                    else
-                        answer = service.authentication(loginField.text, null, passwordField.text)
-                    if (answer == false) {
-                        if (service.isError()) {
-                            container.errorBarTextInfo = service.getServerMessage()
-                            container.errorBarVisible = true
-                        } else {
-                            let serverMessage = service.getServerMessage()
-                            loginField.warning = serverMessage
-                            loginField.borderColor = loginField.warningColor
-                            passwordField.borderColor = passwordField.warningColor
-                        }
-                    } else {
-                        windowManager.openMainWindow()
-                    }
-                }
-            }
-
-            onClicked: login()
+            onClicked: Tools.login()
         }
 
         TemplateButton {
