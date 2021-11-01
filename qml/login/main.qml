@@ -73,6 +73,8 @@ TemplateWindow {
                 }
             }
 
+            onAccepted: registrationProcessButton.login()
+
             onTextEdited: {
                 if (passwordField.isValid()) {
                     passwordField.borderColor = passwordField.defaultborderColor
@@ -117,6 +119,7 @@ TemplateWindow {
                 }
             }
 
+            onAccepted: registrationProcessButton.login()
             onTextEdited: {
                 if (loginField.isValid()) {
                     loginField.borderColor = loginField.defaultborderColor
@@ -183,7 +186,8 @@ TemplateWindow {
                 verticalOffset: 2
                 color: "#50000000"
             }
-            onClicked: {
+
+            function login() {
                 let fields = [loginField, passwordField]
                 if (Validator.isAllValid(fields) && !Validator.isEmpty(fields)) {
                     let answer = true
@@ -206,6 +210,8 @@ TemplateWindow {
                     }
                 }
             }
+
+            onClicked: login()
         }
 
         TemplateButton {
