@@ -12,7 +12,7 @@ Rectangle {
     }
     property string errorBarTextInfo: qsTr("Ошибка на стороне сервера!")
     property bool errorBarVisible: false
-    color: "#3d3d3d"
+    color: "#303030"
     Rectangle {
         id: errorBar
         height: 45
