@@ -4,6 +4,7 @@ import QtQuick.Controls
 import Qt5Compat.GraphicalEffects
 import "../validator.js" as Validator
 import "../templates"
+import "../components"
 
 Rectangle {
     id: codeVerificationBlock
@@ -32,27 +33,17 @@ Rectangle {
     }
 
 
-    TemplateButton {
+    ClassicButton {
         id: codeVerificationButton
         buttonText: "Подтвердить"
         height: 40
         width: 150
         fontSize: 12
         buttonRadius: 7
-        colorDefault: "#364d96"
-        colorMouseOver: "#3e59b5"
-        colorClicked: "#563eb5"
         anchors {
             top: codeVerificationField.bottom
             topMargin: 30
             horizontalCenter: parent.horizontalCenter
-        }
-        layer.enabled: true
-        layer.effect: DropShadow {
-            transparentBorder: true
-            horizontalOffset: 2
-            verticalOffset: 2
-            color: "#50000000"
         }
         onClicked: {
             let valid = false

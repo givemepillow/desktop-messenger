@@ -3,6 +3,7 @@ import QtQuick.Window
 import QtQuick.Controls
 import Qt5Compat.GraphicalEffects
 import "../templates"
+import "../components"
 
 
 Rectangle {
@@ -25,30 +26,18 @@ Rectangle {
         }
     }
 
-    TemplateButton {
+    ClassicButton {
         id: openLoginButton
         buttonText: "Авторизоваться"
         height: 45
         width: 230
         fontSize: 14
         buttonRadius: 7
-        colorDefault: "#364d96"
-        colorMouseOver: "#3e59b5"
-        colorClicked: "#563eb5"
         anchors {
             top: completeLabel.bottom
             topMargin: 20
             horizontalCenter: parent.horizontalCenter
         }
-        layer.enabled: true
-        layer.effect: DropShadow {
-            transparentBorder: true
-            horizontalOffset: 2
-            verticalOffset: 2
-            color: "#50000000"
-        }
-        onClicked: {
-            windowManager.openLoginWindow()
-        }
+        onClicked: windowManager.openLoginWindow()
     }
 }

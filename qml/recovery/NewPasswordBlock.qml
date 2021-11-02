@@ -5,6 +5,7 @@ import Qt5Compat.GraphicalEffects
 import "../validator.js" as Validator
 import "recovery.js" as Recovery
 import "../templates"
+import "../components"
 
 
 Rectangle {
@@ -54,27 +55,17 @@ Rectangle {
     Password2Field {
         id: password2Field
     }
-    TemplateButton {
+    ClassicButton {
         id: loginOrEmailButton
         buttonText: "Сохнанить"
         height: 40
         width: 100
         fontSize: 12
         buttonRadius: 7
-        colorDefault: "#364d96"
-        colorMouseOver: "#3e59b5"
-        colorClicked: "#563eb5"
         anchors {
             top: password2Field.bottom
             topMargin: 30
             horizontalCenter: parent.horizontalCenter
-        }
-        layer.enabled: true
-        layer.effect: DropShadow {
-            transparentBorder: true
-            horizontalOffset: 2
-            verticalOffset: 2
-            color: "#50000000"
         }
         onClicked: {
             let result = false
