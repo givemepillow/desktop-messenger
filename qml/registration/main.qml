@@ -3,6 +3,7 @@ import QtQuick.Controls
 import Qt5Compat.GraphicalEffects
 import "../validator.js" as Validator
 import "registrationTools.js" as Tools
+import "../components"
 import "../templates"
 
 
@@ -24,7 +25,6 @@ TemplateWindow {
 
             property bool isOff: false
             
-
             width: 400
             color: "transparent"
 
@@ -46,104 +46,40 @@ TemplateWindow {
                 }
             }
 
-            // First name field
-            ErrorLabel {
-                id: firstNameLabel
-                field: firstNameField
-            }
-            FirstNameField {
-                id: firstNameField;
-            }
-            // Last name field
-            ErrorLabel {
-                id: lastNameFieldLabel
-                field: lastNameField
-            }
-            LastNameField {
-                id: lastNameField;
-            }
-            // Login field
-            ErrorLabel {
-                id: loginFieldLabel
-                field: loginField
-            }
-            TipLabel {
-                id: loginFieldTipLabel
-                field: loginField
-            }
-            LoginField {
-                id: loginField;
-            }
-            // Email field
-            ErrorLabel {
-                id: emailFieldLabel
-                field: emailField
-            }
-            TipLabel {
-                id: emailFieldTipLabel
-                field: emailField
-            }
-            EmailField {
-                id: emailField
-            }
-            // Password 1 field
-            ErrorLabel {
-                id: password1FieldLabel
-                field: password1Field
-            }
-            TipLabel {
-                id: password1FieldTipLabel
-                field: password1Field
-            }
-            Password1Field {
-                id: password1Field
-                //warning: validator.name
-            }
-            // Password 2 field
-            ErrorLabel {
-                id: password2FieldLabel
-                field: password2Field
-            }
-            TipLabel {
-                id: password2FieldTipLabel
-                field: password2Field
-            }
-            Password2Field {
-                id: password2Field
-                //warning: validator.name
-            }
+            FirstNameField { id: firstNameField }
+            FieldLabel { field: firstNameField }
 
-            Label {
+            LastNameField { id: lastNameField }
+            FieldLabel { field: lastNameField }
+
+            LoginField { id: loginField }
+            FieldLabel { field: loginField }
+   
+            EmailField { id: emailField }
+            FieldLabel { field: emailField }
+            
+            Password1Field { id: password1Field }
+            FieldLabel { field: password1Field }
+            
+            Password2Field { id: password2Field }
+            FieldLabel { field: password2Field }
+
+            InfoLabel {
                 text: qsTr("* Пароль должен содержать символы латинского\n   алфавита в верхем и нижнем регистре, цифры\n   и как миниум один из следующих символов:\n   ! @ _ ) + ( ? $ ^ # * -")
-                anchors {
-                    left: password2Field.left
-                    leftMargin: 5
-                    top: password2Field.bottom
-                    topMargin: 4
-                }
-                color: "#b0b0b0"
+                anchors.left: password2Field.left
+                anchors.top: password2Field.bottom
             }
 
-            Label {
+            InfoLabel {
                 text: qsTr("* Вводите ваши настоящие данные")
-                anchors {
-                    left: lastNameField.left
-                    leftMargin: 5
-                    top: lastNameField.bottom
-                    topMargin: 4
-                }
-                color: "#b0b0b0"
+                anchors.left: lastNameField.left
+                anchors.top: lastNameField.bottom
             }
 
-            Label {
+            InfoLabel {
                 text: qsTr("* На него придёт письмо с кодом подтверждения")
-                anchors {
-                    left: emailField.left
-                    leftMargin: 5
-                    top: emailField.bottom
-                    topMargin: 4
-                }
-                color: "#b0b0b0"
+                anchors.left: emailField.left
+                anchors.top: emailField.bottom
             }
                 
             TemplateButton {
@@ -240,7 +176,7 @@ TemplateWindow {
                 }
             }
                 
-            TemplateButton {
+            ClassicButton {
                 id: acceptButton
                 anchors {
                     horizontalCenter: parent.horizontalCenter
@@ -250,39 +186,12 @@ TemplateWindow {
                 height: codeField.height - 15
                 width: codeField.width - 30
                 buttonText: qsTr("Подтвердить")
-                fontSize: 13
-                buttonRadius: 7
-                colorDefault: "#364d96"
-                colorMouseOver: "#364d96"
-                colorClicked: "#364d96"
-                layer.enabled: true
-                layer.effect: DropShadow {
-                    transparentBorder: true
-                    horizontalOffset: 2
-                    verticalOffset: 2
-                    color: "#50000000"
-                }
                 onClicked: Tools.acceptCode()
             }
-            TemplateButton {
-                anchors {
-                    horizontalCenter: parent.horizontalCenter
-                    top: acceptButton.bottom
-                    topMargin: 10
-                }
-                width: 100
-                height: 15
-                fontSize: 10
+            SmokeButton {
+                anchors.bottomMargin: 30
                 buttonText: qsTr("Отмена")
-                colorDefault: "transparent"
-                colorClicked: "transparent"
-                colorMouseOver: "transparent"
-                colorTextMouseOver: "#9e9e9e"
-                colorTextClicked: "#ffffff"
-                colorTextDefault: "#707070"
-                onClicked: {
-                    registrationBlock.isOff = false
-                }
+                onClicked: registrationBlock.isOff = false
             }
             
         }
@@ -302,38 +211,21 @@ TemplateWindow {
                     top: parent.top
                     topMargin: (parent.height - openLoginButton.height - height - 40) / 2
                 }
-                
                 color: "whitesmoke"
             }
 
-            TemplateButton {
+            ClassicButton {
                 id: openLoginButton
                 buttonText: "Авторизоваться"
                 height: 45
                 width: 230
-                fontSize: 14
-                buttonRadius: 7
-                colorDefault: "#364d96"
-                colorMouseOver: "#3e59b5"
-                colorClicked: "#563eb5"
                 anchors {
                     top: registrationCompleteLabel.bottom
                     topMargin: 20
                     horizontalCenter: parent.horizontalCenter
                 }
-                layer.enabled: true
-                layer.effect: DropShadow {
-                    transparentBorder: true
-                    horizontalOffset: 2
-                    verticalOffset: 2
-                    color: "#50000000"
-                }
-                onClicked: {
-                    windowManager.openLoginWindow()
-                }
+                onClicked: windowManager.openLoginWindow()
             }
-
         }
-
     }
 }

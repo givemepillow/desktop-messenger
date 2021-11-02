@@ -4,6 +4,7 @@ import Qt5Compat.GraphicalEffects
 import "../validator.js" as Validator
 import "loginTools.js" as Tools
 import "../templates"
+import "../components"
 
 TemplateWindow {
     id: window
@@ -32,18 +33,11 @@ TemplateWindow {
             }
         }
 
-        Label {
+        FieldLabel {
             id: loginFieldLabel
-            property TextField field: loginField
-            text: field.warning
-            visible: true
+            field: loginField
             font.pointSize: 11
-            color: "#eb4034"
-            anchors {
-                bottom: field.top
-                bottomMargin: 2
-                horizontalCenter: field.horizontalCenter
-            }
+            anchors.leftMargin: (field.width - width) / 2
         }
 
         TemplateField {
@@ -61,18 +55,11 @@ TemplateWindow {
             onTextEdited: Tools.onTextEditedEmailOrLogin()
         }
         
-        Label {
+        FieldLabel {
             id: passwordFieldLabel
-            property TextField field: passwordField
-            text: field.warning
-            visible: true
+            field: passwordField
             font.pointSize: 11
-            color: "#eb4034"
-            anchors {
-                bottom: field.top
-                bottomMargin: 2
-                horizontalCenter: field.horizontalCenter
-            }
+            anchors.leftMargin: (field.width - width) / 2
         }
 
         PasswordField {
@@ -114,7 +101,6 @@ TemplateWindow {
             colorTextDefault: "#a4a9b0"
             colorTextMouseOver: "#e3bf30"
             colorTextClicked: "#e37e30"
-            colorOverlayClicked: "transparent"
             onClicked: windowManager.openRecoveryWindow()
             anchors {
                 top: passwordField.bottom
@@ -124,30 +110,19 @@ TemplateWindow {
             }
         }
 
-        TemplateButton {
+        ClassicButton {
             id: registrationProcessButton
             buttonText: "Войти"
             height: 40
             width: 200
-            fontSize: 14
-            buttonRadius: 7
-            colorDefault: "#364d96"
-            colorMouseOver: "#3e59b5"
-            colorClicked: "#563eb5"
             anchors {
                 top: passwordField.bottom
                 topMargin: 40
                 horizontalCenter: parent.horizontalCenter
             }
-            layer.enabled: true
-            layer.effect: DropShadow {
-                transparentBorder: true
-                horizontalOffset: 2
-                verticalOffset: 2
-                color: "#50000000"
-            }
             onClicked: Tools.login()
         }
+
 
         TemplateButton {
             id: regBtn1

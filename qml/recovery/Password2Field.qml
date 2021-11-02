@@ -1,4 +1,4 @@
-import "../templates"
+import "../components"
 import "../validator.js" as Validator
 
 PasswordField {
