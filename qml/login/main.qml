@@ -33,18 +33,11 @@ TemplateWindow {
             }
         }
 
-        Label {
+        FieldLabel {
             id: loginFieldLabel
-            property TextField field: loginField
-            text: field.warning
-            visible: true
+            field: loginField
             font.pointSize: 11
-            color: "#eb4034"
-            anchors {
-                bottom: field.top
-                bottomMargin: 2
-                horizontalCenter: field.horizontalCenter
-            }
+            anchors.leftMargin: (field.width - width) / 2
         }
 
         TemplateField {
@@ -62,18 +55,11 @@ TemplateWindow {
             onTextEdited: Tools.onTextEditedEmailOrLogin()
         }
         
-        Label {
+        FieldLabel {
             id: passwordFieldLabel
-            property TextField field: passwordField
-            text: field.warning
-            visible: true
+            field: passwordField
             font.pointSize: 11
-            color: "#eb4034"
-            anchors {
-                bottom: field.top
-                bottomMargin: 2
-                horizontalCenter: field.horizontalCenter
-            }
+            anchors.leftMargin: (field.width - width) / 2
         }
 
         PasswordField {

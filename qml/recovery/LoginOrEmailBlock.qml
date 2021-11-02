@@ -17,25 +17,26 @@ Rectangle {
     property string loginOrEmail: ""
 
     Label {
-        id: loginOrEmailErrorLabel
-        property TextField field: loginOrEmailField
-        text: field.warning == "" ? "Для восстановления пароля введите\nваш логин или адрес электронной почты,\nпривязанный к аккаунту." : field.warning
-        visible: true
-        horizontalAlignment: Text.AlignHCenter
-        font.pointSize: 11
-        color: field.warning !== "" ? "#eb4034" : "whitesmoke"
-        width: parent.width
+        text: "Для восстановления пароля введите\nваш логин или адрес электронной почты,\nпривязанный к аккаунту."
+        color: "whitesmoke"
+        font.pointSize: 12
         height: contentHeight
+        horizontalAlignment: Text.AlignHCenter
+        width: parent.width
         anchors {
-            bottom: field.top
-            bottomMargin: 10
+            top: parent.top
+            topMargin: 100
             horizontalCenter: field.horizontalCenter
         }
     }
 
-    LoginOrEmailField {
-        id: loginOrEmailField
+    FieldLabel {
+        id: loginOrEmailErrorLabel
+        field: loginOrEmailField
+        font.pointSize: 11
+        anchors.leftMargin: (field.width - width) / 2
     }
+    LoginOrEmailField { id: loginOrEmailField }
 
     ClassicButton {
         id: loginOrEmailButton
@@ -52,24 +53,8 @@ Rectangle {
         onClicked: loginOrEmailField.nextStep()         
     }
 
-    TemplateButton {
-        anchors {
-            horizontalCenter: parent.horizontalCenter
-            bottom: parent.bottom
-            bottomMargin: 0
-        }
-        width: 100
-        height: 15
-        fontSize: 13
+    SmokeButton {
         buttonText: qsTr("Отмена")
-        colorDefault: "transparent"
-        colorClicked: "transparent"
-        colorMouseOver: "transparent"
-        colorTextMouseOver: "#9e9e9e"
-        colorTextClicked: "#ffffff"
-        colorTextDefault: "#707070"
-        onClicked: {
-            windowManager.openLoginWindow()
-        }
+        onClicked: windowManager.openLoginWindow()
     }
 }

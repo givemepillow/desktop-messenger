@@ -32,29 +32,17 @@ Rectangle {
         }
     }
 
-    ErrorLabel {
+    FieldLabel {
         id: password1FieldLabel
         field: password1Field
     }
-    TipLabel {
-        id: password1FieldTipLabel
-        field: password1Field
-    }
-    Password1Field {
-        id: password1Field
-    }
+    Password1Field { id: password1Field }
 
-    ErrorLabel {
+    FieldLabel {
         id: password2FieldLabel
         field: password2Field
     }
-    TipLabel {
-        id: password2FieldTipLabel
-        field: password2Field
-    }
-    Password2Field {
-        id: password2Field
-    }
+    Password2Field { id: password2Field }
     ClassicButton {
         id: loginOrEmailButton
         buttonText: "Сохнанить"
