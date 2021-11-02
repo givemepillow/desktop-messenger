@@ -12,7 +12,8 @@ Rectangle {
     width: parent.width
     anchors.centerIn: parent
     color: parent.color
-    visible: true
+    visible: false
+    focus: completeBlock.visible
 
     Label {
         id: completeLabel
@@ -29,7 +30,6 @@ Rectangle {
     ClassicButton {
         id: openLoginButton
         buttonText: "Авторизоваться"
-        focus: completeBlock.visible
         width: 230
         anchors {
             top: completeLabel.bottom
@@ -37,5 +37,8 @@ Rectangle {
             horizontalCenter: parent.horizontalCenter
         }
         onClicked: windowManager.openLoginWindow()
+    }
+    Keys.onPressed: {
+        windowManager.openLoginWindow()
     }
 }

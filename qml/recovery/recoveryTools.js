@@ -52,6 +52,7 @@ function setNewPassword() {
         if (result) {
             newPasswordBlock.visible= false
             completeBlock.visible = true
+            completeBlock.focus = true
         }
     }
 }
