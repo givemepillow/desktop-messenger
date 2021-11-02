@@ -3,7 +3,7 @@ import QtQuick.Window
 import QtQuick.Controls
 import Qt5Compat.GraphicalEffects
 import "../validator.js" as Validator
-import "recovery.js" as Recovery
+import "recoveryTools.js" as Tools
 import "../templates"
 import "../components"
 
@@ -26,7 +26,7 @@ Rectangle {
         anchors {
             top: parent.top
             topMargin: 100
-            horizontalCenter: field.horizontalCenter
+            horizontalCenter: parent.horizontalCenter
         }
     }
 
@@ -36,7 +36,19 @@ Rectangle {
         font.pointSize: 11
         anchors.leftMargin: (field.width - width) / 2
     }
-    LoginOrEmailField { id: loginOrEmailField }
+    TemplateField {
+        id: loginOrEmailField
+        placeholderText: qsTr("Введите ваш логин или email")
+        maximumLength: 25 * 2
+        focus: loginOrEmailBlock.visible
+        anchors {
+            top: parent.top
+            topMargin: 200
+            horizontalCenter: parent.horizontalCenter
+        }
+        onAccepted: Tools.sendCode()
+        
+    }
 
     ClassicButton {
         id: loginOrEmailButton
@@ -50,7 +62,7 @@ Rectangle {
             topMargin: 30
             horizontalCenter: parent.horizontalCenter
         }
-        onClicked: loginOrEmailField.nextStep()         
+        onClicked: Tools.sendCode()         
     }
 
     SmokeButton {

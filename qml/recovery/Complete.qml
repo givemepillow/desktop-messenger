@@ -7,12 +7,12 @@ import "../components"
 
 
 Rectangle {
-    id: newPasswordBlock
+    id: completeBlock
     height: parent.height
     width: parent.width
     anchors.centerIn: parent
     color: parent.color
-    visible: false
+    visible: true
 
     Label {
         id: completeLabel
@@ -29,10 +29,8 @@ Rectangle {
     ClassicButton {
         id: openLoginButton
         buttonText: "Авторизоваться"
-        height: 45
+        focus: completeBlock.visible
         width: 230
-        fontSize: 14
-        buttonRadius: 7
         anchors {
             top: completeLabel.bottom
             topMargin: 20

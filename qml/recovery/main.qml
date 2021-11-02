@@ -27,20 +27,12 @@ TemplateWindow {
             }
         }
 
-        LoginOrEmailBlock {
-            id: loginOrEmailBlock
-        }
+        LoginOrEmail {id: loginOrEmailBlock }
 
-        CodeVerificationBlock {
-            id: codeVerificationBlock
-        }
+        CodeVerification { id: codeVerificationBlock }
 
-        NewPasswordBlock {
-            id: newPasswordBlock
-        }
+        NewPassword { id: newPasswordBlock }
 
-        CompleteBlock {
-            id: completeBlock
-        }
+        Complete { id: completeBlock }
     }
 }
