@@ -15,7 +15,7 @@ Rectangle {
     color: "#303030"
     Rectangle {
         id: errorBar
-        height: 45
+        height: 30
         z: 10
         color: "#732a2a"
         anchors {
@@ -54,7 +54,7 @@ Rectangle {
                 colorOverlayClicked: "#ffffff"
                 colorOverlayDefault: "#707070"
                 onClicked: {
-                    errorBar.visible = false
+                    errorBarVisible = false
                 }
             }
         } 
