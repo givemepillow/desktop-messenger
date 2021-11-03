@@ -87,7 +87,7 @@ TemplateWindow {
             colorTextClicked: colorTextDefault
             anchors {
                 top: passwordField.bottom
-                topMargin: -2
+                topMargin: -3
                 right: recoveryBtn2.left
                 rightMargin: 5
             }
