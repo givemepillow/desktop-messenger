@@ -52,18 +52,23 @@ function login() {
             answer = service.authentication(null, loginField.text, passwordField.text)
         else
             answer = service.authentication(loginField.text, null, passwordField.text)
-        if (answer == false) {
-            if (service.isError()) {
-                container.errorBarTextInfo = service.getServerMessage()
-                container.errorBarVisible = true
-            } else {
-                let serverMessage = service.getServerMessage()
-                loginField.warning = serverMessage
-                loginField.borderColor = loginField.warningColor
-                passwordField.borderColor = passwordField.warningColor
-            }
+        if (!answer) {
+            $handleError()
         } else {
             windowManager.openMainWindow()
         }
+    }
+}
+
+function $handleError() {
+    if (service.isError()) {
+        container.errorBarTextInfo = service.getServerMessage()
+        container.errorBarVisible = true
+    } else {
+        let serverMessage = service.getServerMessage()
+        loginField.warning = serverMessage
+        loginField.borderColor = loginField.warningColor
+        passwordField.borderColor = passwordField.warningColor
+        container.errorBarVisible = false
     }
 }

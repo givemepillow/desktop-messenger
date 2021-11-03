@@ -32,8 +32,15 @@ TemplateField {
     onTextEdited: {
         if (isValid()) {
             if (!service.availableLogin(text)) {
-                warning = service.getServerMessage()
+                if (service.isError()) {
+                    container.errorBarTextInfo = service.getServerMessage()
+                    container.errorBarVisible = true
+                } else {
+                    warning = service.getServerMessage()
+                    container.errorBarVisible = false
+                }
             } else {
+                container.errorBarVisible = false
                 tip = service.getServerMessage()
             }
         }
