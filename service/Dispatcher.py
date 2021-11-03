@@ -32,8 +32,8 @@ class AuthorizationDispatcher:
             answer = ResponseParser.extract_response(cls.__network.receive())
             cls.__set_server_message(answer)
             return ResponseType(answer.type) == ResponseType.ACCEPT
-        except IOError as e:
-            cls.__server_message = e
+        except IOError:
+            cls.__server_message = 'Сервер не доступен!'
             cls.__server_error = True
             return False
 
@@ -48,29 +48,33 @@ class AuthorizationDispatcher:
 
     @classmethod
     def authentication(cls, login, email, password):
-        Security.update_encryption_key(cls.encryption_key())
-        cls.__network.send(
-            RequestConstructor.create(
-                request_type=RequestType.AUTHENTICATION,
-                login=login,
-                password=Security.encrypt(password),
-                email=email
-            ))
-        return cls.__receive()
+        if Security.update_encryption_key(cls.encryption_key()):
+            cls.__network.send(
+                RequestConstructor.create(
+                    request_type=RequestType.AUTHENTICATION,
+                    login=login,
+                    password=Security.encrypt(password),
+                    email=email
+                ))
+            return cls.__receive()
+        else:
+            return False
 
     @classmethod
     def registration(cls, login, password, first_name, last_name, email):
-        Security.update_encryption_key(cls.encryption_key())
-        cls.__network.send(
-            RequestConstructor.create(
-                request_type=RequestType.REGISTRATION,
-                login=login,
-                password=Security.encrypt(password),
-                first_name=first_name,
-                last_name=last_name,
-                email=email
-            ))
-        return cls.__receive()
+        if Security.update_encryption_key(cls.encryption_key()):
+            cls.__network.send(
+                RequestConstructor.create(
+                    request_type=RequestType.REGISTRATION,
+                    login=login,
+                    password=Security.encrypt(password),
+                    first_name=first_name,
+                    last_name=last_name,
+                    email=email
+                ))
+            return cls.__receive()
+        else:
+            return False
 
     @classmethod
     def email_verification(cls, email, login):
@@ -97,7 +101,12 @@ class AuthorizationDispatcher:
         cls.__network.send(RequestConstructor.create(
             request_type=RequestType.ENCRYPTION_KEY
         ))
-        answer = ResponseParser.extract_response(cls.__network.receive())
+        try:
+            answer = ResponseParser.extract_response(cls.__network.receive())
+        except IOError:
+            cls.__server_message = 'Сервер не доступен!'
+            cls.__server_error = True
+            return None
         if ResponseType(answer.type) != ResponseType.KEY:
             cls.__set_server_message(answer)
             raise TypeError("Ошибка при получении ключа шифрования!")
@@ -141,11 +150,13 @@ class AuthorizationDispatcher:
 
     @classmethod
     def new_password(cls, email, login, password):
-        Security.update_encryption_key(cls.encryption_key())
-        cls.__network.send(RequestConstructor.create(
-            request_type=RequestType.NEW_PASSWORD,
-            login=login,
-            email=email,
-            password=Security.encrypt(password)
-        ))
-        return cls.__receive()
+        if Security.update_encryption_key(cls.encryption_key()):
+            cls.__network.send(RequestConstructor.create(
+                request_type=RequestType.NEW_PASSWORD,
+                login=login,
+                email=email,
+                password=Security.encrypt(password)
+            ))
+            return cls.__receive()
+        else:
+            return False

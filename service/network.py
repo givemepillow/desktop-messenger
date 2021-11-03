@@ -13,10 +13,12 @@ class Network(QObject):
         self.socket = None
         self.listenServer = None
         self.socket = QtNetwork.QTcpSocket()
-        self.__create_signals()
-        self.__create_connection()
         self.__timer = QTimer(self)
         self.__timer.setInterval(1000)
+        self.__timer.timeout.connect(self.__create_connection)
+        self.__create_signals()
+        
+        
 
     def __create_signals(self):
         self.socket.errorOccurred.connect(self.__error)
@@ -30,27 +32,25 @@ class Network(QObject):
     def __create_connection(self):
         print("try to connect...")
         self.socket.connectToHost(self.TCP_HOST, self.TCP_SEND_TO_PORT)
-        self.__alive = self.socket.waitForConnected(100)
-        return self.__alive
-
-    def __reconnect(self):
+        self.__alive = self.socket.waitForConnected(50)
         if not self.__alive:
-            self.socket.reset()
-            return self.__create_connection()
-        return True
+            self.__timer.start()
+        else:
+            self.__timer.stop()
+        return self.__alive
 
     def __error(self):
         self.__alive = False
         #self.__reconnect()
-        print(self.socket.errorString())
+        print("error: ", self.socket.errorString())
 
     def __disconnect(self):
         print('disconnected from server')
         self.socket.disconnectFromHost()
-        self.socket.waitForDisconnected(1000)
+        self.create_connection()
 
     def send(self, data: bytes):
-        if not self.__reconnect():
+        if not self.__alive and not self.__create_connection():
             return False
         self.socket.write(data)
         self.__alive = self.socket.flush()
