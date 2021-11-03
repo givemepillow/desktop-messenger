@@ -9,11 +9,14 @@ class Security:
 
     @classmethod
     def update_encryption_key(cls, new_key):
+        if new_key is None:
+            return False
         cls.key = serialization.load_pem_public_key(
             base64.b64decode(
                 new_key
             )
         )
+        return True
 
     @classmethod
     def encrypt(cls, data: str):
