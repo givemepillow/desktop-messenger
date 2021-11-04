@@ -15,9 +15,14 @@ function onEditingFinishedEmailOrLogin() {
     }
 }
 
-function onTextEditedEmailOrLogin() {
+function onFocusChanged() {
     if ($isValidPassowrd(passwordField.password)) {
         passwordField.borderColor = passwordField.defaultborderColor
+        passwordField.warning = ''
+    }
+    if ($isValidLogin(loginField.text)) {
+        loginField.borderColor = loginField.defaultborderColor
+        loginField.warning = ""
     }
 }
 
@@ -33,13 +38,6 @@ function onEditingFinishedPassword() {
     if (!$isValidPassowrd(passwordField.text)) {
         passwordField.borderColor = passwordField.warningColor
         passwordField.warning = "Некорректный пароль!"
-    }
-}
-
-function onTextEditedPassword() {
-    if ($isValidLogin(loginField.text)) {
-        loginField.borderColor = loginField.defaultborderColor
-        loginField.warning = ""
     }
 }
 

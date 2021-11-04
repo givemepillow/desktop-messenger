@@ -52,7 +52,7 @@ TemplateWindow {
             }
             onEditingFinished: Tools.onEditingFinishedEmailOrLogin()
             onAccepted: Tools.login()
-            onTextEdited: Tools.onTextEditedEmailOrLogin()
+            onFocusChanged: Tools.onFocusChanged()
         }
         
         FieldLabel {
@@ -72,7 +72,7 @@ TemplateWindow {
             }
             onEditingFinished: Tools.onEditingFinishedPassword()
             onAccepted: Tools.login()
-            onTextEdited: Tools.onTextEditedPassword()
+            onFocusChanged: Tools.onFocusChanged()
         }
 
         TemplateButton {
