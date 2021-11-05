@@ -5,6 +5,8 @@ from PySide6.QtCore import QObject, Signal, QTimer
 class Network(QObject):
 
     __alive = False
+    __timer_interval = 1000
+    __reconnection_tries = 0
 
     def __init__(self):
         QObject.__init__(self)
@@ -14,7 +16,7 @@ class Network(QObject):
         self.listenServer = None
         self.socket = QtNetwork.QTcpSocket()
         self.__timer = QTimer(self)
-        self.__timer.setInterval(1000)
+        self.__timer.setInterval(self.__timer_interval)
         self.__timer.timeout.connect(self.__create_connection)
         self.__create_signals()
         
@@ -32,10 +34,18 @@ class Network(QObject):
     def __create_connection(self):
         print("try to connect...")
         self.socket.connectToHost(self.TCP_HOST, self.TCP_SEND_TO_PORT)
-        self.__alive = self.socket.waitForConnected(50)
+        self.__alive = self.socket.waitForConnected(100)
         if not self.__alive:
-            self.__timer.start()
+            if self.__timer.isActive():
+                if self.__reconnection_tries > 60 * 15:
+                    self.__timer_interval = 5000
+                else:
+                    self.__reconnection_tries += 1
+            else:
+                self.__timer.start()
         else:
+            self.__timer_interval = 1000
+            self.__reconnection_tries = 0
             self.__timer.stop()
         return self.__alive
 
@@ -47,7 +57,7 @@ class Network(QObject):
     def __disconnect(self):
         print('disconnected from server')
         self.socket.disconnectFromHost()
-        self.create_connection()
+        self.__create_connection()
 
     def send(self, data: bytes):
         if not self.__alive and not self.__create_connection():
