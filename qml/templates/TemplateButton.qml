@@ -2,7 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import Qt5Compat.GraphicalEffects
 
-Button {
+AbstractButton {
     id: button
 
     property url iconSource: ""
@@ -22,10 +22,7 @@ Button {
 
     property int iconHeight: 37
     property int iconWidth: 37
-    
 
-    flat: true
-    highlighted: false
 
     QtObject {
         id: internal
