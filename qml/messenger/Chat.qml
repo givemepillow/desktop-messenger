@@ -36,7 +36,7 @@ Rectangle {
     Rectangle {
         id: inputContainer
         color: "transparent"
-        height: contentHeight
+        height: scrollV.height
         anchors {
             bottom: parent.bottom
             left: parent.left
@@ -63,6 +63,7 @@ Rectangle {
         }
 
         ScrollView {
+            id: scrollV
 
             height:  getHeight(36, 150)
 
