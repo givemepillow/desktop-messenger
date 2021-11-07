@@ -63,14 +63,14 @@ AbstractButton {
             width: button.iconWidth
             fillMode: Image.PreserveAspectFit
             visible: false
-            antialiasing: false
+            antialiasing: true
         }
 
         ColorOverlay {
             anchors.fill: iconButton
             source: iconButton
             color: internal.dynamicOverlayColor
-            antialiasing: false
+            antialiasing: true
         }
     }
 }
