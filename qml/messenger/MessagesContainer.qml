@@ -27,29 +27,37 @@ Rectangle {
         
         Rectangle {
             id: messageBlock
+
+            readonly property int maxWidth: 500
              
             color: "#333333"
             radius: 6
             height: messageArea.height + 30
-            width: messageArea.width < 55 ? 55 : messageArea.width + 15
+            width: messageArea.width < 55 ? 55 : messageArea.width
             anchors {
                 margins: 20
             }
 
-            Text {
+            TextEdit {
                 id: messageArea
-                readonly property int maxWidth: 500
+                readOnly: true
+                selectByMouse: true
                 color: "white"
                 font.pixelSize: 18
                 text: model.messageText
                 wrapMode: TextEdit.Wrap
-                
-                width: contentWidth > maxWidth ? maxWidth : contentWidth
-                
+                leftPadding: 10
+                rightPadding: 10
+                topPadding: 5
+                selectionColor: "grey" 
                 anchors {
                     left: parent.left
                     top: parent.top
-                    margins: 5
+                }
+                Component.onCompleted: {
+                    if (messageArea.contentWidth > maxWidth) {
+                        messageArea.width = maxWidth
+                    }
                 }
             }
 
@@ -65,7 +73,6 @@ Rectangle {
                     bottomMargin: 5
                 }
             }
-            //Component.onCompleted: if (userName == model.messageFrom) messageRectangle.anchors.right = parent.right
         }
         
     }
