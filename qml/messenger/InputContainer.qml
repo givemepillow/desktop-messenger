@@ -3,6 +3,7 @@ import QtQuick.Window
 import QtQuick.Controls
 import Qt5Compat.GraphicalEffects
 import "../templates"
+import "tools.js" as Tools
 
 Rectangle {
     id: inputContainer
@@ -31,15 +32,7 @@ Rectangle {
             bottom: parent.bottom
             bottomMargin: ((48 - 36) / 2) + 10
         }
-        onClicked: {
-            if (textArea.text !== '') {
-                    messagesContainer.model.append({
-                    "messageText":  textArea.text,
-                    "messageTime": Qt.formatTime(new Date(), "hh:mm")
-                })
-                textArea.text = ''
-            }
-        }
+        onClicked: Tools.send()
     }
 
     Rectangle {
@@ -93,6 +86,13 @@ Rectangle {
                     if (length > 1000) {
                         remove(1000, length)
                     }
+                }
+
+                Keys.onReturnPressed: (event)=> {
+                    if (!(event.modifiers & Qt.ShiftModifier) && !(event.modifiers & Qt.ControlModifier))
+                        Tools.send()
+                    else
+                        insert(length, '\n')
                 }
             }
         }
