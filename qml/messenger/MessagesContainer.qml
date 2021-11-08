@@ -92,7 +92,7 @@ Rectangle {
 
         footer: Rectangle {
             width: messageList.width
-            height: 5
+            height: 25
             color: "transparent"
         }
 
@@ -106,13 +106,53 @@ Rectangle {
 
         ScrollBar.vertical: ScrollBar {
             id: verticalScrollBar
-            policy: ScrollBar.AlwaysOff
+            policy: ScrollBar.AlwaysOn
+            visible: false
         }
 
         onCountChanged: {
             positionViewAtEnd()
-            verticalScrollBar.position = 1   
+            verticalScrollBar.position = 1
+            downButton.visible = false
         }
 
+        onMovementStarted: {
+            if (verticalScrollBar.position > (1 - 13/count))
+                downButton.visible = false
+            else
+                downButton.visible = true
+        }
+
+        onMovementEnded: {
+            if (verticalScrollBar.position < (1 - 13/count))
+                downButton.visible = true
+            else
+                downButton.visible = false
+        }
+
+    }
+
+        
+    TemplateButton {
+        id: downButton
+        visible: false
+        colorDefault: "transparent"
+        colorOverlayDefault: "#a38dba"
+        colorOverlayMouseOver: "#9172b5"
+        colorOverlayClicked: "#9d58ed"
+        iconHeight: 50
+        iconWidth: 50
+        width: 50
+        height: 50
+        iconSource: "../resources/icons/down.png"
+        anchors {
+            bottom: parent.bottom
+            right: parent.right
+            bottomMargin: 25
+        }
+        onClicked: {
+            messageList.positionViewAtEnd()
+            downButton.visible = false
+        }
     }
 }
