@@ -140,8 +140,8 @@ Rectangle {
         colorOverlayDefault: "#a38dba"
         colorOverlayMouseOver: "#9172b5"
         colorOverlayClicked: "#9d58ed"
-        iconHeight: 50
-        iconWidth: 50
+        iconHeight: 40
+        iconWidth: 40
         width: 50
         height: 50
         iconSource: "../resources/icons/down.png"
