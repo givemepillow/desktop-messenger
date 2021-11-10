@@ -3,16 +3,10 @@ import QtQuick.Window
 import QtQuick.Controls
 import Qt5Compat.GraphicalEffects
 import "../templates"
+import "tools.js" as Tools
 
 Rectangle {
-    id: root
-    width: parent.width * 0.7
-    color: "transparent"
-    anchors {
-        right: parent.right
-        top: parent.top
-        bottom: parent.bottom
-    }
+    id: root 
 
     Image {
         id: backgroundImage
