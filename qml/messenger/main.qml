@@ -2,6 +2,8 @@ import QtQuick
 import QtQuick.Window
 import QtQuick.Controls
 import "../templates"
+import "chat"
+import "contacts"
 
 TemplateWindow {
     id: window
@@ -16,16 +18,19 @@ TemplateWindow {
     Container {
         id: container
 
+        color: "#2b2b2b"
+
         Contacts {
             id: contacts
 
-            color: "lightgreen"
-            
+            color: "transparent"
+
             anchors {
                 left: parent.left
                 top: parent.top
                 bottom: parent.bottom
                 right: chat.left
+                rightMargin: 3
             }
         }
 

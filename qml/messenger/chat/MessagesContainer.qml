@@ -2,7 +2,7 @@ import QtQuick
 import QtQuick.Window
 import QtQuick.Controls
 import Qt5Compat.GraphicalEffects
-import "../templates"
+import "../../templates"
 
 
 Rectangle {
@@ -22,7 +22,7 @@ Rectangle {
         id: messageModel
     }
 
-        Component {
+    Component {
         id: message
         
         Rectangle {
