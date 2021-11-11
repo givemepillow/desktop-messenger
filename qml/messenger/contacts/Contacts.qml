@@ -33,7 +33,7 @@ Rectangle {
         Rectangle {
             id: contactBlock
              
-            color:  mouseArea.containsMouse ? "#3d3d3d" :"#333333"
+            color:  isMouseHovered() ? "#3d3d3d" :"#333333"
             height: 70
             width: root.width
 
@@ -42,7 +42,7 @@ Rectangle {
                 text: model.contactName
                 color: "whitesmoke"
                 font.pointSize: 11
-                visible: !mouseArea.containsMouse
+                visible: !isMouseHovered()
                 anchors {
                     top: parent.top
                     left: parent.left
@@ -55,7 +55,7 @@ Rectangle {
                 text: model.contactLogin
                 color: "#af8cde"
                 font.pointSize: 11
-                visible: mouseArea.containsMouse
+                visible: isMouseHovered()
                 anchors {
                     top: parent.top
                     left: parent.left
@@ -68,7 +68,7 @@ Rectangle {
                 id: lastMessageTime
                 text: model.lastMessageTime
                 color: "#787878"
-                visible: !mouseArea.containsMouse
+                visible: !isMouseHovered()
                 font.pointSize: 11
                 anchors {
                     top: parent.top
@@ -77,29 +77,6 @@ Rectangle {
                     topMargin: 10
                 }
             }
-
-            
-
-            TemplateButton {
-                id: deleteButton
-                iconSource: "../resources/icons/close.png"
-                visible: mouseArea.containsMouse
-                colorDefault: "transparent"
-                width: 15
-                height: 15
-                iconHeight: 30
-                iconWidth: 30
-                colorOverlayDefault: "gray"
-                colorOverlayMouseOver: "blue"
-                anchors {
-                    top: parent.top
-                    right: parent.right
-                    rightMargin: 10
-                    topMargin: 15
-                }
-            }
-
-
 
             Text {
                 text: model.lastMessage
@@ -117,6 +94,29 @@ Rectangle {
                 id: mouseArea
                 hoverEnabled: true  
                 anchors.fill: parent
+            }
+
+            TemplateButton {
+                id: deleteButton
+                iconSource: "../resources/icons/close.png"
+                opacity: isMouseHovered() ? 1 : 0
+                colorDefault: "transparent"
+                width: 15
+                height: 15
+                iconHeight: 30
+                iconWidth: 30
+                colorOverlayDefault: "gray"
+                colorOverlayClicked: "#d45555"
+                anchors {
+                    top: parent.top
+                    right: parent.right
+                    rightMargin: 10
+                    topMargin: 15
+                }
+            }
+
+            function isMouseHovered() {
+                return (mouseArea.containsMouse || deleteButton.hovered)
             }
         }
         
