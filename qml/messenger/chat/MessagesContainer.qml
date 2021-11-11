@@ -29,6 +29,15 @@ Rectangle {
             id: messageBlock
 
             readonly property int maxWidth: 500
+
+            layer.enabled: true
+            layer.effect: DropShadow {
+                spread: 0.0
+                transparentBorder: true
+                horizontalOffset: 2
+                verticalOffset: 4
+                color: "#20000000"
+            }
              
             color: "#333333"
             radius: 6
