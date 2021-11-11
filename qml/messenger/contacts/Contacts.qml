@@ -11,7 +11,6 @@ Rectangle {
         id: search
         height: 40
         placeholderText: qsTr("Поиск...")
-        cursorVisible: true
         selectByMouse: true
         focusReason: Qt.MouseFocusReason
         font.pixelSize: 18
@@ -20,7 +19,23 @@ Rectangle {
         color: "whitesmoke"
         leftPadding: 12
         background: Rectangle {
-            color: "#404040"
+            color: "transparent"
+            Rectangle {
+                height: 2
+                color: "#333333"
+                anchors {
+                    left: parent.left
+                    right: parent.right
+                    bottom: parent.bottom
+                }
+                layer.enabled: true
+                layer.effect: DropShadow {
+                    transparentBorder: true
+                    horizontalOffset: 0
+                    verticalOffset: -2
+                    color: "#20000000"
+                }
+            }
         }
         anchors {
             left: parent.left
@@ -59,18 +74,12 @@ Rectangle {
             height: 70
             width: root.width
 
-            Rectangle {
-                id: bottomLine
-                color: "#575757"
-                visible: index + 1 !== contactList.count ? true : false
-                height: 1
-                anchors {
-                    bottom: contactBlock.bottom
-                    right: contactBlock.right
-                    rightMargin: 15
-                    left: parent.left
-                    leftMargin: 50
-                }
+            layer.enabled: true
+            layer.effect: DropShadow {
+                transparentBorder: true
+                horizontalOffset: 2
+                verticalOffset: 2
+                color: "#20000000"
             }
 
             Text {
@@ -172,6 +181,7 @@ Rectangle {
             left: parent.left
             right: parent.right
             top: search.bottom
+            topMargin: 3
         }
         contentWidth: parent.width
         clip: true
