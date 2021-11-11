@@ -1,9 +1,11 @@
 import QtQuick 
 import QtQuick.Window
 import QtQuick.Controls
+import Qt5Compat.GraphicalEffects
 import "../templates"
 import "chat"
 import "contacts"
+import "bar"
 
 TemplateWindow {
     id: window
@@ -20,20 +22,6 @@ TemplateWindow {
 
         color: "#2b2b2b"
 
-        Contacts {
-            id: contacts
-
-            color: "transparent"
-
-            anchors {
-                left: parent.left
-                top: parent.top
-                bottom: parent.bottom
-                right: chat.left
-                rightMargin: 3
-            }
-        }
-
         Chat {
             id: chat
 
@@ -42,8 +30,50 @@ TemplateWindow {
 
             anchors {
                 right: parent.right
-                top: parent.top
+                top: bar.bottom
                 bottom: parent.bottom
+            }
+        }
+
+        Contacts {
+            id: contacts
+
+            color: "transparent"
+
+            anchors {
+                left: parent.left
+                top: bar.bottom
+                bottom: parent.bottom
+                right: chat.left
+                rightMargin: 0
+            }
+
+        }
+
+        Rectangle {
+            anchors {
+                right: contacts.right
+                top: bar.bottom
+                bottom: parent.bottom
+            }
+            width: 1
+            color: "#2b2b2b"
+            layer.enabled: true
+            layer.effect: DropShadow {
+                spread: 0.0
+                transparentBorder: true
+                horizontalOffset: 1
+                verticalOffset: 0
+                color: "#90000000"
+            }
+        }
+
+        Bar {
+            id: bar
+            anchors {
+                left: parent.left
+                right: parent.right
+                top: parent.top
             }
         }
     }
