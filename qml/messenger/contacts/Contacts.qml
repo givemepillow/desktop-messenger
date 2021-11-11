@@ -7,6 +7,28 @@ import "../../templates"
 Rectangle {
     id: root
 
+    TextField {
+        id: search
+        height: 40
+        placeholderText: qsTr("Поиск...")
+        cursorVisible: true
+        selectByMouse: true
+        focusReason: Qt.MouseFocusReason
+        font.pixelSize: 18
+        maximumLength: 20
+        verticalAlignment: TextInput.AlignVCenter
+        color: "whitesmoke"
+        leftPadding: 12
+        background: Rectangle {
+            color: "#404040"
+        }
+        anchors {
+            left: parent.left
+            right: parent.right
+            top: parent.top
+        }
+    }
+
     ListModel {
         id: contactModel
 
@@ -33,9 +55,23 @@ Rectangle {
         Rectangle {
             id: contactBlock
              
-            color:  isMouseHovered() ? "#3d3d3d" :"#333333"
+            color: isMouseHovered() ? "#3d3d3d" :"#333333"
             height: 70
             width: root.width
+
+            Rectangle {
+                id: bottomLine
+                color: "#575757"
+                visible: index + 1 !== contactList.count ? true : false
+                height: 1
+                anchors {
+                    bottom: contactBlock.bottom
+                    right: contactBlock.right
+                    rightMargin: 15
+                    left: parent.left
+                    leftMargin: 50
+                }
+            }
 
             Text {
                 id: contactName
@@ -131,7 +167,12 @@ Rectangle {
         model: contactModel
         delegate: contact
         spacing: 0
-        anchors.fill: parent
+        anchors {
+            bottom: parent.bottom
+            left: parent.left
+            right: parent.right
+            top: search.bottom
+        }
         contentWidth: parent.width
         clip: true
 
