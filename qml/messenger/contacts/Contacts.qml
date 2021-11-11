@@ -113,6 +113,9 @@ Rectangle {
                     rightMargin: 10
                     topMargin: 15
                 }
+                onClicked: {
+                    contactList.model.remove(index)
+                }
             }
 
             function isMouseHovered() {
