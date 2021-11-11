@@ -34,7 +34,7 @@ Rectangle {
             id: closeButton
             visible: closable
             width: parent.width / 3; height: parent.height;
-            colorMouseOver: "#616161"
+            colorMouseOver: "#965757"
             colorClicked: "#ba3b32"
             onClicked: windowManager.exit()
             iconSource: "../resources/icons/close.png"
@@ -46,8 +46,8 @@ Rectangle {
             visible: maximizable
             iconHeight: 35
             iconWidth: 35
-            colorMouseOver: "#616161"
-            colorClicked: "#616161"
+            colorMouseOver: "#61875d"
+            colorClicked: "#5fba56"
             //onClicked: controller.closeApplication()
             iconSource: "../resources/icons/maximize.png"
         }
@@ -56,7 +56,7 @@ Rectangle {
             visible: minimizable
             width: parent.width / 3; height: parent.height;
             colorMouseOver: "#616161"
-            colorClicked: "#616161"
+            colorClicked: "#805db0"
             //onClicked: controller.closeCurrentWindow()
             iconSource: "../resources/icons/minimize.png"
         }
