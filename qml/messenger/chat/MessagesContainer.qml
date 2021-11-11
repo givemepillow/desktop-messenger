@@ -96,6 +96,14 @@ Rectangle {
             color: "transparent"
         }
 
+        headerPositioning: ListView.InlineFooter
+
+        header: Rectangle {
+            width: messageList.width
+            height: messagesContainer.height / 3
+            color: "transparent"
+        }
+
         anchors {
             bottom: parent.bottom
             bottomMargin: 0
