@@ -7,7 +7,7 @@ import "tools.js" as Tools
 
 Rectangle {
     id: inputContainer
-    color: "#333333"
+    color: "transparent"
     height: textAreaBlock.height + 20
     anchors {
         bottom: parent.bottom
@@ -47,7 +47,7 @@ Rectangle {
             left: parent.left
             right: sendButton.left
         }
-        color: "transparent"
+        color: "#333333"
         border.width: 1
         border.color: "grey"
         radius: 9
