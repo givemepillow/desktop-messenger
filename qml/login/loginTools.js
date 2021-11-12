@@ -53,7 +53,7 @@ function login() {
         if (!answer) {
             $handleError()
         } else {
-            windowManager.openMainWindow()
+            windowManager.openMessengerWindow()
         }
     }
 }

@@ -24,5 +24,5 @@ QtObject {
         WindowManager.createWindow("recovery/main.qml")
     }
 
-    Component.onCompleted: openMessengerWindow() //openLoginWindow()
+    Component.onCompleted: openLoginWindow()
 }
