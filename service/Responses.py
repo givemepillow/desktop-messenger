@@ -21,7 +21,8 @@ class AuthComplete(BaseModel):
 
 
 class Stats(BaseModel):
-    clients_count: int
+    online: int
+    offline: int
     message: Optional[str]
 
 

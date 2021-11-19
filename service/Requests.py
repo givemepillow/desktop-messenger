@@ -1,7 +1,7 @@
 import enum
 from typing import Optional, Union
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class RequestType(enum.Enum):
@@ -17,60 +17,65 @@ class RequestType(enum.Enum):
     RECOVERY_EMAIl_VERIFICATION: int = 108
     RECOVERY_CODE_VERIFICATION: int = 109
     NEW_PASSWORD: int = 110
+    STATS: int = 111
+
+
+class Stats(BaseModel):
+    pass
 
 
 class NewPassword(BaseModel):
-    email: Optional[str]
-    login: Optional[str]
+    email: Optional[str] = Field(min_length=8, max_length=50)
+    login: Optional[str] = Field(min_length=3, max_length=25)
     password: bytes
 
 
 class AvailableLogin(BaseModel):
-    login: str
+    login: str = Field(min_length=3, max_length=25)
 
 
 class AvailableEmail(BaseModel):
-    email: str
+    email: str = Field(min_length=5, max_length=50)
 
 
 class EncryptionKey(BaseModel):
-    email: Optional[str]
-    login: Optional[str]
+    email: Optional[str] = Field(min_length=5, max_length=50)
+    login: Optional[str] = Field(min_length=3, max_length=25)
 
 
 class Registration(BaseModel):
-    login: str
-    email: str
-    first_name: str
-    last_name: str
+    login: str = Field(min_length=3, max_length=25)
+    email: str = Field(min_length=5, max_length=50)
+    first_name: str = Field(min_length=2, max_length=30)
+    last_name: str = Field(min_length=2, max_length=30)
     password: bytes
 
 
 class Authentication(BaseModel):
-    login: Optional[str]
-    email: Optional[str]
+    login: Optional[str] = Field(min_length=3, max_length=25)
+    email: Optional[str] = Field(min_length=5, max_length=50)
     password: bytes
 
 
 class EmailVerification(BaseModel):
-    email: str
-    login: str
+    email: str = Field(min_length=5, max_length=50)
+    login: str = Field(min_length=3, max_length=25)
 
 
 class CodeVerification(BaseModel):
-    email: str
-    code: int
+    email: str = Field(min_length=5, max_length=50)
+    code: int = Field(ge=100000, le=999999)
 
 
 class RecoveryEmailVerification(BaseModel):
-    email: Optional[str]
-    login: Optional[str]
+    email: Optional[str] = Field(min_length=5, max_length=50)
+    login: Optional[str] = Field(min_length=3, max_length=25)
 
 
 class RecoveryCodeVerification(BaseModel):
-    email: Optional[str]
-    login: Optional[str]
-    code: int
+    email: Optional[str] = Field(min_length=5, max_length=50)
+    login: Optional[str] = Field(min_length=3, max_length=25)
+    code: int = Field(ge=100000, le=999999)
 
 
 class Request(BaseModel):
@@ -85,7 +90,8 @@ class Request(BaseModel):
         AvailableEmail,
         RecoveryEmailVerification,
         RecoveryCodeVerification,
-        NewPassword
+        NewPassword,
+        Stats
     ]
     ip: Optional[str]
 
@@ -100,5 +106,6 @@ requests = {
     RequestType.AVAILABLE_LOGIN: AvailableLogin,
     RequestType.RECOVERY_CODE_VERIFICATION: RecoveryCodeVerification,
     RequestType.RECOVERY_EMAIl_VERIFICATION: RecoveryEmailVerification,
-    RequestType.NEW_PASSWORD: NewPassword
+    RequestType.NEW_PASSWORD: NewPassword,
+    RequestType.STATS: Stats
 }
