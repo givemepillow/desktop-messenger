@@ -6,6 +6,7 @@ import "../templates"
 import "chat"
 import "contacts"
 import "bar"
+import Messenger
 
 TemplateWindow {
     id: window
@@ -21,6 +22,11 @@ TemplateWindow {
         id: container
 
         color: "#2b2b2b"
+
+        Messenger {
+            id: messenger
+        }
+
 
         Chat {
             id: chat
