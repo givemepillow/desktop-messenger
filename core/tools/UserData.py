@@ -18,6 +18,12 @@ class UserData:
         if (password != '' and password): cls.__set_password(password)
 
     @classmethod
+    def clear(cls):
+        cls.__set_my_email('')
+        cls.__set_my_login('')
+        cls.__set_password(b'')
+
+    @classmethod
     def __set_my_id(cls, my_id):
         cls.__dir()
         with open('data/id', 'w') as f:

@@ -99,7 +99,12 @@ class Service(Network):
             )): return False
         response =  self.receive()
         if ResponseType(response.type) == ResponseType.AUTH_COMPLETE:
-            UserData.save(my_id=response.data.user_id)
+            UserData.save(
+                my_id=response.data.user_id,
+                password=UserData.get_password(),
+                email=UserData.get_my_email(),
+                login=UserData.get_my_login()
+            )
             return True
         else:
             return False
@@ -125,6 +130,7 @@ class Service(Network):
                 )
             return True
         else:
+            UserData.clear()
             return False
 
 
