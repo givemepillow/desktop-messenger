@@ -24,5 +24,11 @@ QtObject {
         WindowManager.createWindow("recovery/main.qml")
     }
 
-    Component.onCompleted: openLoginWindow()
+    Component.onCompleted: {
+        if (service.autoAuthentication()) {
+            openMessengerWindow()
+        } else {
+            openLoginWindow()
+        }
+    }
 }
