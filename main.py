@@ -3,8 +3,7 @@ from PySide6.QtGui import QGuiApplication
 from PySide6.QtQml import QQmlApplicationEngine, qmlRegisterType
 from PySide6.QtCore import QUrl
 
-from service import Service
-from service import Messenger
+from core import Service, Messenger
 
 if __name__ == '__main__':
     app = QGuiApplication(sys.argv)
