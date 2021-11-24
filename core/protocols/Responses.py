@@ -17,6 +17,8 @@ class ResponseType(enum.Enum):
 
 class AuthComplete(BaseModel):
     user_id: int
+    first_name: str
+    last_name: str
     message: Optional[str]
 
 
