@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import Qt5Compat.GraphicalEffects
+import QtQuick.Controls.Material
 import "../validator.js" as Validator
 import "loginTools.js" as Tools
 import "../templates"
@@ -47,7 +48,7 @@ TemplateWindow {
             focus: true
             anchors {
                 top: parent.top
-                topMargin: 150
+                topMargin: 140
                 horizontalCenter: parent.horizontalCenter
             }
             onEditingFinished: Tools.onEditingFinishedEmailOrLogin()
@@ -67,7 +68,7 @@ TemplateWindow {
             placeholderText: qsTr("Введите пароль")
             anchors {
                 top: loginField.bottom
-                topMargin: 25
+                topMargin: 20
                 horizontalCenter: parent.horizontalCenter
             }
             onEditingFinished: Tools.onEditingFinishedPassword()
@@ -108,6 +109,17 @@ TemplateWindow {
                 right: passwordField.right
                 rightMargin: 7
             }
+        }
+
+        CheckBox {
+            id: checkBox
+            Material.theme: Material.Dark
+            Material.accent: Material.Indigo
+            text: qsTr("Сохранить пароль")
+            anchors.top: passwordField.bottom
+            anchors.topMargin: 85
+            font.pointSize: 10
+            anchors.horizontalCenter: parent.horizontalCenter
         }
 
         ClassicButton {
