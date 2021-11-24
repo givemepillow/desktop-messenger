@@ -115,7 +115,7 @@ class Service(Network):
                 my_id=response.data.user_id,
                 password=UserData.get_password(),
                 email=UserData.get_my_email(),
-                login=UserData.get_my_login(),
+                login=response.data.login,
                 first_name=response.data.first_name,
                 last_name=response.data.last_name
             )
@@ -135,14 +135,16 @@ class Service(Network):
             )): return False
         response =  self.receive()
         if ResponseType(response.type) == ResponseType.AUTH_COMPLETE:
-            UserData.save(my_id=response.data.user_id)
+            UserData.save(
+                my_id=response.data.user_id,
+                first_name=response.data.first_name,
+                last_name=response.data.last_name,
+                login=response.data.login
+            )
             if save_password:
                 UserData.save(
                     password=Security.encrypt(password),
-                    email=email,
-                    login=login,
-                    first_name=response.data.first_name,
-                    last_name=response.data.last_name
+                    email=email
                 )
             return True
         else:
