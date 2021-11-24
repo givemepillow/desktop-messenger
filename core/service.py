@@ -34,6 +34,18 @@ class Service(Network):
         return UserData.get_my_id()
 
     @Slot(result=str)
+    def getMyFirstName(self):
+        return UserData.get_my_first_name()
+
+    @Slot(result=str)
+    def getMyLastName(self):
+        return UserData.get_my_last_name()
+
+    @Slot(result=str)
+    def getMyLogin(self):
+        return UserData.get_my_login()
+
+    @Slot(result=str)
     def getServerMessage(self):
         return self.__get_server_message()
 
@@ -80,12 +92,12 @@ class Service(Network):
         response = self.receive()
         self.__online = response.data.online if response is not None else 0
         self.__offline = response.data.offline if response is not None else 0
-        return self.__online
+        return self.__online or 0
 
 
     @Slot(result=int)
     def getOffline(self):
-        return self.__offline if self.__offline is not None else 0
+        return self.__offline or 0
 
     
     @Slot(result=bool)
@@ -103,7 +115,9 @@ class Service(Network):
                 my_id=response.data.user_id,
                 password=UserData.get_password(),
                 email=UserData.get_my_email(),
-                login=UserData.get_my_login()
+                login=UserData.get_my_login(),
+                first_name=response.data.first_name,
+                last_name=response.data.last_name
             )
             return True
         else:
@@ -126,7 +140,9 @@ class Service(Network):
                 UserData.save(
                     password=Security.encrypt(password),
                     email=email,
-                    login=login
+                    login=login,
+                    first_name=response.data.first_name,
+                    last_name=response.data.last_name
                 )
             return True
         else:
