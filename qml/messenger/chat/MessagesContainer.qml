@@ -14,8 +14,19 @@ Rectangle {
         bottom: inputContainer.top
         left: parent.left
         right: parent.right
-        rightMargin: 10
-        leftMargin: 10
+    }
+
+
+    Connections {
+        target: messenger
+        function onNewMessage(fromId, toId, message, dateTime, messageId) {
+            messageModel.append({
+                "fromId": fromId,
+                "toId": toId,
+                "messageText": message,
+                "messageTime": dateTime
+            })
+        }
     }
 
     ListModel {
@@ -43,9 +54,9 @@ Rectangle {
             radius: 6
             height: messageArea.height + 30
             width: messageArea.width < 55 ? 55 : messageArea.width
-            anchors {
-                margins: 20
-            }
+            anchors.rightMargin: 10
+            anchors.leftMargin: 10
+            Component.onCompleted: if (model.fromId == service.getMyId()) anchors.right = parent.right
 
             TextEdit {
                 id: messageArea
@@ -60,7 +71,7 @@ Rectangle {
                 topPadding: 5
                 selectionColor: "grey" 
                 anchors {
-                    left: parent.left
+                    right: parent.right
                     top: parent.top
                 }
                 Component.onCompleted: {
@@ -70,8 +81,13 @@ Rectangle {
                 }
             }
 
+            function getTime(timestamp) {
+                var date = new Date(timestamp)
+                return date.getHours()+":"+date.getMinutes()
+            }
+
             Text {
-                text: model.messageTime
+                text: getTime(model.messageTime)
                 color: "#787878"
                 font.pointSize: 11
                 anchors {
@@ -96,6 +112,7 @@ Rectangle {
         width: parent.white
         contentWidth: parent.width
         clip: true
+        cacheBuffer: 2000
 
         footerPositioning: ListView.InlineFooter
 
@@ -171,5 +188,9 @@ Rectangle {
             messageList.positionViewAtEnd()
             downButton.visible = false
         }
+    }
+
+    ChatBar {
+
     }
 }
