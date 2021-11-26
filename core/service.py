@@ -99,14 +99,17 @@ class Service(Network):
     def getOffline(self):
         return self.__offline or 0
 
-    
+    @Slot()
+    def logout(self):
+        UserData.clear()
+
     @Slot(result=bool)
     def autoAuthentication(self):
         if not Security.key_is_set() or not self._send(
             RequestConstructor.create(
                 request_type=RequestType.AUTHENTICATION,
-                login= UserData.get_my_login(),
-                password= UserData.get_password(),
+                login=UserData.get_my_login(),
+                password=UserData.get_password(),
                 email=UserData.get_my_email()
             )): return False
         response =  self.receive()
