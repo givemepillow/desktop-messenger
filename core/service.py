@@ -94,7 +94,6 @@ class Service(Network):
         self.__offline = response.data.offline if response is not None else 0
         return self.__online or 0
 
-
     @Slot(result=int)
     def getOffline(self):
         return self.__offline or 0
@@ -102,6 +101,28 @@ class Service(Network):
     @Slot()
     def logout(self):
         UserData.clear()
+
+    @Slot(str, result=list)
+    def search(self, keywords):
+        keywords = keywords.split()
+        if len(keywords) == 1:
+            self._send(RequestConstructor.create(
+                request_type=RequestType.SEARCH,
+                keyword1 = keywords[0]
+            ))
+            response = self.receive()
+            return [[user['id'], user['login'], user['first_name'], user['last_name']] for user in response.data.users]
+        elif len(keywords) == 2:
+            self._send(RequestConstructor.create(
+                request_type=RequestType.SEARCH,
+                keyword1=keywords[0],
+                keyword2=keywords[1] 
+            ))
+            response = self.receive()
+            return [[user['id'], user['login'], user['first_name'], user['last_name']] for user in response.data.users]
+        else:
+            return []
+
 
     @Slot(result=bool)
     def autoAuthentication(self):
@@ -112,7 +133,7 @@ class Service(Network):
                 password=UserData.get_password(),
                 email=UserData.get_my_email()
             )): return False
-        response =  self.receive()
+        response = self.receive()
         if ResponseType(response.type) == ResponseType.AUTH_COMPLETE:
             UserData.save(
                 my_id=response.data.user_id,
@@ -125,7 +146,6 @@ class Service(Network):
             return True
         else:
             return False
-
 
     @Slot(str, str, str, bool, result=bool)
     def authentication(self, login, email, password, save_password):
@@ -153,7 +173,6 @@ class Service(Network):
         else:
             UserData.clear()
             return False
-
 
     @Slot(str, result=bool)
     def availableEmail(self, email):
@@ -204,7 +223,6 @@ class Service(Network):
     def __encryption_key_verify(self):
         if not Security.key_is_set(): return False
 
-
     def __get_encryption_key(self):
         answer = None
         try:
@@ -245,7 +263,6 @@ class Service(Network):
             self.__set_server_message(answer)
             return status
             
-
     def __set_server_message(self, answer):
         if answer is None or self._Network__alive == False:
             self.__server_message = 'Сервер не доступен!'
@@ -256,7 +273,6 @@ class Service(Network):
         else:
             self.__server_error = False
         self.__server_message = answer.data.message
-
 
     def __get_server_message(self):
         msg = self.__server_message if self.__server_message else self.__default_server_message

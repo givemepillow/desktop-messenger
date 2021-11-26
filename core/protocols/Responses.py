@@ -1,5 +1,5 @@
 import enum
-from typing import Union, Optional
+from typing import Union, Optional, List
 
 from pydantic import BaseModel
 
@@ -13,6 +13,12 @@ class ResponseType(enum.Enum):
     KEY: int = 205
     STATS: int = 211
     AUTH_COMPLETE: int = 212
+    SEARCH_RESULTS: int = 210
+
+
+class SearchResults(BaseModel):
+    users: List[Optional[dict]]
+    message: Optional[str]
 
 
 class AuthComplete(BaseModel):
@@ -52,7 +58,8 @@ responses = {
     ResponseType.ACCEPT: Accept,
     ResponseType.KEY: Key,
     ResponseType.STATS: Stats,
-    ResponseType.AUTH_COMPLETE: AuthComplete
+    ResponseType.AUTH_COMPLETE: AuthComplete,
+    ResponseType.SEARCH_RESULTS: SearchResults
 }
 
 
@@ -64,5 +71,6 @@ class Response(BaseModel):
         Accept,
         Key,
         Stats,
-        AuthComplete
+        AuthComplete,
+        SearchResults
     ]
