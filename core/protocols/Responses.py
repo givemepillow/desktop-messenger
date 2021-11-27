@@ -14,6 +14,13 @@ class ResponseType(enum.Enum):
     STATS: int = 211
     AUTH_COMPLETE: int = 212
     SEARCH_RESULTS: int = 210
+    USER_STATUS: int = 209
+
+
+class UserStatus(BaseModel):
+    is_online: bool
+    last_seen: Optional[float]
+    message: str
 
 
 class SearchResults(BaseModel):
@@ -59,7 +66,8 @@ responses = {
     ResponseType.KEY: Key,
     ResponseType.STATS: Stats,
     ResponseType.AUTH_COMPLETE: AuthComplete,
-    ResponseType.SEARCH_RESULTS: SearchResults
+    ResponseType.SEARCH_RESULTS: SearchResults,
+    ResponseType.USER_STATUS: UserStatus
 }
 
 
@@ -72,5 +80,6 @@ class Response(BaseModel):
         Key,
         Stats,
         AuthComplete,
-        SearchResults
+        SearchResults,
+        UserStatus
     ]
