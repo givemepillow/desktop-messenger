@@ -7,8 +7,39 @@ import "../../templates"
 Rectangle {
     id: root
 
+    TemplateButton {
+        id: nothingIcon
+        visible: !search.found
+        height: 90
+        width: 90
+        enabled: false
+        iconHeight: 80
+        iconWidth: 80
+        iconSource: "../resources/icons/nothing.png"
+        colorOverlayDefault: "gray"
+        colorOverlayMouseOver: "gray"
+        colorOverlayClicked: "gray"
+        anchors {
+            horizontalCenter: parent.horizontalCenter
+            top: search.bottom
+            topMargin: 30
+        }
+    }
+    Text {
+        text: qsTr("Никого не удалось найти.")
+        font.pointSize: 12
+        visible: !search.found
+        color: "gray"
+        anchors {
+            horizontalCenter: parent.horizontalCenter
+            top: nothingIcon.bottom
+            topMargin: 1
+        }
+    }
+
     TextField {
         id: search
+        property bool found: true
         height: 40
         placeholderText: qsTr("Поиск...")
         selectByMouse: true
@@ -42,26 +73,26 @@ Rectangle {
             right: parent.right
             top: parent.top
         }
+        onTextEdited: {
+            contactModel.clear()
+            contactList.selectedIndex = -1
+            let users = service.search(text)
+            search.found = (users.length == 0) ? false : true
+            for (let key in users) {
+                let user = users[key]
+                contactModel.append({
+                    contactName: [user[3], user[2]].join(' '),
+                    lastMessage: "Пока нет ни одного сообщения.",
+                    lastMessageTime: " ",
+                    contactLogin: user[1],
+                    contactId: user[0],
+                })
+            }
+        }
     }
 
     ListModel {
         id: contactModel
-
-        ListElement {
-            contactName: "Kirill"
-            lastMessage: "hello!"
-            lastMessageTime: "12:00"
-            contactLogin: "kirillka"
-            
-        }
-
-        ListElement {
-            contactName: "Kirill Lapushinskiy"
-            lastMessage: "hello! how are u?"
-            lastMessageTime: "12:00"
-            contactLogin: "kirilllapushinskiy"
-        }
-
     }
 
     Component {
@@ -69,38 +100,34 @@ Rectangle {
         
         Rectangle {
             id: contactBlock
-             
-            color: isMouseHovered() ? "#3d3d3d" :"#333333"
+            color:  index == contactList.selectedIndex ? "#4d4c4c" : isMouseHovered() ? "#424242" : "#333333"
             height: 70
             width: root.width
 
-            layer.enabled: true
-            layer.effect: DropShadow {
-                transparentBorder: true
-                horizontalOffset: 2
-                verticalOffset: 2
-                color: "#20000000"
+            Component.onCompleted: {
+                if (model.contactId === messenger.getTarget()) {
+                    contactList.selectedIndex = index
+                }
             }
+
+            
+            Rectangle {
+                width: parent.width * 0.9
+                height: 1
+                color: "#636363"
+                anchors {
+                    bottom: parent.bottom
+                    horizontalCenter: parent.horizontalCenter
+                }
+                visible: index + 1 == contactList.model.count ? false : true
+            }
+            
 
             Text {
                 id: contactName
                 text: model.contactName
                 color: "whitesmoke"
                 font.pointSize: 11
-                visible: !isMouseHovered()
-                anchors {
-                    top: parent.top
-                    left: parent.left
-                    leftMargin: 10
-                    topMargin: 10
-                }
-            }
-
-            Text {
-                text: model.contactLogin
-                color: "#af8cde"
-                font.pointSize: 11
-                visible: isMouseHovered()
                 anchors {
                     top: parent.top
                     left: parent.left
@@ -139,12 +166,22 @@ Rectangle {
                 id: mouseArea
                 hoverEnabled: true  
                 anchors.fill: parent
+                onClicked: {
+                    if (model.contactId != messenger.getTarget()) {
+                        messenger.updateTraget(model.contactId)
+                        chat.chatChanged()
+                        contactList.selectedIndex = index
+                        chat.anyChatIsOpen = true
+                        chat.currentLogin = model.contactLogin
+                        chat.currentName = model.contactName
+                    }
+                }
             }
 
             TemplateButton {
                 id: deleteButton
                 iconSource: "../resources/icons/close.png"
-                opacity: isMouseHovered() ? 1 : 0
+                visible: isMouseHovered() && messenger.haveAnyMessages() ? 1 : 0
                 colorDefault: "transparent"
                 width: 15
                 height: 15
@@ -172,6 +209,7 @@ Rectangle {
 
     ListView {
         id: contactList
+        property int selectedIndex: -1
         verticalLayoutDirection: ListView.TopToBottom
         model: contactModel
         delegate: contact
