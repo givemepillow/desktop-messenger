@@ -6,12 +6,21 @@ class UserData:
     __my_email = None
     __my_first_name = None
     __my_last_name = None
+    __temp_pass = None
 
 
     @staticmethod
     def __dir():
         if not os.path.exists('data'):
             os.makedirs('data')
+
+    @classmethod
+    def save_password_temporarty(cls, password):
+        cls.__temp_pass = password
+
+    @classmethod
+    def get_temporary_password(cls):
+        return cls.__temp_pass if cls.__temp_pass else ''
 
 
     @classmethod
@@ -31,6 +40,7 @@ class UserData:
         cls.__set_password(b'')
         cls.__set_first_name('')
         cls.__set_last_name('')
+        cls.save_password_temporarty('')
 
 
     @classmethod
