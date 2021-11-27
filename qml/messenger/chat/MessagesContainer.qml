@@ -16,6 +16,28 @@ Rectangle {
         right: parent.right
     }
 
+    Rectangle {
+        height: 100
+        color: "#40000000"
+        visible: messageList.count == 0
+        anchors {
+            left: parent.left
+            right: parent.right
+            top: parent.top
+            topMargin: 70
+        }
+        Text {
+            font.pointSize: 20
+            color: "whitesmoke"
+            text: "Нет ни одного сообщения -\nнапишите что-нибудь :)"
+            anchors.centerIn: parent
+            style: Text.Raised; styleColor: "gray"
+            horizontalAlignment: Text.AlignHCenter
+        }
+    }
+
+    
+
     signal chatChanged()
     onChatChanged: {
         messageModel.clear()
