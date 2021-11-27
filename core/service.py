@@ -18,12 +18,14 @@ class Service(Network):
     __online = None
     __offline = None
 
+    __auth_complete = False
+
 
     def __init__(self):
         super(Service, self).__init__(address='127.0.0.1', port=6767)
         self.socket.connected.connect(self.__get_encryption_key)
+        self.socket.connected.connect(self.__update_authentication)
         self._Network__create_connection()
-
 
     @Slot(result=bool)
     def isError(self):
@@ -82,6 +84,20 @@ class Service(Network):
             ))
         return self.__receive()
 
+    @Slot(int, result=float)
+    def getUserOnlineStatus(self, user_id):
+        self._send(
+            RequestConstructor.create(
+                request_type=RequestType.USER_STATUS,
+                user_id=user_id
+            )
+        )
+        response = self.receive()
+        if response.data.is_online == True:
+            return 0
+        else:
+            return response.data.last_seen
+
     @Slot(result=int)
     def getOnline(self):
         self._send(
@@ -101,6 +117,10 @@ class Service(Network):
     @Slot()
     def logout(self):
         UserData.clear()
+        self._send(RequestConstructor.create(
+                request_type=RequestType.LOGOUT
+        ))
+        self.receive()
 
     @Slot(str, result=list)
     def search(self, keywords):
@@ -123,18 +143,24 @@ class Service(Network):
         else:
             return []
 
+    def __update_authentication(self):
+        if self.__auth_complete and not self.autoAuthentication():
+            self.__server_error = True
+            self.__server_message = 'Необходима повторная аутентификация!'
 
     @Slot(result=bool)
     def autoAuthentication(self):
+        password = UserData.get_temporary_password()
         if not Security.key_is_set() or not self._send(
             RequestConstructor.create(
                 request_type=RequestType.AUTHENTICATION,
                 login=UserData.get_my_login(),
-                password=UserData.get_password(),
+                password=Security.encrypt(password) if password else UserData.get_password(),
                 email=UserData.get_my_email()
             )): return False
         response = self.receive()
         if ResponseType(response.type) == ResponseType.AUTH_COMPLETE:
+            self.__auth_complete = True
             UserData.save(
                 my_id=response.data.user_id,
                 password=UserData.get_password(),
@@ -158,6 +184,8 @@ class Service(Network):
             )): return False
         response =  self.receive()
         if ResponseType(response.type) == ResponseType.AUTH_COMPLETE:
+            self.__auth_complete = True
+            UserData.save_password_temporarty(password)
             UserData.save(
                 my_id=response.data.user_id,
                 first_name=response.data.first_name,
@@ -227,7 +255,9 @@ class Service(Network):
         answer = None
         try:
             self._send(RequestConstructor.create(
-                request_type=RequestType.ENCRYPTION_KEY
+                request_type=RequestType.ENCRYPTION_KEY,
+                login=UserData.get_my_login(),
+                email=UserData.get_my_email()
             ))
             answer = ResponseParser.extract_response(self._receive())
         except IOError:
