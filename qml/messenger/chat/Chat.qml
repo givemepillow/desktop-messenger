@@ -8,6 +8,12 @@ import "tools.js" as Tools
 Rectangle {
     id: root 
 
+    property bool anyChatIsOpen: false
+    property string currentLogin: " "
+    property string currentName: " "
+    signal chatChanged()
+    onChatChanged: messagesContainer.chatChanged()
+
     Image {
         id: backgroundImage
         source: "../../resources/images/background.jpg"
@@ -28,11 +34,13 @@ Rectangle {
 
     MessagesContainer {
         id: messagesContainer
+        visible: anyChatIsOpen
     }
     
 
     InputContainer {
         id: inputContainer
+        visible: anyChatIsOpen
     }
     
 }
