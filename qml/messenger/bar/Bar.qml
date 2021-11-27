@@ -30,12 +30,11 @@ Rectangle {
         color: "transparent"
         height: parent.height
         width: myLogin.width
-        opacity: nameBlock.hovered ? 1 : 0
         Text {
             id: myLogin
             text: service.getMyLogin()
             color: "grey"
-            font.pointSize: 16
+            font.pointSize: 14
             anchors {
                 right: parent.right
                 rightMargin: 0
@@ -49,18 +48,36 @@ Rectangle {
         }
     }
 
+    TemplateButton {
+        id: exitIcon
+        width: 25
+        height: 25
+        iconHeight: 25
+        iconSource: "../resources/icons/exit.png"
+        colorOverlayDefault: "grey"
+        colorOverlayMouseOver: "whitesmoke"
+        colorOverlayClicked: "white"
+        anchors {
+            verticalCenter: parent.verticalCenter
+            right: parent.right
+            rightMargin: 10
+        }
+        onClicked: {
+            windowManager.openLoginWindow()
+            service.logout()
+        }
+    }
+
     Rectangle {
         id: nameBlock
-        property bool hovered: mouseArea.containsMouse
         anchors {
-            right: parent.right
-            rightMargin: 50
+            right: loginBlock.left
+            rightMargin: 15
             verticalCenter: parent.verticalCenter
         }
         color: "transparent"
         height: parent.height
         width: myFirstName.width + myLastName.width
-        opacity: hovered ? 0 : 1
         MouseArea {
             id: mouseArea
             hoverEnabled: true  
@@ -69,8 +86,8 @@ Rectangle {
         Text {
             id: myFirstName
             text: service.getMyFirstName()
-            color: "whitesmoke"
-            font.pointSize: 18
+            color: "#bdbdbd"
+            font.pointSize: 14
             anchors {
                 right: myLastName.left
                 rightMargin: 7
@@ -80,8 +97,8 @@ Rectangle {
         Text {
             id: myLastName
             text: service.getMyLastName()
-            color: "whitesmoke"
-            font.pointSize: 18
+            color: "#bdbdbd"
+            font.pointSize: 14
             anchors {
                 right: parent.right
                 rightMargin: 0
