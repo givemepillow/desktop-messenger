@@ -30,7 +30,7 @@ Rectangle {
         source: backgroundImage
         color: "#000000"
         antialiasing: true
-        opacity: anyChatIsOpen ? 0.45 : 0.75
+        opacity: anyChatIsOpen ? 0.45 : 0.59
     }
 
 
