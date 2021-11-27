@@ -14,6 +14,8 @@ Rectangle {
     signal chatChanged()
     onChatChanged: messagesContainer.chatChanged()
 
+    
+
     Image {
         id: backgroundImage
         source: "../../resources/images/background.jpg"
@@ -27,8 +29,8 @@ Rectangle {
         anchors.fill: backgroundImage
         source: backgroundImage
         color: "#000000"
-        opacity: 0.45
         antialiasing: true
+        opacity: anyChatIsOpen ? 0.45 : 0.75
     }
 
 
@@ -41,6 +43,16 @@ Rectangle {
     InputContainer {
         id: inputContainer
         visible: anyChatIsOpen
+    }
+
+    Text {
+        font.pointSize: 20
+        color: "whitesmoke"
+        visible: !anyChatIsOpen
+        text: "Чтобы перейти к переписке -\nвыберите чат или найдите пользователя."
+        anchors.centerIn: parent
+        style: Text.Raised; styleColor: "gray"
+        horizontalAlignment: Text.AlignHCenter
     }
     
 }
