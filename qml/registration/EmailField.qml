@@ -25,8 +25,15 @@ TemplateField {
     onTextEdited: {
         if (isValid()) {
             if (!service.availableEmail(text)) {
-                warning = service.getServerMessage()
+                if (service.isError()) {
+                    container.errorBarTextInfo = service.getServerMessage()
+                    container.errorBarVisible = true
+                } else {
+                    container.errorBarVisible = false
+                    warning = service.getServerMessage()
+                }
             } else {
+                container.errorBarVisible = false
                 tip = service.getServerMessage()
             }
         }

@@ -10,16 +10,28 @@ function isValidLoginOrEmail(field) {
         // For login.
         if (!Validator.isValidEmail(field.text)) {
             if (service.availableLogin(field.text)) {
-                field.warning = "Данный логин не зарегестрирован."
+                field.warning = "Данный логин не зарегистрирован."
             } else {
-                valid = true
+                if (service.isError()) {
+                    container.errorBarTextInfo = service.getServerMessage()
+                    container.errorBarVisible = true
+                } else {
+                    container.errorBarVisible = false
+                    valid = true
+                }
             }
         } else {
             // For email.
             if (service.availableEmail(field.text)) {
-                field.warning = "Данный email не зарегестрирован."
+                field.warning = "Данный email не зарегистрирован."
             } else {
-                valid = true
+                if (service.isError()) {
+                    container.errorBarTextInfo = service.getServerMessage()
+                    container.errorBarVisible = true
+                } else {
+                    container.errorBarVisible = false
+                    valid = true
+                }
             }
         }
     }
@@ -36,8 +48,15 @@ function verifyCode() {
     if (valid) {
         codeVerificationBlock.visible = false
         newPasswordBlock.visible = true
+        container.errorBarVisible = false
     } else {
-        codeVerificationField.warning = service.getServerMessage()
+        if (service.isError()) {
+            container.errorBarTextInfo = service.getServerMessage()
+            container.errorBarVisible = true
+        } else {
+            container.errorBarVisible = false
+            codeVerificationField.warning = service.getServerMessage()
+        }
     }
 }
 
@@ -53,6 +72,10 @@ function setNewPassword() {
             newPasswordBlock.visible= false
             completeBlock.visible = true
             completeBlock.focus = true
+            container.errorBarVisible = false
+        } else {
+            container.errorBarTextInfo = service.getServerMessage()
+            container.errorBarVisible = true
         }
     }
 }

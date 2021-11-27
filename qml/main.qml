@@ -16,13 +16,19 @@ QtObject {
         WindowManager.createWindow("registration/main.qml")
     }
 
-    function openMainWindow() {
-        WindowManager.createWindow("main/main.qml")
+    function openMessengerWindow() {
+        WindowManager.createWindow("messenger/main.qml")
     }
 
     function openRecoveryWindow() {
         WindowManager.createWindow("recovery/main.qml")
     }
 
-    Component.onCompleted: openLoginWindow()
+    Component.onCompleted: {
+        if (service.autoAuthentication()) {
+            openMessengerWindow()
+        } else {
+            openLoginWindow()
+        }
+    }
 }

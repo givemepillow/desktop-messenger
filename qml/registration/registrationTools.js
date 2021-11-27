@@ -5,8 +5,14 @@ function registration() {
         password1Field, password2Field
     ]
     if (!Validator.isEmpty(fields) && Validator.isAllValid(fields)) {
-        if (service.emailVerification(emailField.text, loginField.text, ))
+        if (service.emailVerification(emailField.text, loginField.text, )) {
             registrationBlock.isOff = true
+            container.errorBarVisible = false
+        } else {
+            container.errorBarTextInfo = service.getServerMessage()
+            container.errorBarVisible = true
+            registrationBlock.isOff = false
+        }
     }
 }
 

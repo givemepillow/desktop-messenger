@@ -1,6 +1,7 @@
 import json
 from json import JSONDecodeError
-from service.Responses import ResponseType, Response, responses
+
+from core.protocols import ResponseType, Response, responses
 
 class ResponseParser:
     @classmethod
