@@ -43,13 +43,14 @@ function onEditingFinishedPassword() {
 
 // login proccess //
 function login() {
+    //windowManager.openMessengerWindow()
     let fields = [loginField, passwordField]
     if (Validator.isAllValid(fields) && !Validator.isEmpty(fields)) {
         let answer = true
         if (loginField.text.indexOf('@') !== -1)
-            answer = service.authentication(null, loginField.text, passwordField.text)
+            answer = service.authentication(null, loginField.text, passwordField.text, checkBox.checkState == Qt.Checked)
         else
-            answer = service.authentication(loginField.text, null, passwordField.text)
+            answer = service.authentication(loginField.text, null, passwordField.text, checkBox.checkState == Qt.Checked)
         if (!answer) {
             $handleError()
         } else {
