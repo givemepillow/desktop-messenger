@@ -8,6 +8,7 @@ from core.protocols import Type
 class Messenger(Network):
     TCP_HOST = '127.0.0.1'
     TCP_SEND_TO_PORT = 6700
+    __current_target_id = -1
 
     def __init__(self):
         super(Messenger, self).__init__(address='127.0.0.1', port=6700)
@@ -19,6 +20,7 @@ class Messenger(Network):
 
 
     def __new_message(self, data):
+        # save message
         self.newMessage.emit(
             data['from_id'],
             data['to_id'],
@@ -59,12 +61,24 @@ class Messenger(Network):
     def __parse(self, raw_message):
         return json.loads(raw_message.decode('utf-8'))
 
-    @Slot(str, str, result=bool)
-    def sendMessage(self, to_id, message):
+    @Slot(str, result=bool)
+    def sendMessage(self, message):
         return self.send(MessageConstructor.create_message(
-                to_id = to_id,
+                to_id = self.__current_target_id,
                 message = message
             ))
+
+    @Slot(int)
+    def updateTraget(self, to_id):
+        self.__current_target_id = to_id
+
+    @Slot(result=bool)
+    def haveAnyMessages(self):
+        return False
+
+    @Slot(result=int)
+    def getTarget(self):
+        return self.__current_target_id
 
     newMessage = Signal(
         int, int, str, float, str,
