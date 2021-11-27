@@ -22,9 +22,17 @@ let months = {
 function getMessageTime(timestamp) {
     var date = new Date(timestamp)
     if (date.getDate() == new Date().getDate())
-        return date.getHours()+":"+date.getMinutes()
+        return ('0' + date.getHours()).slice(-2) +
+        ":"+
+        ('0' + date.getMinutes()).slice(-2)
     else
-        return date.getDate() + " " + months[date.getMonth()] + " " + date.getHours()+":"+date.getMinutes()
+        return date.getDate() +
+        " " +
+        months[date.getMonth()] +
+        " " +
+        ('0' + date.getHours()).slice(-2) +
+        ":"+
+        ('0' + date.getMinutes()).slice(-2)
 
 }
 
@@ -32,7 +40,16 @@ function getMessageTime(timestamp) {
 function getUserTime(timestamp) {
     let date = new Date(timestamp)
     if (date.getDate() == new Date().getDate())
-        return "в " + date.getHours()+":"+date.getMinutes()
+        return "в " + 
+        ('0' + date.getHours()).slice(-2) +
+        ":"+
+        ('0' + date.getMinutes()).slice(-2)
     else
-        return date.getDate() + " " + months[date.getMonth()] + " в " + date.getHours()+":"+date.getMinutes()
+        return date.getDate() + 
+        " " +
+        months[date.getMonth()] +
+        " в " +
+        ('0' + date.getHours()).slice(-2) +
+        ":"+
+        ('0' + date.getMinutes()).slice(-2)
 }
