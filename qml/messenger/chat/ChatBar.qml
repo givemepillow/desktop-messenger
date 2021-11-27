@@ -69,9 +69,7 @@ Rectangle {
                 onlineStatus.color = 'whitesmoke'
                 statusIcon.btnColor = '#5eba52'
             } else if (status == -1){
-                onlineStatus.text = "никогда"
-                onlineStatus.color = 'gray'
-                statusIcon.btnColor = 'gray'
+                onlineStatus.text = " "
             } else {
                 onlineStatus.text = "последний раз был/была в сети " + Tools.getUserTime(status)
                 onlineStatus.color = 'gray'

@@ -72,7 +72,7 @@ Rectangle {
         id: nameBlock
         anchors {
             right: loginBlock.left
-            rightMargin: 15
+            rightMargin: 10
             verticalCenter: parent.verticalCenter
         }
         color: "transparent"
