@@ -64,7 +64,8 @@ Rectangle {
                     "fromId": fromId,
                     "toId": toId,
                     "messageText": message,
-                    "messageTime": dateTime
+                    "messageTime": dateTime,
+                    "messageId": messageId
                 })
             }
         }

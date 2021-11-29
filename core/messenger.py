@@ -81,7 +81,7 @@ class Messenger(Network):
         return self.__current_target_id
 
     newMessage = Signal(
-        int, int, str, float, str,
+        int, int, str, float, int,
         arguments=[
             'fromId',
             'toId',
