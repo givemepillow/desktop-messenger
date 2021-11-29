@@ -1,7 +1,7 @@
 from PySide6.QtCore import QObject, Signal, Slot, Property
 import json
 
-from core.system import Network
+from core.system import Network, Storage
 from core.converters import MessageConstructor
 from core.protocols import Type
 
@@ -21,6 +21,13 @@ class Messenger(Network):
 
     def __new_message(self, data):
         # save message
+        Storage().save_message(
+            message_id=data['message_id'],
+            from_id=data['from_id'],
+            to_id=data['to_id'], # Local from global to!
+            message=data['message'],
+            date_time=data['date_time']
+        )
         self.newMessage.emit(
             data['from_id'],
             data['to_id'],
