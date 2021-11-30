@@ -197,6 +197,7 @@ class Service(Network):
                     password=Security.encrypt(password),
                     email=email
                 )
+            print(response.data.user_id)
             return True
         else:
             UserData.clear()
@@ -255,9 +256,7 @@ class Service(Network):
         answer = None
         try:
             self._send(RequestConstructor.create(
-                request_type=RequestType.ENCRYPTION_KEY,
-                login=UserData.get_my_login(),
-                email=UserData.get_my_email()
+                request_type=RequestType.ENCRYPTION_KEY
             ))
             answer = ResponseParser.extract_response(self._receive())
         except IOError:
