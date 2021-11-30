@@ -2,6 +2,7 @@ import json
 
 from core.protocols import Type
 from core.tools import UserData
+from core.system import Storage
 
 class MessageConstructor:
     @classmethod
@@ -22,6 +23,8 @@ class MessageConstructor:
 
     @classmethod
     def create_init(cls):
+        print(f"{Storage.get_last_index(UserData.get_my_id())=}")
         return  cls.__set_meta_data({
-            'type': Type.INIT
+            'type': Type.INIT,
+            'last_message_id': Storage.get_last_index(UserData.get_my_id())
         })

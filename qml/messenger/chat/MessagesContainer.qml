@@ -42,6 +42,17 @@ Rectangle {
     onChatChanged: {
         messageModel.clear()
         chatBar.chatChanged()
+        let messages = messenger.loadMessages()
+        for (let i in messages) {
+            messageModel.append({
+                "messageId": messages[i][0],
+                "fromId": messages[i][1],
+                "toId": messages[i][2],
+                "messageText": messages[i][3],
+                "messageTime": messages[i][4]
+            })
+            messageList.positionViewAtEnd()
+        }
     }
     
     Rectangle {

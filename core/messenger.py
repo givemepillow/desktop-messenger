@@ -4,6 +4,7 @@ import json
 from core.system import Network, Storage
 from core.converters import MessageConstructor
 from core.protocols import Type
+from core.tools import UserData
 
 class Messenger(Network):
     TCP_HOST = '127.0.0.1'
@@ -37,7 +38,11 @@ class Messenger(Network):
         )
 
     def __init(self, data):
-        ...
+        Storage.save_many_messages(data['messages'])
+
+    @Slot(result=list)
+    def loadMessages(self):
+        return Storage.load_messages(self.__current_target_id, UserData.get_my_id())
 
     def __on_error(self):
         print('ERROR: ', self.socket.errorString())
