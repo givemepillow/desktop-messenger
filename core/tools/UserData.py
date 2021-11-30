@@ -78,7 +78,8 @@ class UserData:
             with open('data/id', 'a+') as f:
                 f.seek(0)
                 my_id = f.read()
-                cls.__my_id = int(my_id)
+                if my_id != '':
+                    cls.__my_id = int(my_id)
         return cls.__my_id
 
 
