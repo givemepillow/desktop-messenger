@@ -5,7 +5,7 @@ from typing import Optional
 from core.system import Network
 from core.protocols import RequestType, ResponseType
 from core.converters import RequestConstructor, ResponseParser
-from core.tools import Security, UserData
+from core.tools import Security, UserData, MessageData
 
 
 class Service(Network):
@@ -26,6 +26,8 @@ class Service(Network):
         self.socket.connected.connect(self.__get_encryption_key)
         self.socket.connected.connect(self.__update_authentication)
         self._Network__create_connection()
+
+
 
     @Slot(result=bool)
     def isError(self):
@@ -124,14 +126,13 @@ class Service(Network):
 
     @Slot(str, result=list)
     def search(self, keywords):
-        keywords = keywords.split()
+        response, keywords = [], keywords.split()
         if len(keywords) == 1:
             self._send(RequestConstructor.create(
                 request_type=RequestType.SEARCH,
                 keyword1 = keywords[0]
             ))
             response = self.receive()
-            return [[user['id'], user['login'], user['first_name'], user['last_name']] for user in response.data.users]
         elif len(keywords) == 2:
             self._send(RequestConstructor.create(
                 request_type=RequestType.SEARCH,
@@ -139,9 +140,7 @@ class Service(Network):
                 keyword2=keywords[1] 
             ))
             response = self.receive()
-            return [[user['id'], user['login'], user['first_name'], user['last_name']] for user in response.data.users]
-        else:
-            return []
+        return [[user['id'], user['login'], user['first_name'], user['last_name']] for user in response.data.users]
 
     def __update_authentication(self):
         if self.__auth_complete and not self.autoAuthentication():
@@ -169,6 +168,7 @@ class Service(Network):
                 first_name=response.data.first_name,
                 last_name=response.data.last_name
             )
+            MessageData.init(UserData.get_my_id())
             return True
         else:
             return False
@@ -197,7 +197,7 @@ class Service(Network):
                     password=Security.encrypt(password),
                     email=email
                 )
-            print(response.data.user_id)
+            MessageData.init(UserData.get_my_id())
             return True
         else:
             UserData.clear()
