@@ -16,7 +16,4 @@ TemplateButton {
     colorTextMouseOver: "#9e9e9e"
     colorTextClicked: "#ffffff"
     colorTextDefault: "#707070"
-    onClicked: {
-        windowManager.openLoginWindow()
-    }
 }
