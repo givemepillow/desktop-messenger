@@ -46,22 +46,40 @@ TemplateWindow {
                 }
             }
 
-            FirstNameField { id: firstNameField }
+            FirstNameField {
+                id: firstNameField 
+                onAccepted: Tools.registration()
+            }
             FieldLabel { field: firstNameField }
 
-            LastNameField { id: lastNameField }
+            LastNameField {
+                id: lastNameField
+                onAccepted: Tools.registration()
+            }
             FieldLabel { field: lastNameField }
 
-            LoginField { id: loginField }
+            LoginField {
+                id: loginField
+                onAccepted: Tools.registration()
+            }
             FieldLabel { field: loginField }
    
-            EmailField { id: emailField }
+            EmailField {
+                id: emailField
+                onAccepted: Tools.registration()
+            }
             FieldLabel { field: emailField }
             
-            Password1Field { id: password1Field }
+            Password1Field {
+                id: password1Field
+                onAccepted: Tools.registration()
+            }
             FieldLabel { field: password1Field }
             
-            Password2Field { id: password2Field }
+            Password2Field {
+                id: password2Field
+                onAccepted: Tools.registration()
+            }
             FieldLabel { field: password2Field }
 
             InfoLabel {
@@ -156,6 +174,7 @@ TemplateWindow {
                     codeLabel.color = codeLabel.nonWarningColor
                     codeLabel.font.pointSize = 11
                 }
+                onAccepted: Tools.acceptCode()
             }
 
             Label {
@@ -191,9 +210,13 @@ TemplateWindow {
             SmokeButton {
                 anchors.bottomMargin: 30
                 buttonText: qsTr("Отмена")
-                onClicked: registrationBlock.isOff = false
+                onClicked: {
+                    codeLabel.color = codeLabel.nonWarningColor
+                    codeLabel.text = codeLabel.defaultText
+                    codeField.text = ''
+                    registrationBlock.isOff = false
+                }
             }
-            
         }
 
         Rectangle {
