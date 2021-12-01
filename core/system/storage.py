@@ -58,21 +58,49 @@ class Storage:
         tables = [t[0] for t in cls.__cursor.fetchall()]
         print(tables)
         # Creating tables.
-        if cls.USERS_TABLE not in tables:
-            cls.__cursor.execute(f"CREATE TABLE {cls.USERS_TABLE}"\
-                "(user_id BIGINT PRIMARY KEY, login VARCHAR(25), email VARCHAR(50), "\
-                    "first_name VARCHAR(30), last_name  VARCHAR(30))")
+        # if cls.USERS_TABLE not in tables:
+        #     cls.__cursor.execute(
+        #         f"CREATE TABLE {cls.USERS_TABLE}"\
+        #         "(user_id BIGINT PRIMARY KEY, login VARCHAR(25), email VARCHAR(50), "\
+        #         "first_name VARCHAR(30), last_name  VARCHAR(30))")
         if cls.MESSAGES_TABLE not in tables:
-            cls.__cursor.execute(f"CREATE TABLE {cls.MESSAGES_TABLE} "\
+            cls.__cursor.execute(
+                f"CREATE TABLE {cls.MESSAGES_TABLE} "\
                 "(message_id BIGINT PRIMARY KEY, from_id INTEGER NOT NULL, "\
-                    "to_id INTEGER NOT NULL, message VARCHAR(1000), date_time DECIMAIL(17,4));")
+                "to_id INTEGER NOT NULL, message VARCHAR(1000), date_time DECIMAIL(17,4) NOT NULL);"
+            )
+        # FOREIGN KEY (from_id) REFERENCES users(user_id)
+        # "FOREIGN KEY (to_id) REFERENCES users(user_id)
 
 
     @classmethod
     def save_many_messages(cls, messages):
         cls.__cursor.executemany("INSERT INTO messages(message_id, from_id, to_id, message, date_time)" \
         "VALUES(?, ?, ?, ?, ?);", messages)
-        #cls.__connection.commit()
+        cls.__connection.commit()
+
+    @classmethod
+    def get_users_id(cls, my_id):
+        cls.__cursor.execute(
+            "SELECT DISTINCT from_id, to_id "\
+            "FROM messages WHERE to_id = ? OR from_id = ?;", (my_id, my_id))
+        return cls.__cursor.fetchall()
+
+    @classmethod
+    def have_messages_to_myself(cls, my_id):
+        cls.__cursor.execute(
+            "SELECT from_id "\
+            "FROM messages WHERE to_id = ? AND from_id = to_id;", (my_id, )
+        )
+        return len(cls.__cursor.fetchall()) > 0
+
+    @classmethod
+    def get_last_massage_info(cls, user_id, my_id):
+        cls.__cursor.execute(
+            "SELECT message, date_time, max(message_id)"\
+            "FROM messages WHERE (to_id = ? AND from_id = ?) OR (to_id = ? AND from_id = ?);", (my_id, user_id, user_id, my_id)
+        )
+        return cls.__cursor.fetchone()
 
     @classmethod
     def save_message(cls, message_id, from_id, to_id, message, date_time):
