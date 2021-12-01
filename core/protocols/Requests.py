@@ -21,9 +21,14 @@ class RequestType(enum.Enum):
     SEARCH: int = 112
     LOGOUT: int = 113
     USER_STATUS: int = 114
+    USER_INFO: int = 115
 
 
 class UserStatus(BaseModel):
+    user_id: int
+
+
+class UserInfo(BaseModel):
     user_id: int
 
 
@@ -110,7 +115,8 @@ class Request(BaseModel):
         Stats,
         Search,
         Logout,
-        UserStatus
+        UserStatus,
+        UserInfo
     ]
     ip: Optional[str]
     port: Optional[int]
@@ -130,5 +136,6 @@ requests = {
     RequestType.STATS: Stats,
     RequestType.SEARCH: Search,
     RequestType.LOGOUT: Logout,
-    RequestType.USER_STATUS: UserStatus
+    RequestType.USER_STATUS: UserStatus,
+    RequestType.USER_INFO: UserInfo
 }

@@ -15,6 +15,15 @@ class ResponseType(enum.Enum):
     AUTH_COMPLETE: int = 212
     SEARCH_RESULTS: int = 210
     USER_STATUS: int = 209
+    USER_INFO: int = 207
+
+
+class UserInfo(BaseModel):
+    user_id: int
+    login: str
+    first_name: str
+    last_name: str
+    message: Optional[str]
 
 
 class UserStatus(BaseModel):
@@ -67,7 +76,8 @@ responses = {
     ResponseType.STATS: Stats,
     ResponseType.AUTH_COMPLETE: AuthComplete,
     ResponseType.SEARCH_RESULTS: SearchResults,
-    ResponseType.USER_STATUS: UserStatus
+    ResponseType.USER_STATUS: UserStatus,
+    ResponseType.USER_INFO: UserInfo
 }
 
 
@@ -81,5 +91,6 @@ class Response(BaseModel):
         Stats,
         AuthComplete,
         SearchResults,
-        UserStatus
+        UserStatus,
+        UserInfo
     ]
