@@ -21,6 +21,41 @@ TemplateWindow {
         id: container
 
         Rectangle {
+            id: logoBlock
+            color: "transparent"
+            anchors {
+                left: registrationBlock.right
+                top: parent.top
+                bottom: parent. bottom
+                right: parent.right
+            }
+            Text {
+                id: messengerLabel
+                color: "whitesmoke"
+                text: "Desktop messenger"
+                font.pointSize: 36
+                anchors {
+                    top: parent.top
+                    topMargin: 275
+                    left: parent.left
+                    leftMargin: 20
+                }
+                
+            }
+             Text {
+                color: "whitesmoke"
+                text: "by kirilllapushinskiy"
+                font.pointSize: 26
+                anchors {
+                    top: messengerLabel.bottom
+                    left: messengerLabel.left
+                    leftMargin: 200
+                }
+                
+            }
+        }
+
+        Rectangle {
             id: registrationBlock
 
             property bool isOff: false
