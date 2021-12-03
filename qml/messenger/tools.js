@@ -52,3 +52,24 @@ function getUserTime(timestamp) {
         ":"+
         ('0' + date.getMinutes()).slice(-2)
 }
+
+function setContacts(text) {
+    if (text != '') {
+        contactModel.clear()
+        contactList.selectedIndex = -1
+        let users = service.search(text)
+        search.found = (users.length == 0) ? false : true
+        for (let key in users) {
+        let user = users[key]
+            contactModel.append({
+                contactName: [user[3], user[2]].join(' '),
+                lastMessage: " ",
+                lastMessageTime: " ",
+                contactLogin: user[1],
+                contactId: user[0],
+            })
+        } 
+    } else {
+        contactList.updateContacts()
+    }
+}

@@ -3,7 +3,7 @@ import QtQuick.Window
 import QtQuick.Controls
 import Qt5Compat.GraphicalEffects
 import "../../templates"
-import "tools.js" as Tools
+import "../tools.js" as Tools
 
 Rectangle {
     id: root 
@@ -13,8 +13,8 @@ Rectangle {
     property string currentName: " "
     signal chatChanged()
     onChatChanged: messagesContainer.chatChanged()
-
     
+
 
     Image {
         id: backgroundImage
