@@ -73,3 +73,12 @@ function setContacts(text) {
         contactList.updateContacts()
     }
 }
+
+function extractLastMessage(text) {
+    let new_line = text.indexOf('\n')
+    if (new_line != -1)
+        text = text.substring(0, new_line)
+    let str_len = text.length
+    let result = text.substring(0, 20)
+    return str_len > result.length ? result + '...' : result
+}

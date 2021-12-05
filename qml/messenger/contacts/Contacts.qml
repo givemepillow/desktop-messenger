@@ -85,7 +85,6 @@ Rectangle {
             top: parent.top
         }
         onTextEdited: Tools.setContacts(text)
-        
     }
 
     ListModel {
@@ -194,7 +193,7 @@ Rectangle {
                 }
                 onClicked: {
                     contactList.model.remove(index)
-                    Tools.setContacts()
+                    Tools.setContacts(search.text)
                 }
             }
 
@@ -231,7 +230,7 @@ Rectangle {
                 let user = users[key]
                 contactModel.append({
                     contactName: user[0],
-                    lastMessage: user[1],
+                    lastMessage: Tools.extractLastMessage(user[1]),
                     lastMessageTime: Tools.getMessageTime(user[2]),
                     contactLogin: user[3],
                     contactId: user[4],
