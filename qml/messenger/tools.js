@@ -20,6 +20,7 @@ let months = {
 }
 
 function getMessageTime(timestamp) {
+    if (timestamp == -1) return ' '
     var date = new Date(timestamp)
     if (date.getDate() == new Date().getDate())
         return ('0' + date.getHours()).slice(-2) +
@@ -33,7 +34,6 @@ function getMessageTime(timestamp) {
         ('0' + date.getHours()).slice(-2) +
         ":"+
         ('0' + date.getMinutes()).slice(-2)
-
 }
 
 
@@ -52,4 +52,23 @@ function getUserTime(timestamp) {
         ('0' + date.getHours()).slice(-2) +
         ":"+
         ('0' + date.getMinutes()).slice(-2)
+}
+
+function setContacts(text) {
+    if (text != '') {
+        contactModel.clear()
+        contactList.selectedIndex = -1
+        let users = service.search(text)
+        search.found = (users.length == 0) ? false : true
+        for (let key in users) {
+            let user = users[key]
+            contactModel.append({
+                contactName: [user[2], user[3]].join(' '),
+                contactLogin: user[1],
+                contactId: user[0],
+            })
+        } 
+    } else {
+        contactList.updateContacts()
+    }
 }

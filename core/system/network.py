@@ -50,7 +50,7 @@ class Network(QObject):
     def __create_connection(self):
         print("try to connect...")
         self.socket.connectToHost(self.TCP_HOST, self.TCP_SEND_TO_PORT)
-        self.__alive = self.socket.waitForConnected(50)
+        self.__alive = self.socket.waitForConnected(1000 if not self.__reconnection_tries else 50)
         self.__process_timer()
         return self.__alive
 

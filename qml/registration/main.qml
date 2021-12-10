@@ -21,6 +21,41 @@ TemplateWindow {
         id: container
 
         Rectangle {
+            id: logoBlock
+            color: "transparent"
+            anchors {
+                left: registrationBlock.right
+                top: parent.top
+                bottom: parent. bottom
+                right: parent.right
+            }
+            Text {
+                id: messengerLabel
+                color: !registrationBlock.isOff ? "whitesmoke" : "#3d3d3d"
+                text: "Desktop messenger"
+                font.pointSize: 36
+                anchors {
+                    top: parent.top
+                    topMargin: 275
+                    left: parent.left
+                    leftMargin: 20
+                }
+                
+            }
+             Text {
+                color: !registrationBlock.isOff ? "whitesmoke" : "#3d3d3d"
+                text: "by kirilllapushinskiy"
+                font.pointSize: 26
+                anchors {
+                    top: messengerLabel.bottom
+                    left: messengerLabel.left
+                    leftMargin: 200
+                }
+                
+            }
+        }
+
+        Rectangle {
             id: registrationBlock
 
             property bool isOff: false
@@ -46,22 +81,40 @@ TemplateWindow {
                 }
             }
 
-            FirstNameField { id: firstNameField }
+            FirstNameField {
+                id: firstNameField 
+                onAccepted: Tools.registration()
+            }
             FieldLabel { field: firstNameField }
 
-            LastNameField { id: lastNameField }
+            LastNameField {
+                id: lastNameField
+                onAccepted: Tools.registration()
+            }
             FieldLabel { field: lastNameField }
 
-            LoginField { id: loginField }
+            LoginField {
+                id: loginField
+                onAccepted: Tools.registration()
+            }
             FieldLabel { field: loginField }
    
-            EmailField { id: emailField }
+            EmailField {
+                id: emailField
+                onAccepted: Tools.registration()
+            }
             FieldLabel { field: emailField }
             
-            Password1Field { id: password1Field }
+            Password1Field {
+                id: password1Field
+                onAccepted: Tools.registration()
+            }
             FieldLabel { field: password1Field }
             
-            Password2Field { id: password2Field }
+            Password2Field {
+                id: password2Field
+                onAccepted: Tools.registration()
+            }
             FieldLabel { field: password2Field }
 
             InfoLabel {
@@ -156,6 +209,7 @@ TemplateWindow {
                     codeLabel.color = codeLabel.nonWarningColor
                     codeLabel.font.pointSize = 11
                 }
+                onAccepted: Tools.acceptCode()
             }
 
             Label {
@@ -164,7 +218,7 @@ TemplateWindow {
                 property string defaultText: qsTr("Введите код, отправленный\nна указанный вами адрес электронной почты.")
                 text: defaultText
                 visible: true
-                font.pointSize: 11
+                font.pointSize: 15
                 property color warningColor: "#d45353"
                 property color nonWarningColor: "whitesmoke"
                 color: nonWarningColor
@@ -191,9 +245,13 @@ TemplateWindow {
             SmokeButton {
                 anchors.bottomMargin: 30
                 buttonText: qsTr("Отмена")
-                onClicked: registrationBlock.isOff = false
+                onClicked: {
+                    codeLabel.color = codeLabel.nonWarningColor
+                    codeLabel.text = codeLabel.defaultText
+                    codeField.text = ''
+                    registrationBlock.isOff = false
+                }
             }
-            
         }
 
         Rectangle {

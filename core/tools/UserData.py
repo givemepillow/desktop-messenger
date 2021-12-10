@@ -20,7 +20,7 @@ class UserData:
 
     @classmethod
     def get_temporary_password(cls):
-        return cls.__temp_pass if cls.__temp_pass else ''
+        return cls.__temp_pass if cls.__temp_pass else None
 
 
     @classmethod
@@ -78,7 +78,8 @@ class UserData:
             with open('data/id', 'a+') as f:
                 f.seek(0)
                 my_id = f.read()
-                cls.__my_id = int(my_id)
+                if my_id != '':
+                    cls.__my_id = int(my_id)
         return cls.__my_id
 
 

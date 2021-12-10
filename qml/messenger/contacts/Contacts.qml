@@ -3,13 +3,31 @@ import QtQuick.Window
 import QtQuick.Controls
 import Qt5Compat.GraphicalEffects
 import "../../templates"
+import "../tools.js" as Tools
+import "../"
 
 Rectangle {
     id: root
+    property var userIndex: {0: 0}
+    Connections {
+        target: messenger
+        function onDeleteChatSignal() {
+            chat.chatChanged()
+            Tools.setContacts(search.text)
+        }
+
+        function onReloadContacts() {
+            Tools.setContacts(search.text)
+        }
+
+        function onLoaded() {
+            Tools.setContacts(search.text)
+        }
+    }
 
     TemplateButton {
         id: nothingIcon
-        visible: !search.found
+        visible: !search.found && search.text != ''
         height: 90
         width: 90
         enabled: false
@@ -28,7 +46,7 @@ Rectangle {
     Text {
         text: qsTr("Никого не удалось найти.")
         font.pointSize: 12
-        visible: !search.found
+        visible: !search.found && search.text != ''
         color: "gray"
         anchors {
             horizontalCenter: parent.horizontalCenter
@@ -73,22 +91,7 @@ Rectangle {
             right: parent.right
             top: parent.top
         }
-        onTextEdited: {
-            contactModel.clear()
-            contactList.selectedIndex = -1
-            let users = service.search(text)
-            search.found = (users.length == 0) ? false : true
-            for (let key in users) {
-                let user = users[key]
-                contactModel.append({
-                    contactName: [user[3], user[2]].join(' '),
-                    lastMessage: "Пока нет ни одного сообщения.",
-                    lastMessageTime: " ",
-                    contactLogin: user[1],
-                    contactId: user[0],
-                })
-            }
-        }
+        onTextEdited: Tools.setContacts(text)
     }
 
     ListModel {
@@ -108,9 +111,9 @@ Rectangle {
                 if (model.contactId === messenger.getTarget()) {
                     contactList.selectedIndex = index
                 }
+                root.userIndex[model.contactId] = index
             }
 
-            
             Rectangle {
                 width: parent.width * 0.9
                 height: 1
@@ -119,7 +122,7 @@ Rectangle {
                     bottom: parent.bottom
                     horizontalCenter: parent.horizontalCenter
                 }
-                visible: index + 1 == contactList.model.count ? false : true
+                visible: index == 0 ? false : true
             }
             
 
@@ -138,7 +141,7 @@ Rectangle {
 
             Text {
                 id: lastMessageTime
-                text: model.lastMessageTime
+                text: Tools.getMessageTime(messenger.getLastMessageTime(model.contactId))
                 color: "#787878"
                 visible: !isMouseHovered()
                 font.pointSize: 11
@@ -151,7 +154,8 @@ Rectangle {
             }
 
             Text {
-                text: model.lastMessage
+                id: lastMessage
+                text: messenger.getLastMessage(model.contactId)
                 color: "#787878"
                 font.pointSize: 11
                 anchors {
@@ -174,6 +178,8 @@ Rectangle {
                         chat.anyChatIsOpen = true
                         chat.currentLogin = model.contactLogin
                         chat.currentName = model.contactName
+                        messenger.markAsRead(model.contactId)
+                        readIcon.visible = false
                     }
                 }
             }
@@ -181,7 +187,7 @@ Rectangle {
             TemplateButton {
                 id: deleteButton
                 iconSource: "../resources/icons/close.png"
-                visible: isMouseHovered() && messenger.haveAnyMessages() ? 1 : 0
+                visible: isMouseHovered() && messenger.haveAnyMessages(model.contactId) ? 1 : 0
                 colorDefault: "transparent"
                 width: 15
                 height: 15
@@ -196,7 +202,28 @@ Rectangle {
                     topMargin: 15
                 }
                 onClicked: {
-                    contactList.model.remove(index)
+                    openAccept(contactId)
+                }
+            }
+
+            TemplateButton {
+                id: readIcon
+                iconSource: "../resources/icons/circle.png"
+                enabled: false
+                visible: !messenger.isRead(model.contactId)
+                colorDefault: "transparent"
+                width: 20
+                height: 20
+                iconHeight: 15
+                iconWidth: 15
+                colorOverlayDefault: "#184896"
+                colorOverlayClicked: "#184896"
+                colorOverlayMouseOver: "#184896"
+                anchors {
+                    left: lastMessage.right
+                    leftMargin: 5
+                    top: lastMessage.top
+                    topMargin: 3
                 }
             }
 
@@ -210,12 +237,12 @@ Rectangle {
     ListView {
         id: contactList
         property int selectedIndex: -1
-        verticalLayoutDirection: ListView.TopToBottom
+        verticalLayoutDirection: ListView.BottomToTop
         model: contactModel
         delegate: contact
         spacing: 0
+        height: contentHeight < parent.height ? contentHeight : parent.height
         anchors {
-            bottom: parent.bottom
             left: parent.left
             right: parent.right
             top: search.bottom
@@ -223,6 +250,21 @@ Rectangle {
         }
         contentWidth: parent.width
         clip: true
+
+        function updateContacts() {
+            contactModel.clear()
+            contactList.selectedIndex = -1
+            let users = service.updateContacts()
+            // search.found = (users.length == 0) ? false : true
+            for (let key in users) {
+                let user = users[key]
+                contactModel.append({
+                    contactName: user[0],
+                    contactLogin: user[1],
+                    contactId: user[2],
+                })
+            }
+        }
 
         ScrollBar.vertical: ScrollBar {
             id: verticalScrollBar
@@ -233,6 +275,36 @@ Rectangle {
         onCountChanged: {
             positionViewAtEnd()
             verticalScrollBar.position = 1
+        }
+    }
+
+    TemplateButton {
+        id: astronautIcon
+        iconSource: "../resources/icons/astronaut.png"
+        colorDefault: "transparent"
+        visible: contactList.model.count == 0 && search.text == ''
+        width: 60
+        height: 60
+        iconHeight: 64
+        iconWidth: 64
+        enabled: false
+        colorOverlayDefault: "#b0b0b0"
+        anchors {
+            horizontalCenter: parent.horizontalCenter
+            top: parent.top
+            topMargin: parent.height / 4
+        }
+    }
+
+    Text {
+        text: "Здесь так одиноко..."
+        visible: contactList.model.count == 0 && search.text == ''
+        color: "#b0b0b0"
+        font.pointSize: 12
+        anchors {
+            horizontalCenter: parent.horizontalCenter
+            top: astronautIcon.bottom
+            topMargin: 10
         }
     }
 }
