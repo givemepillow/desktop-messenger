@@ -4,51 +4,90 @@ import json
 from core.system import Network, Storage
 from core.converters import MessageConstructor
 from core.protocols import Type
-from core.tools import UserData
+from core.tools import UserData, MessageData
 
 class Messenger(Network):
-    TCP_HOST = '127.0.0.1'
-    TCP_SEND_TO_PORT = 6700
     __current_target_id = -1
+    __my_id = None
 
     def __init__(self):
-        super(Messenger, self).__init__(address='127.0.0.1', port=6700)
+        super(Messenger, self).__init__(address='89.223.71.146', port=6700) # '89.223.71.146'
         self.socket.connected.connect(self.__init_messenger_session)
         self.socket.readyRead.connect(self.__receive_message)
         self._Network__create_connection()
-        #self.__storage = Storage()
-
-
+        MessageData.update_chats_from_storage()
+        self.__my_id = UserData.get_my_id()
 
     def __new_message(self, data):
-        # save message
+        _from, _to = data['from_id'], data['to_id']
         Storage().save_message(
             message_id=data['message_id'],
-            from_id=data['from_id'],
-            to_id=data['to_id'], # Local from global to!
+            from_id=_from,
+            to_id=_to, # Local from global to!
             message=data['message'],
             date_time=data['date_time']
         )
-        self.newMessage.emit(
-            data['from_id'],
-            data['to_id'],
-            data['message'],
-            data['date_time'],
-            data['message_id']
-        )
+        user_id = self.__extract_user_id(_from, _to)
+        MessageData.add_chat(user_id)
+        MessageData.update_chat(user_id, data['message'], data['date_time'],  data['message_id'])
+        if self.__current_target_id == user_id:
+            self.newMessage.emit(
+                data['from_id'],
+                data['to_id'],
+                data['message'],
+                data['date_time'],
+                data['message_id'],
+            )
+        else:
+            Storage.set_read([(user_id,)])
+        self.reloadContacts.emit()
+
+    def __extract_user_id(self, from_id, to_id):
+        return from_id if from_id != self.__my_id or from_id == to_id else to_id
 
     def __init(self, data):
+        if data['last_update'] != MessageData.get_last_update():
+            Storage.clear()
+            MessageData.set_last_update(data['last_update'])
         Storage.save_many_messages(data['messages'])
+        new_messages = [(self.__extract_user_id(msg[1], msg[2]), ) for msg in data['messages']]
+        Storage.set_read(new_messages)
+        MessageData.update_chats_from_storage()
+        self.reloadContacts.emit()
 
+    @Slot(int)
+    def deleteChat(self, user_id):
+        return self.send(MessageConstructor.create_delete_dialog(
+            to_id = user_id
+        ))
+
+    def __deleting_dialog(self, data):
+        _from, _to = data['from_id'], data['to_id']
+        user_id = self.__extract_user_id(_from, _to)
+        MessageData.remove_chat(user_id=user_id)
+        Storage.clear_chat(_from, _to)
+        MessageData.update_chats_from_storage()
+        self.deleteChatSignal.emit()
+    
     @Slot(result=list)
     def loadMessages(self):
         return Storage.load_messages(self.__current_target_id, UserData.get_my_id())
 
-    def __on_error(self):
-        print('ERROR: ', self.socket.errorString())
+    @Slot(int, result=str)
+    def getLastMessage(self, user_id):
+        if user_id not in MessageData.chat_users:
+            return 'Нет ни одного сообщения'
+        _last_message = MessageData.chat_users[user_id]['last_message'].split('\n')
+        return _last_message[0][0:20]
+
+    @Slot(int, result=float)
+    def getLastMessageTime(self, user_id):
+        if user_id not in MessageData.chat_users:
+            return -1
+        return MessageData.chat_users[user_id]['last_message_time']
+
 
     def __close_connection(self):
-        #print('disconnect from host')
         self.socket.disconnectFromHost()
         self.create_connection()
 
@@ -65,7 +104,8 @@ class Messenger(Network):
     def handle(self, data):
         handlers = {
             Type.MESSAGE: self.__new_message,
-            Type.INIT: self.__init
+            Type.INIT: self.__init,
+            Type.DELETE_DIALOG: self.__deleting_dialog
         }
         answer = self.__parse(data)
         handlers[answer['type']](answer)
@@ -77,16 +117,25 @@ class Messenger(Network):
     def sendMessage(self, message):
         return self.send(MessageConstructor.create_message(
                 to_id = self.__current_target_id,
-                message = message
+                message = message.strip()
             ))
 
     @Slot(int)
     def updateTraget(self, to_id):
         self.__current_target_id = to_id
 
-    @Slot(result=bool)
-    def haveAnyMessages(self):
-        return False
+    @Slot(int, result=bool)
+    def haveAnyMessages(self, user_id):
+        return user_id in MessageData.chat_users
+
+    @Slot(int, result=bool)
+    def isRead(self, user_id):
+        _read = Storage.is_read(user_id)
+        return user_id in MessageData.chat_users and len(_read) == 0 or _read[0] == 1 
+
+    @Slot(int)
+    def markAsRead(self, user_id):
+       Storage.mark_as_read(user_id)
 
     @Slot(result=int)
     def getTarget(self):
@@ -101,6 +150,10 @@ class Messenger(Network):
             'dateTime',
             'messageId'
         ])
+
+    loaded = Signal()
+    reloadContacts = Signal()
+    deleteChatSignal = Signal()
 
     def __receive_message(self):
         self.handle(bytes(self.socket.readAll()))

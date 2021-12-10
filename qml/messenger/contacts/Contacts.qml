@@ -4,17 +4,24 @@ import QtQuick.Controls
 import Qt5Compat.GraphicalEffects
 import "../../templates"
 import "../tools.js" as Tools
+import "../"
 
 Rectangle {
     id: root
     property var userIndex: {0: 0}
     Connections {
         target: messenger
-        function onReloadContacts() {
-            contactList.updateContacts()
+        function onDeleteChatSignal() {
+            chat.chatChanged()
+            Tools.setContacts(search.text)
         }
+
+        function onReloadContacts() {
+            Tools.setContacts(search.text)
+        }
+
         function onLoaded() {
-            contactList.updateContacts()
+            Tools.setContacts(search.text)
         }
     }
 
@@ -134,7 +141,7 @@ Rectangle {
 
             Text {
                 id: lastMessageTime
-                text: model.lastMessageTime
+                text: Tools.getMessageTime(messenger.getLastMessageTime(model.contactId))
                 color: "#787878"
                 visible: !isMouseHovered()
                 font.pointSize: 11
@@ -147,7 +154,8 @@ Rectangle {
             }
 
             Text {
-                text: messenger.haveAnyMessages(model.contactId) ? model.lastMessage : 'Нет ни одного сообщения'
+                id: lastMessage
+                text: messenger.getLastMessage(model.contactId)
                 color: "#787878"
                 font.pointSize: 11
                 anchors {
@@ -170,6 +178,8 @@ Rectangle {
                         chat.anyChatIsOpen = true
                         chat.currentLogin = model.contactLogin
                         chat.currentName = model.contactName
+                        messenger.markAsRead(model.contactId)
+                        readIcon.visible = false
                     }
                 }
             }
@@ -192,8 +202,28 @@ Rectangle {
                     topMargin: 15
                 }
                 onClicked: {
-                    contactList.model.remove(index)
-                    Tools.setContacts(search.text)
+                    openAccept(contactId)
+                }
+            }
+
+            TemplateButton {
+                id: readIcon
+                iconSource: "../resources/icons/circle.png"
+                enabled: false
+                visible: !messenger.isRead(model.contactId)
+                colorDefault: "transparent"
+                width: 20
+                height: 20
+                iconHeight: 15
+                iconWidth: 15
+                colorOverlayDefault: "#184896"
+                colorOverlayClicked: "#184896"
+                colorOverlayMouseOver: "#184896"
+                anchors {
+                    left: lastMessage.right
+                    leftMargin: 5
+                    top: lastMessage.top
+                    topMargin: 3
                 }
             }
 
@@ -230,10 +260,8 @@ Rectangle {
                 let user = users[key]
                 contactModel.append({
                     contactName: user[0],
-                    lastMessage: Tools.extractLastMessage(user[1]),
-                    lastMessageTime: Tools.getMessageTime(user[2]),
-                    contactLogin: user[3],
-                    contactId: user[4],
+                    contactLogin: user[1],
+                    contactId: user[2],
                 })
             }
         }

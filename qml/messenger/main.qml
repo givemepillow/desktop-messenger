@@ -49,8 +49,8 @@ TemplateWindow {
             
             anchors.centerIn: parent
 
-            property int chatIndex: null
-            property int contactId: null
+            property int chatIndex: -1
+            property int contactId: -1
             
             Row {
                 anchors.bottom: parent.bottom
@@ -65,7 +65,8 @@ TemplateWindow {
                     width: dialog.width / 2 - 30
                     text: dialog.acceptText
                     onClicked:{
-                       contacts.deleteChat(dialog.chatIndex, dialog.contactId)
+                       console.log(dialog.contactId)
+                       messenger.deleteChat(dialog.contactId)
                        dialog.visible = false
                     }
                 }
@@ -104,10 +105,9 @@ TemplateWindow {
         Contacts {
             id: contacts
 
-            signal openAccept(int index, int contactId)
+            signal openAccept(int contactId)
             onOpenAccept: {
                 dialog.visible = true
-                dialog.chatIndex = index
                 dialog.contactId = contactId
             }
 

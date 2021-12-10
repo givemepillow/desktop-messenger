@@ -2,7 +2,7 @@ from PySide6.QtCore import QObject, Signal, Slot, Property
 
 from typing import Optional
 
-from core.system import Network
+from core.system import Network, Storage
 from core.protocols import RequestType, ResponseType
 from core.converters import RequestConstructor, ResponseParser
 from core.tools import Security, UserData, MessageData
@@ -22,12 +22,11 @@ class Service(Network):
 
 
     def __init__(self):
-        super(Service, self).__init__(address='127.0.0.1', port=6767)
+        super(Service, self).__init__(address='89.223.71.146', port=6767)
         self.socket.connected.connect(self.__get_encryption_key)
         self.socket.connected.connect(self.__update_authentication)
         self._Network__create_connection()
-
-
+        MessageData.set_get_user_info(self.getUserInfo)
 
     @Slot(result=bool)
     def isError(self):
@@ -64,7 +63,7 @@ class Service(Network):
                 last_name=last_name,
                 email=email
             )): return False
-        return self.__receive()
+        return ResponseType(self.receive().type) == ResponseType.ACCEPT
 
     @Slot(str, str, result=bool)
     def emailVerification(self, email, login):
@@ -74,7 +73,7 @@ class Service(Network):
                 email=email,
                 login=login
             ))
-        return self.__receive()
+        return ResponseType(self.receive().type) == ResponseType.ACCEPT
 
     @Slot(str, str, result=bool)
     def codeVerification(self, email, code):
@@ -84,7 +83,7 @@ class Service(Network):
                 email=email,
                 code=code
             ))
-        return self.__receive()
+        return ResponseType(self.receive().type) == ResponseType.ACCEPT
 
     @Slot(int, result=float)
     def getUserOnlineStatus(self, user_id):
@@ -116,11 +115,27 @@ class Service(Network):
     def getOffline(self):
         return self.__offline or 0
 
+    def getUserInfo(self, user_id):
+        self._send(
+            RequestConstructor.create(
+                request_type=RequestType.USER_INFO,
+                user_id=user_id
+            )
+        )
+        response = self.receive()
+        return response.data
+
+    @Slot(result=list)
+    def updateContacts(self):
+        contacts = sorted(MessageData.chat_users.values(), key=lambda item: item['message_id'] or 0)
+        return [[c['contact_name'], c['contact_login'], c['contact_id']] for c in contacts]
+
     @Slot()
     def logout(self):
         UserData.clear()
+        Storage.clear()
         self._send(RequestConstructor.create(
-                request_type=RequestType.LOGOUT
+            request_type=RequestType.LOGOUT
         ))
         self.receive()
 
@@ -132,15 +147,15 @@ class Service(Network):
                 request_type=RequestType.SEARCH,
                 keyword1 = keywords[0]
             ))
-            response = self.receive()
+            response = self.receive().data.users
         elif len(keywords) == 2:
             self._send(RequestConstructor.create(
                 request_type=RequestType.SEARCH,
                 keyword1=keywords[0],
                 keyword2=keywords[1] 
             ))
-            response = self.receive()
-        return [[user['id'], user['login'], user['first_name'], user['last_name']] for user in response.data.users]
+            response = self.receive().data.users
+        return [[u['id'], u['login'], u['first_name'], u['last_name']] for u in response]
 
     def __update_authentication(self):
         if self.__auth_complete and not self.autoAuthentication():
@@ -150,28 +165,12 @@ class Service(Network):
     @Slot(result=bool)
     def autoAuthentication(self):
         password = UserData.get_temporary_password()
-        if not Security.key_is_set() or not self._send(
-            RequestConstructor.create(
-                request_type=RequestType.AUTHENTICATION,
-                login=UserData.get_my_login(),
-                password=Security.encrypt(password) if password else UserData.get_password(),
-                email=UserData.get_my_email()
-            )): return False
-        response = self.receive()
-        if ResponseType(response.type) == ResponseType.AUTH_COMPLETE:
-            self.__auth_complete = True
-            UserData.save(
-                my_id=response.data.user_id,
-                password=UserData.get_password(),
-                email=UserData.get_my_email(),
-                login=response.data.login,
-                first_name=response.data.first_name,
-                last_name=response.data.last_name
-            )
-            MessageData.init(UserData.get_my_id())
-            return True
-        else:
-            return False
+        return self.authentication(
+            login=UserData.get_my_login(),
+            email=UserData.get_my_email(),
+            password=Security.encrypt(password) if password else UserData.get_password(),
+            save_password=True
+        )
 
     @Slot(str, str, str, bool, result=bool)
     def authentication(self, login, email, password, save_password):
@@ -179,13 +178,13 @@ class Service(Network):
             RequestConstructor.create(
                 request_type=RequestType.AUTHENTICATION,
                 login=login,
-                password=Security.encrypt(password),
+                password=Security.encrypt(password) if isinstance(password, str) else password,
                 email=email
             )): return False
         response =  self.receive()
         if ResponseType(response.type) == ResponseType.AUTH_COMPLETE:
             self.__auth_complete = True
-            UserData.save_password_temporarty(password)
+            UserData.save_password_temporarty(password if isinstance(password, str) else '')
             UserData.save(
                 my_id=response.data.user_id,
                 first_name=response.data.first_name,
@@ -194,7 +193,7 @@ class Service(Network):
             )
             if save_password:
                 UserData.save(
-                    password=Security.encrypt(password),
+                    password=Security.encrypt(password) if isinstance(password, str) else password,
                     email=email
                 )
             MessageData.init(UserData.get_my_id())
@@ -209,7 +208,7 @@ class Service(Network):
             request_type=RequestType.AVAILABLE_EMAIL,
             email=email
         ))
-        return self.__receive()
+        return ResponseType(self.receive().type) == ResponseType.ACCEPT
 
     @Slot(str, result=bool)
     def availableLogin(self, login):
@@ -217,7 +216,7 @@ class Service(Network):
             request_type=RequestType.AVAILABLE_LOGIN,
             login=login
         ))
-        return self.__receive()
+        return ResponseType(self.receive().type) == ResponseType.ACCEPT
 
     @Slot(str, str, result=bool)
     def recoveryEmailVerification(self, email, login):
@@ -226,7 +225,7 @@ class Service(Network):
             login=login,
             email=email
         ))
-        return self.__receive()
+        return ResponseType(self.receive().type) == ResponseType.ACCEPT
 
     @Slot(str, str, str, result=bool)
     def recoveryCodeVerification(self, email, login, code):
@@ -236,7 +235,7 @@ class Service(Network):
             email=email,
             code=code
         ))
-        return self.__receive()
+        return ResponseType(self.receive().type) == ResponseType.ACCEPT
 
     @Slot(str, str, str, result=bool)
     def newPassword(self, email, login, password):
@@ -247,7 +246,7 @@ class Service(Network):
                 email=email,
                 password=Security.encrypt(password)
             )): return False
-        return self.__receive()
+        return ResponseType(self.receive().type) == ResponseType.ACCEPT
     
     def __encryption_key_verify(self):
         if not Security.key_is_set(): return False
@@ -276,21 +275,6 @@ class Service(Network):
         finally:
             self.__set_server_message(answer)
             return answer
-
-    def __receive(self):
-        answer, status = None, False
-        try:
-            answer = ResponseParser.extract_response(self._receive())
-            if ResponseType(answer.type) == ResponseType.AUTH_COMPLETE:
-                UserData.set_my_id(answer.data.user_id)
-                status = True
-            else:
-                status = (ResponseType(answer.type) == ResponseType.ACCEPT)
-        except IOError:
-            status = False
-        finally:
-            self.__set_server_message(answer)
-            return status
             
     def __set_server_message(self, answer):
         if answer is None or self._Network__alive == False:

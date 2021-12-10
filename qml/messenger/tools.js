@@ -20,6 +20,7 @@ let months = {
 }
 
 function getMessageTime(timestamp) {
+    if (timestamp == -1) return ' '
     var date = new Date(timestamp)
     if (date.getDate() == new Date().getDate())
         return ('0' + date.getHours()).slice(-2) +
@@ -60,11 +61,9 @@ function setContacts(text) {
         let users = service.search(text)
         search.found = (users.length == 0) ? false : true
         for (let key in users) {
-        let user = users[key]
+            let user = users[key]
             contactModel.append({
-                contactName: [user[3], user[2]].join(' '),
-                lastMessage: " ",
-                lastMessageTime: " ",
+                contactName: [user[2], user[3]].join(' '),
                 contactLogin: user[1],
                 contactId: user[0],
             })
@@ -72,13 +71,4 @@ function setContacts(text) {
     } else {
         contactList.updateContacts()
     }
-}
-
-function extractLastMessage(text) {
-    let new_line = text.indexOf('\n')
-    if (new_line != -1)
-        text = text.substring(0, new_line)
-    let str_len = text.length
-    let result = text.substring(0, 20)
-    return str_len > result.length ? result + '...' : result
 }

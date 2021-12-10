@@ -20,7 +20,7 @@ class UserData:
 
     @classmethod
     def get_temporary_password(cls):
-        return cls.__temp_pass if cls.__temp_pass else ''
+        return cls.__temp_pass if cls.__temp_pass else None
 
 
     @classmethod

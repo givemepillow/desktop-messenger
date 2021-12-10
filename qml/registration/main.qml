@@ -31,7 +31,7 @@ TemplateWindow {
             }
             Text {
                 id: messengerLabel
-                color: "whitesmoke"
+                color: !registrationBlock.isOff ? "whitesmoke" : "#3d3d3d"
                 text: "Desktop messenger"
                 font.pointSize: 36
                 anchors {
@@ -43,7 +43,7 @@ TemplateWindow {
                 
             }
              Text {
-                color: "whitesmoke"
+                color: !registrationBlock.isOff ? "whitesmoke" : "#3d3d3d"
                 text: "by kirilllapushinskiy"
                 font.pointSize: 26
                 anchors {
@@ -218,7 +218,7 @@ TemplateWindow {
                 property string defaultText: qsTr("Введите код, отправленный\nна указанный вами адрес электронной почты.")
                 text: defaultText
                 visible: true
-                font.pointSize: 11
+                font.pointSize: 15
                 property color warningColor: "#d45353"
                 property color nonWarningColor: "whitesmoke"
                 color: nonWarningColor

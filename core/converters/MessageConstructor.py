@@ -1,7 +1,7 @@
 import json
 
 from core.protocols import Type
-from core.tools import UserData
+from core.tools import UserData, MessageData
 from core.system import Storage
 
 class MessageConstructor:
@@ -19,12 +19,20 @@ class MessageConstructor:
             'date_time': None,
             'message_id': None
         })
-        
+
+    @classmethod
+    def create_delete_dialog(cls, to_id):
+        return cls.__set_meta_data({
+            'type': Type.DELETE_DIALOG,
+            'to_id': int(to_id),
+            'last_update': MessageData.get_last_update()
+        })
 
     @classmethod
     def create_init(cls):
-        print(f"{Storage.get_last_index(UserData.get_my_id())=}")
         return  cls.__set_meta_data({
             'type': Type.INIT,
-            'last_message_id': Storage.get_last_index(UserData.get_my_id())
+            'to_id': UserData.get_my_id(),
+            'last_message_id': Storage.get_last_index(UserData.get_my_id()),
+            'last_update': MessageData.get_last_update()
         })
