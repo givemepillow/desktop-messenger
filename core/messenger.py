@@ -77,6 +77,7 @@ class Messenger(Network):
     def __deleting_message(self, data):
         _message_id = data['message_id']
         Storage.remove_message(_message_id)
+        MessageData.update_chats_from_storage()
         self.deleteChatSignal.emit()
     
     @Slot(result=list)

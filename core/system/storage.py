@@ -56,6 +56,16 @@ class Storage:
                 "(message_id BIGINT PRIMARY KEY, from_id INTEGER NOT NULL, "\
                 "to_id INTEGER NOT NULL, message VARCHAR(1000), date_time DECIMAIL(17,4) NOT NULL);"
             )
+    
+    @classmethod
+    def remove_message(cls, message_id):
+        cls.__cursor.execute(
+            """
+            DELETE FROM messages WHERE message_id = ?;
+            """,
+            (message_id,)
+        )
+        cls.__connection.commit()
 
     @classmethod
     def set_read(cls, chat_id):

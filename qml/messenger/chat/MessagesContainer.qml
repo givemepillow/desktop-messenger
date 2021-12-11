@@ -160,7 +160,7 @@ Rectangle {
                     colorOverlayDefault: "#787878"
                     colorOverlayMouseOver: "#733c3f"
                     colorOverlayClicked: "#c9222d"
-                    visible: mouseArea.containsMouse || deleteButton.hovered
+                    visible: (mouseArea.containsMouse || deleteButton.hovered) && model.fromId == service.getMyId() 
                     height: 20
                     width: 20
                     anchors {
