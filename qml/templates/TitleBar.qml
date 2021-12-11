@@ -43,7 +43,7 @@ Rectangle {
         TemplateButton {
             id: maximizeButton
             width: parent.width / 3; height: parent.height;
-            visible: maximizable
+            visible: false
             iconHeight: 35
             iconWidth: 35
             colorMouseOver: "#61875d"
@@ -53,7 +53,7 @@ Rectangle {
         }
         TemplateButton {
             id: minimizeButton
-            visible: minimizable
+            visible: false
             width: parent.width / 3; height: parent.height;
             colorMouseOver: "#616161"
             colorClicked: "#805db0"
