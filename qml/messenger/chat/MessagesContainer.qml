@@ -105,7 +105,7 @@ Rectangle {
                 color: "#333333"
                 radius: 6
                 height: messageArea.height + 30
-                width: messageArea.width < (messageDate.width + 20) ? messageDate.width + 20 : messageArea.width
+                width: messageArea.width < (messageDate.width + 45) ? messageDate.width + 45: messageArea.width
                 Component.onCompleted: if (model.fromId == service.getMyId()) anchors.right = parent.right
 
                 TextEdit {

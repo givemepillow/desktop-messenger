@@ -58,10 +58,10 @@ class Storage:
             )
 
     @classmethod
-    def set_read(cls, chats):
-        cls.__cursor.executemany(
+    def set_read(cls, chat_id):
+        cls.__cursor.execute(
             "INSERT OR REPLACE INTO read(chat_id, read) VALUES(?, FALSE);",
-            chats
+            (chat_id,)
         )
         cls.__connection.commit()
 

@@ -39,7 +39,7 @@ class Messenger(Network):
                 data['message_id'],
             )
         else:
-            Storage.set_read([(user_id,)])
+            Storage.set_read(user_id)
         self.reloadContacts.emit()
 
     def __extract_user_id(self, from_id, to_id):
@@ -50,8 +50,6 @@ class Messenger(Network):
             Storage.clear()
             MessageData.set_last_update(data['last_update'])
         Storage.save_many_messages(data['messages'])
-        new_messages = [(self.__extract_user_id(msg[1], msg[2]), ) for msg in data['messages']]
-        Storage.set_read(new_messages)
         MessageData.update_chats_from_storage()
         self.reloadContacts.emit()
 
@@ -131,7 +129,8 @@ class Messenger(Network):
     @Slot(int, result=bool)
     def isRead(self, user_id):
         _read = Storage.is_read(user_id)
-        return user_id in MessageData.chat_users and len(_read) == 0 or _read[0] == 1 
+        print(_read)
+        return _read[0] if _read else  1 == 1
 
     @Slot(int)
     def markAsRead(self, user_id):
