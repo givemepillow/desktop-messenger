@@ -22,7 +22,7 @@ class Service(Network):
 
 
     def __init__(self):
-        super(Service, self).__init__(address='127.0.0.1', port=6767)
+        super(Service, self).__init__(address='89.223.71.146', port=6767)
         self.socket.connected.connect(self.__get_encryption_key)
         self.socket.connected.connect(self.__update_authentication)
         self._Network__create_connection()

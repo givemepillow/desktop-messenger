@@ -11,7 +11,7 @@ class Messenger(Network):
     __my_id = None
 
     def __init__(self):
-        super(Messenger, self).__init__(address='127.0.0.1', port=6700) # '89.223.71.146'
+        super(Messenger, self).__init__(address='89.223.71.146', port=6700) # '89.223.71.146'
         self.socket.connected.connect(self.__init_messenger_session)
         self.socket.readyRead.connect(self.__receive_message)
         self._Network__create_connection()
