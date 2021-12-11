@@ -108,6 +108,12 @@ Rectangle {
                 width: messageArea.width < (messageDate.width + 45) ? messageDate.width + 45: messageArea.width
                 Component.onCompleted: if (model.fromId == service.getMyId()) anchors.right = parent.right
 
+                MouseArea {
+                    id: mouseArea
+                    hoverEnabled: true  
+                    anchors.fill: parent
+                }
+
                 TextEdit {
                     id: messageArea
                     readOnly: true
@@ -144,6 +150,26 @@ Rectangle {
                         rightMargin: 10
                         bottomMargin: 5
                     }
+                }
+
+                TemplateButton {
+                    id: deleteButton
+                    iconSource: "../resources/icons/trash.png"
+                    iconHeight: 20
+                    iconWidth: 20
+                    colorOverlayDefault: "#787878"
+                    colorOverlayMouseOver: "#733c3f"
+                    colorOverlayClicked: "#c9222d"
+                    visible: mouseArea.containsMouse || deleteButton.hovered
+                    height: 20
+                    width: 20
+                    anchors {
+                        bottom: parent.bottom
+                        left: parent.left
+                        leftMargin: 5
+                        bottomMargin: 5
+                    }
+                    onClicked: messenger.deleteMessage(model.messageId)
                 }
             }
             
