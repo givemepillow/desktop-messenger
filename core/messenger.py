@@ -11,7 +11,7 @@ class Messenger(Network):
     __my_id = None
 
     def __init__(self):
-        super(Messenger, self).__init__(address='89.223.71.146', port=6700) # '89.223.71.146'
+        super(Messenger, self).__init__(address='127.0.0.1', port=6700) # '89.223.71.146'
         self.socket.connected.connect(self.__init_messenger_session)
         self.socket.readyRead.connect(self.__receive_message)
         self._Network__create_connection()
@@ -39,7 +39,7 @@ class Messenger(Network):
                 data['message_id'],
             )
         else:
-            Storage.set_read([(user_id,)])
+            Storage.set_read(user_id)
         self.reloadContacts.emit()
 
     def __extract_user_id(self, from_id, to_id):
@@ -50,8 +50,6 @@ class Messenger(Network):
             Storage.clear()
             MessageData.set_last_update(data['last_update'])
         Storage.save_many_messages(data['messages'])
-        new_messages = [(self.__extract_user_id(msg[1], msg[2]), ) for msg in data['messages']]
-        Storage.set_read(new_messages)
         MessageData.update_chats_from_storage()
         self.reloadContacts.emit()
 
@@ -61,12 +59,24 @@ class Messenger(Network):
             to_id = user_id
         ))
 
+    @Slot(int)
+    def deleteMessage(self, message_id):
+        return self.send(MessageConstructor.create_delete_message(
+            to_id=self.__current_target_id,
+            message_id = message_id
+        ))
+
     def __deleting_dialog(self, data):
         _from, _to = data['from_id'], data['to_id']
         user_id = self.__extract_user_id(_from, _to)
         MessageData.remove_chat(user_id=user_id)
         Storage.clear_chat(_from, _to)
         MessageData.update_chats_from_storage()
+        self.deleteChatSignal.emit()
+
+    def __deleting_message(self, data):
+        _message_id = data['message_id']
+        Storage.remove_message(_message_id)
         self.deleteChatSignal.emit()
     
     @Slot(result=list)
@@ -105,7 +115,8 @@ class Messenger(Network):
         handlers = {
             Type.MESSAGE: self.__new_message,
             Type.INIT: self.__init,
-            Type.DELETE_DIALOG: self.__deleting_dialog
+            Type.DELETE_DIALOG: self.__deleting_dialog,
+            Type.DELETE_MASSAGE: self.__deleting_message
         }
         answer = self.__parse(data)
         handlers[answer['type']](answer)
@@ -131,7 +142,7 @@ class Messenger(Network):
     @Slot(int, result=bool)
     def isRead(self, user_id):
         _read = Storage.is_read(user_id)
-        return user_id in MessageData.chat_users and len(_read) == 0 or _read[0] == 1 
+        return not (user_id in MessageData.chat_users and _read[0] == 0)
 
     @Slot(int)
     def markAsRead(self, user_id):

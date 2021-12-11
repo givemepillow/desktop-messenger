@@ -36,3 +36,12 @@ class MessageConstructor:
             'last_message_id': Storage.get_last_index(UserData.get_my_id()),
             'last_update': MessageData.get_last_update()
         })
+
+    @classmethod
+    def create_delete_message(cls, to_id, message_id):
+        return cls.__set_meta_data({
+            'type': Type.DELETE_MASSAGE,
+            'to_id': int(to_id),
+            'message_id': int(message_id),
+            'last_update': MessageData.get_last_update()
+        })
