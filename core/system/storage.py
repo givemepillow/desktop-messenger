@@ -144,7 +144,7 @@ class Storage:
                 "WHERE (to_id = ? AND from_id = ?) OR (to_id = ? AND from_id = ?);",
                 (to_id, from_id, from_id, to_id)
             )
-        return [list(message) for message in cls.__cursor.fetchall()]
+        return sorted([list(message) for message in cls.__cursor.fetchall()], key=lambda item: item[0])
 
     @classmethod
     def get_last_index(cls, my_id):
