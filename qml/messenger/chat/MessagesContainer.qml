@@ -218,8 +218,8 @@ Rectangle {
             }
 
             onCountChanged: {
-                positionViewAtStart()
-                verticalScrollBar.position = 0
+                positionViewAtEnd()
+                verticalScrollBar.position = 1
                 downButton.visible = false
             }
 
