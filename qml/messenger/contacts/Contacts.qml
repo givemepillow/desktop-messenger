@@ -266,6 +266,14 @@ Rectangle {
             }
         }
 
+        headerPositioning: ListView.InlineFooter
+
+        header: Rectangle {
+            width: contactList.width
+            height: 100
+            color: "transparent"
+        }
+
         ScrollBar.vertical: ScrollBar {
             id: verticalScrollBar
             policy: ScrollBar.AlwaysOn
@@ -274,7 +282,7 @@ Rectangle {
 
         onCountChanged: {
             positionViewAtEnd()
-            verticalScrollBar.position = 1
+            //verticalScrollBar.position = 0
         }
     }
 
